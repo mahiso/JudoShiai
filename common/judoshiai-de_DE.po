@@ -1536,7 +1536,7 @@ msgid "Rep. time:"
 msgstr ""
 
 msgid "Highest weight (g):"
-msgstr "Max. Gewicht (kg):"
+msgstr "Max. Gewicht (g):"
 
 msgid "Weight text:"
 msgstr "Text Gewicht:"
@@ -1687,6 +1687,9 @@ msgstr "Polnisches System"
 
 msgid "Slovakian System"
 msgstr "Slowakisches System"
+
+msgid "German Judo Federation"
+msgstr "Deutscher Judo Bund"
 
 msgid "Tatami"
 msgstr "Matte"

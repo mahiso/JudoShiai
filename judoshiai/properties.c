@@ -396,7 +396,7 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
 
     SET_VAL(PROP_NUM_TATAMIS, NULL, number_of_tatamis);
 
-    if (draw_system == DRAW_INTERNATIONAL || draw_system == DRAW_NORWEGIAN)
+    if (draw_system == DRAW_INTERNATIONAL || draw_system == DRAW_NORWEGIAN || draw_system == DRAW_DJB)
         SET_VAL(PROP_WIN_NEEDED_FOR_MEDAL, "1", 1);
     else
         SET_VAL(PROP_WIN_NEEDED_FOR_MEDAL, "0", 0);
@@ -470,7 +470,11 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
             default_cats[2] = (struct default_cat){0, 6, 0, CAT_SYSTEM_REPECHAGE};
             default_cats[3] = (struct default_cat){0, 0, 0, 0};
             break;
-        }
+	case DRAW_DJB:
+	    default_cats[2] = (struct default_cat){0, 6, 0, CAT_IJF_DOUBLE_REPECHAGE};
+            default_cats[3] = (struct default_cat){0, 0, 0, 0};
+            break;    
+	}
 
         for (i = 0; i < NUM_DEFAULT_CATS; i++) {
             snprintf(buf, sizeof(buf), "%d %d %d %d", 
@@ -511,7 +515,7 @@ static void reset_props1(GtkWidget *button, void *data)
 static const gchar *draw_system_names[NUM_DRAWS] = 
     {N_("International System"), N_("Finnish System"), N_("Swedish System"), N_("Estonian System"), N_("Spanish System"), 
      N_("Norwegian System"), N_("British System"), N_("Australian System"), N_("Danish System"), 
-     N_("Polish System"), N_("Slovakian System"), N_("Ukrainian System")};
+     N_("Polish System"), N_("Slovakian System"), N_("Ukrainian System"), N_("German Judo Federation")};
 
 #define NUM_TBLS 2
 
