@@ -571,7 +571,7 @@ struct offial_category official_categories[NUM_DRAWS][2][10] = {
 
         }, { // women
             {
-                "Women", 1000, 300, 0, 600, // name, max age, match gs rest times 
+                "Women", 1000, 240, 0, 600, // name, max age, match gs rest times 
                 {{48000, "48"}, {52000, "52"}, {57000, "57"}, 
                  {63000, "63"}, {70000, "70"}, {78000, "78"}, {0, NULL}}
             }, {
