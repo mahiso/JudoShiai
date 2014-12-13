@@ -27,7 +27,7 @@ Next some libraries:
 
 $ sudo apt-get install librsvg2-dev libao-dev libmpg123-dev libcurl4-openssl-dev
 
-JudoShiai is under Subversion in Sourceforge:
+JudoShiai is under Git in Sourceforge:
 
 $ sudo apt-get install git
 
