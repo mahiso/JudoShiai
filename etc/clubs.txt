@@ -147,3 +147,45 @@ Sarko=SAR>Turku
 Suomenlinnan urheilijat=SUO>Helsinki
 Pyhäsalmen Sykkeen Judo=SYK
 Vammalan Veikot=VAM
+Aalborg Judoklub
+Birkerod Judoklub
+ETSV Weiche
+FT Neumünster
+Hennigsdorfer Judoverein
+Hjorring Judoklub
+Jetsmark Judoklub
+JG Sachsenwald
+Judo Klub Kiel v. 1964 e. V.
+Judo Team Oldenburg
+Kauri Judoklub
+KMTV
+NDTSV Holsatia Judo
+Orso Judoklub
+Rathenower Judoclub
+Rendsburger TSV=RTSV>Rendsburg
+Ry Judoklub
+Saerslev Judoklub
+SC Itzehoe
+Sjelle Skjørring
+Skive Judo Club
+SV Giekau e. V.
+SV Hohner Eintracht
+S. V. Makkabi Kiel e. V.
+SV Mönkeberg
+T. H.-Eilbeck von 1880 e. V.=T.H.-Eilbeck
+Tomoe Judo Club
+Ts Einfeld
+TS Einfeld
+TSG Concordia Schönkirchen
+Tsunami Eckernförde
+TSV Glückauf Linden e. V.
+TSV Klausdorf
+TSV Kronshagen
+TSV Kropp
+TSV Lindewitt
+TSV Westerland
+TuS- Holtenau v. 1909 e. V./Judo=TuS Holtenau/Holtenau
+Van Rheenen Sport Almere
+Vejle Judo Club
+VfB Hellerau Klotzsche
+VfL Oldesloe
