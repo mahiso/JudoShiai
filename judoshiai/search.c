@@ -49,7 +49,6 @@ static gboolean button_pressed(GtkWidget *button,
         if (data->results[i] == button) {
             if (data->callback) {
                 data->callback(data->index[i], data->args);
-                search_end(data->dialog, NULL, data);
                 return TRUE;
             } else {
                 GtkTreeIter iter;
@@ -100,7 +99,7 @@ static void lookup(GtkWidget *w, gpointer arg)
             first_u = g_utf8_casefold(first, -1);
             last_u = g_utf8_casefold(last, -1);
 
-            if (strncmp(name, last_u, strlen(name)) == 0) {
+            if ((strncmp(name, last_u, strlen(name)) == 0) || strncmp(name, first_u, strlen(name)) == 0) {
 		if (country && country[0])
 		    snprintf(buf, sizeof(buf), "%s, %s, %s/%s, %s", 
 			     last, first, club, country, cat);
@@ -148,9 +147,9 @@ void search_competitor_args(GtkWidget *w, gpointer cb, gpointer args)
     data->args = args;
 
     dialog = gtk_dialog_new_with_buttons (_("Search"),
-                                          NULL,
+                                          GTK_WINDOW(main_window),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                          GTK_STOCK_CANCEL, GTK_RESPONSE_OK,
                                           NULL);
 
     data->dialog = dialog;
