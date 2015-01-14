@@ -604,6 +604,9 @@ struct offial_category official_categories[NUM_DRAWS][2][10] = {
 	  }, {
 	    "U12m", 11, 120, 0, 600, // U12 categories are unofficially, only a help to organize
 	    {{25000,"25"}, {28000,"28"}, {31000,"31"}, {34000,"34"}, {37000,"37"}, {40000,"40"}, {43000,"43"},{46000,"46"}, {0, NULL}}
+	  }, {
+	    "U9m", 8, 120, 0, 600, // U9 categories are unofficially, only a help to organize
+	    {{24000,"24"}, {27000,"27"}, {30000,"30"}, {33000, "33"}, {36000, "36"}, {40000, "40"}, {44000, "44"}, {0, NULL}}
 	  }, { NULL, 0, 0, 0, 0, {{0, NULL}}} 
 	}, { // women
 	  {
@@ -623,6 +626,9 @@ struct offial_category official_categories[NUM_DRAWS][2][10] = {
 	   {{33000, "33"}, {36000, "36"}, {40000, "40"}, {44000, "44"}, {48000, "48"}, {52000, "52"}, {57000, "57"}, {63000, "63"}, {0, NULL}}
 	  }, {
 	    "U12w", 11, 120, 0, 600, // U12 categories are unofficially, only a help to organize
+	    {{24000,"24"}, {27000,"27"}, {30000,"30"}, {33000, "33"}, {36000, "36"}, {40000, "40"}, {44000, "44"}, {0, NULL}}
+	  }, {
+	    "U9w", 8, 120, 0, 600, // U9 categories are unofficially, only a help to organize
 	    {{24000,"24"}, {27000,"27"}, {30000,"30"}, {33000, "33"}, {36000, "36"}, {40000, "40"}, {44000, "44"}, {0, NULL}}
 	  }, { NULL, 0, 0, 0, 0, {{0, NULL}}}
       }
