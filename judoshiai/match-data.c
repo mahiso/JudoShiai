@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -12,6 +12,8 @@
 
 #include <cairo.h>
 #include <cairo-pdf.h>
+
+#include <assert.h>
 
 #include "judoshiai.h"
 
@@ -2432,7 +2434,11 @@ gint num_matches_estimate(gint index)
 
     if (systm.system == SYSTEM_CUSTOM) {
         struct custom_data *cd = get_custom_table(systm.table);
-        if (cd) return mul*cd->num_matches;
+        if (cd && cd->num_matches) return mul*cd->num_matches;
+        g_print("ERROR: Custom category %s returned num_matches=0 cd=%p matches=%d\n", 
+                catdata->category, cd, cd ? cd->num_matches : 0);
+        assert(cd);
+        assert(cd->num_matches > 0);
         return mul*20; // error
     }
 

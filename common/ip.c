@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2011 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #if defined(__WIN32__) || defined(WIN32)
 
@@ -50,8 +50,8 @@
 #define gettext(String) (String)
 #define dgettext(Domain,String) (String)
 #define dcgettext(Domain,String,Type) (String)
-#define bindtextdomain(Domain,Directory) (Domain) 
-#define bind_textdomain_codeset(Domain,Codeset) (Codeset) 
+#define bindtextdomain(Domain,Directory) (Domain)
+#define bind_textdomain_codeset(Domain,Codeset) (Codeset)
 #endif /* ENABLE_NLS */
 
 /* System-dependent definitions */
@@ -133,7 +133,7 @@ gint nodescan(guint network) // addr in network byte order
         sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (sd < 0)
             return -1;
-        
+
         unblock_socket(sd);
 
         struct linger l;
@@ -203,7 +203,7 @@ gint nodescan(guint network) // addr in network byte order
 
         g_usleep(1000000);
 
-        for (i = 0; i < 16; i++) { 
+        for (i = 0; i < 16; i++) {
             last = (block << 4) | i;
             if (last == 0 || last > 254)
                 continue;
@@ -335,7 +335,7 @@ gulong get_my_address()
 
 extern GKeyFile *keyfile;
 
-static void node_ip_address_callback(GtkWidget *widget, 
+static void node_ip_address_callback(GtkWidget *widget,
                                      GdkEvent *event,
                                      GtkWidget *data)
 {
@@ -344,7 +344,7 @@ static void node_ip_address_callback(GtkWidget *widget,
     if (ptr_to_gint(event) == GTK_RESPONSE_OK) {
         sscanf(gtk_entry_get_text(GTK_ENTRY(data)), "%ld.%ld.%ld.%ld", &a, &b, &c, &d);
         node_ip_addr = htonl((a << 24) | (b << 16) | (c << 8) | d);
-        g_key_file_set_string(keyfile, "preferences", "nodeipaddress", 
+        g_key_file_set_string(keyfile, "preferences", "nodeipaddress",
                               gtk_entry_get_text(GTK_ENTRY(data)));
     }
     gtk_widget_destroy(widget);
@@ -357,8 +357,8 @@ void ask_node_ip_address( GtkWidget *w,
     gulong myaddr = ntohl(node_ip_addr);
     GtkWidget *dialog, *hbox, *label, *address;
 
-    sprintf(addrstr, "%ld.%ld.%ld.%ld", 
-            (myaddr>>24)&0xff, (myaddr>>16)&0xff, 
+    sprintf(addrstr, "%ld.%ld.%ld.%ld",
+            (myaddr>>24)&0xff, (myaddr>>16)&0xff,
             (myaddr>>8)&0xff, (myaddr)&0xff);
 
     dialog = gtk_dialog_new_with_buttons (_("Address of the communication node"),
@@ -385,8 +385,8 @@ void ask_node_ip_address( GtkWidget *w,
 
     if (connection_ok && node_ip_addr == 0) {
         gulong myaddr = ntohl(tmp_node_addr);
-        g_snprintf(addrstr, sizeof(addrstr), "%s: %ld.%ld.%ld.%ld", _("(Connection OK)"), 
-                   (myaddr>>24)&0xff, (myaddr>>16)&0xff, 
+        g_snprintf(addrstr, sizeof(addrstr), "%s: %ld.%ld.%ld.%ld", _("(Connection OK)"),
+                   (myaddr>>24)&0xff, (myaddr>>16)&0xff,
                    (myaddr>>8)&0xff, (myaddr)&0xff);
         label = gtk_label_new(addrstr);
     } else if (connection_ok)
@@ -395,7 +395,7 @@ void ask_node_ip_address( GtkWidget *w,
         label = gtk_label_new(_("(Connection broken)"));
 #if (GTKVER == 3)
     gtk_grid_attach_next_to(GTK_GRID(hbox), label, address, GTK_POS_RIGHT, 1, 1);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
  		      hbox, TRUE, TRUE, 0);
 #else
     gtk_box_pack_start_defaults(GTK_BOX(hbox), label);
@@ -432,12 +432,12 @@ void show_my_ip_addresses( GtkWidget *w,
     for (i = 0; i < addrcnt; i++) {
         myaddr = addrs[i];
         if (myaddr == ntohl(my_ip_address))
-            sprintf(addrstr, "<b>%ld.%ld.%ld.%ld</b>", 
-                    (myaddr>>24)&0xff, (myaddr>>16)&0xff, 
+            sprintf(addrstr, "<b>%ld.%ld.%ld.%ld</b>",
+                    (myaddr>>24)&0xff, (myaddr>>16)&0xff,
                     (myaddr>>8)&0xff, (myaddr)&0xff);
         else
-            sprintf(addrstr, "%ld.%ld.%ld.%ld", 
-                    (myaddr>>24)&0xff, (myaddr>>16)&0xff, 
+            sprintf(addrstr, "%ld.%ld.%ld.%ld",
+                    (myaddr>>24)&0xff, (myaddr>>16)&0xff,
                     (myaddr>>8)&0xff, (myaddr)&0xff);
 
         label = gtk_label_new(addrstr);
@@ -450,7 +450,7 @@ void show_my_ip_addresses( GtkWidget *w,
     }
 
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
  		      vbox, TRUE, TRUE, 0);
 #else
     gtk_box_pack_start_defaults(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox);
@@ -548,7 +548,7 @@ struct message *get_rec_msg(void)
 gboolean check_for_input(gpointer data)
 {
     struct message *msg = get_rec_msg();
-        
+
     if (msg) {
         if (msg->type > 0 && msg->type < NUM_MESSAGES)
             msg_stat.rxtype[(gint)msg->type]++;
@@ -564,7 +564,7 @@ gboolean check_for_input(gpointer data)
 static gint conn_info_callback(gpointer data)
 {
     static gboolean last_ok = FALSE;
-        
+
     if (connection_ok == last_ok)
         return TRUE;
 
@@ -586,7 +586,7 @@ void open_comm_socket(void)
     }
 #endif
     my_ip_address = get_my_address();
-    g_print("My address = %ld.%ld.%ld.%ld\n", 
+    g_print("My address = %ld.%ld.%ld.%ld\n",
             (my_ip_address)&0xff,
             (my_ip_address>>8)&0xff,
             (my_ip_address>>16)&0xff,
@@ -680,8 +680,8 @@ void print_stat(void)
     if (elapsed == 0)
         elapsed = 1;
 
-    g_print("Messages in %d s: rx: %d (%d/s) tx: %d (%d/s)\n", 
-            elapsed, msg_stat.rx, msg_stat.rx/elapsed, 
+    g_print("Messages in %d s: rx: %d (%d/s) tx: %d (%d/s)\n",
+            elapsed, msg_stat.rx, msg_stat.rx/elapsed,
             msg_stat.tx, msg_stat.tx/elapsed);
 
     for (i = 1; i < NUM_MESSAGES; i++) {
@@ -724,7 +724,7 @@ gpointer client_thread(gpointer args)
         }
 #if 0
         int nodelayflag = 1;
-        if (setsockopt(comm_fd, IPPROTO_TCP, TCP_NODELAY, 
+        if (setsockopt(comm_fd, IPPROTO_TCP, TCP_NODELAY,
                        (void *)&nodelayflag, sizeof(nodelayflag))) {
             g_print("CANNOT SET TCP_NODELAY\n");
         }
@@ -757,7 +757,7 @@ gpointer client_thread(gpointer args)
                (tmp_node_addr == node_ip_addr)) {
             struct timeval timeout;
             gint r;
-			
+
             if (old_port != get_port()) {
                 g_print("oldport=%d newport=%d\n", old_port, get_port());
                 old_port = get_port();
@@ -802,7 +802,7 @@ gpointer client_thread(gpointer args)
                 static gint ri = 0;
                 static gboolean escape = FALSE;
                 static guchar p[512];
-                                
+
                 if ((n = recv(comm_fd, (char *)inbuf, sizeof(inbuf), 0)) > 0) {
                     gint i;
                     for (i = 0; i < n; i++) {
@@ -842,7 +842,7 @@ gpointer client_thread(gpointer args)
                             p[ri++] = c;
                         }
                     }
-                } else 
+                } else
                     break;
             }
         } // while
@@ -957,7 +957,7 @@ static void analyze_ssdp(gchar *rec, struct sockaddr_in *client)
         return;
 
     gchar *p1, *p = strstr(rec, "UPnP/1.0 Judo");
-    
+
     if (!p)
         return;
 
@@ -1063,8 +1063,8 @@ gpointer ssdp_thread(gpointer args)
     name_out.sin_port = htons(SSDP_PORT);
     name_out.sin_addr.s_addr = inet_addr(SSDP_MULTICAST);
 
-#if 0	
-    ret = sendto(sock_out, ssdp_req_data, ssdp_req_data_len, 0, (struct sockaddr*) &name_out, 
+#if 0
+    ret = sendto(sock_out, ssdp_req_data, ssdp_req_data_len, 0, (struct sockaddr*) &name_out,
                  sizeof(struct sockaddr_in));
     if (ret != ssdp_req_data_len) {
         perror("SSDP send req");
@@ -1084,7 +1084,7 @@ gpointer ssdp_thread(gpointer args)
         timeout.tv_sec=3;
         timeout.tv_usec=0;
         read_fd = fds;
-	
+
         if (select(sock_out+2, &read_fd, NULL, NULL, &timeout) < 0) {
             perror("SSDP select");
             continue;
@@ -1092,7 +1092,7 @@ gpointer ssdp_thread(gpointer args)
 
         if (FD_ISSET(sock_out, &read_fd)) {
             socklen = sizeof(clientsock);
-            if ((len = recvfrom(sock_out, inbuf, sizeof(inbuf)-1, 0, 
+            if ((len = recvfrom(sock_out, inbuf, sizeof(inbuf)-1, 0,
                                 (struct sockaddr *)&clientsock, &socklen)) == (size_t)-1) {
                 perror("SSDP recvfrom");
                 goto out;
@@ -1104,11 +1104,11 @@ gpointer ssdp_thread(gpointer args)
                 if (strncmp(inbuf, "HTTP/1.1 200 OK", 12) == 0)
                     analyze_ssdp(inbuf, &clientsock);
             } // len > 0
-        } 
+        }
 
         if (FD_ISSET(sock_in, &read_fd)) {
             socklen = sizeof(clientsock);
-            if ((len = recvfrom(sock_in, inbuf, sizeof(inbuf)-1, 0, 
+            if ((len = recvfrom(sock_in, inbuf, sizeof(inbuf)-1, 0,
                                 (struct sockaddr *)&clientsock, &socklen)) == (size_t)-1) {
                 perror("SSDP recvfrom");
                 goto out;
@@ -1134,10 +1134,10 @@ gpointer ssdp_thread(gpointer args)
                                                   ST "\r\n"
                                                   "USN: uuid:%08x-cafe-babe-737%d-%012x\r\n"
                                                   "\r\n",
-                                                  inet_ntoa(addr.sin_addr), os, 
+                                                  inet_ntoa(addr.sin_addr), os,
                                                   ssdp_id,
                                                   SHIAI_VERSION, my_address,
-                                                  application_type(), htonl(my_ip_address));
+                                                  application_type(), (int)(htonl(my_ip_address)));
 
                     //g_print("SSDP %s send: '%s'\n", APPLICATION, resp);
                     ret = sendto(sock_out, resp, strlen(resp), 0, (struct sockaddr *)&clientsock, socklen);
@@ -1172,10 +1172,10 @@ gpointer ssdp_thread(gpointer args)
                                        "SERVER:%s/1 UPnP/1.0 %s/%s\r\n"
                                        "USN: uuid:%08x-cafe-babe-737%d-%012x\r\n"
                                        "\r\n",
-                                       inet_ntoa(addr.sin_addr), os, 
+                                       inet_ntoa(addr.sin_addr), os,
                                        ssdp_id,
                                        SHIAI_VERSION, my_address,
-                                       application_type(), htonl(my_ip_address));
+                                       application_type(), (int)(htonl(my_ip_address)));
                 resplen = strlen(resp);
             }
 
@@ -1189,7 +1189,7 @@ gpointer ssdp_thread(gpointer args)
         static time_t last_time = 0;
         if (!connection_ok && now > last_time + 5) {
             last_time = now;
-            ret = sendto(sock_out, ssdp_req_data, ssdp_req_data_len, 0, (struct sockaddr*) &name_out, 
+            ret = sendto(sock_out, ssdp_req_data, ssdp_req_data_len, 0, (struct sockaddr*) &name_out,
                          sizeof(struct sockaddr_in));
             //g_print("SSDP %s REQ SEND by timeout\n\n", APPLICATION);
             if (ret != ssdp_req_data_len) {

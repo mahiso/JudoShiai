@@ -18,7 +18,9 @@ all:
 	make -C judoinfo
 	make -C judoweight
 	make -C judojudogi
+ifeq ($(JUDOPROXY),YES)
 	make -C judoproxy
+endif
 	make -C doc
 	rm -rf $(RELDIR)
 	mkdir -p $(RELDIR)/bin
@@ -35,6 +37,7 @@ all:
 	mkdir -p $(RELDIR)/share/locale/nl/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/cs/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/de/LC_MESSAGES
+	mkdir -p $(RELDIR)/share/locale/ru/LC_MESSAGES
 	mkdir -p $(RELDIR)/share/locale/en_GB/LC_MESSAGES
 	mkdir -p $(RELDIR)/lib
 	mkdir -p $(RELDIR)/doc
@@ -45,7 +48,9 @@ all:
 	cp $(JUDOINFOFILE) $(RELDIR)/bin/
 	cp $(JUDOWEIGHTFILE) $(RELDIR)/bin/
 	cp $(JUDOJUDOGIFILE) $(RELDIR)/bin/
+ifeq ($(JUDOPROXY),YES)
 	cp $(JUDOPROXYFILE) $(RELDIR)/bin/
+endif
 ### Windows executable ###
 ifeq ($(TGT),WIN32)
 ifeq ($(GTKVER),3)
@@ -56,6 +61,10 @@ endif
 	cp $(SOUNDDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(RSVGDIR)/bin/*.dll $(RELDIR)/bin/
 	cp $(CURLDIR)/bin/*.dll $(RELDIR)/bin/
+ifeq ($(JUDOPROXY),YES)
+	cp $(WEBKITDIR)/bin/*.dll $(RELDIR)/bin/
+	cp $(SOAPDIR)/bin/*.dll $(RELDIR)/bin/
+endif
 	cp -r $(RUNDIR)/lib/gtk-$(GTKVER).0 $(RELDIR)/lib/
 	cp -r $(RUNDIR)/share/locale/fi $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/sv $(RELDIR)/share/locale/
@@ -69,6 +78,7 @@ endif
 	cp -r $(RUNDIR)/share/locale/nl $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/cs $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/de $(RELDIR)/share/locale/
+	cp -r $(RUNDIR)/share/locale/ru $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/locale/en_GB $(RELDIR)/share/locale/
 	cp -r $(RUNDIR)/share/themes $(RELDIR)/share/
 	cp -r $(RUNDIR)/etc $(RELDIR)/
@@ -89,6 +99,7 @@ endif
 	cp common/judoshiai-nl_NL.mo $(RELDIR)/share/locale/nl/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-cs_CZ.mo $(RELDIR)/share/locale/cs/LC_MESSAGES/judoshiai.mo
 	cp common/judoshiai-de_DE.mo $(RELDIR)/share/locale/de/LC_MESSAGES/judoshiai.mo
+	cp common/judoshiai-ru_RU.mo $(RELDIR)/share/locale/ru/LC_MESSAGES/judoshiai.mo
 	cp etc/*.png $(RELDIR)/etc/
 	cp etc/*.txt $(RELDIR)/etc/
 	cp etc/*.css $(RELDIR)/etc/
@@ -158,7 +169,7 @@ debian:
 	cp gnome/*-pak .
 	checkinstall -D --install=no --pkgname=judoshiai --pkgversion=$(SHIAI_VER_NUM) \
 	--maintainer=oh2ncp@kolumbus.fi --nodoc \
-	--requires libao4,libatk1.0-0,libcairo2,libcurl3,libgdk-pixbuf2.0-0,libgtk2.0-0,libpango-1.0-0,librsvg2-2,libcanberra-gtk-module
+	--requires libao4,libatk1.0-0,libcairo2,libcurl3,libgdk-pixbuf2.0-0,libgtk3.0-0,libpango-1.0-0,librsvg2-2,libcanberra-gtk-module
 	mv *.deb $(RELDIR)/
 	rm description-pak postinstall-pak postremove-pak
 

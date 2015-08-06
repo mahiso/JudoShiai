@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #ifndef _SHIAI_H_
 #define _SHIAI_H_
@@ -27,13 +27,15 @@
 #define gettext(String) (String)
 #define dgettext(Domain,String) (String)
 #define dcgettext(Domain,String,Type) (String)
-#define bindtextdomain(Domain,Directory) (Domain) 
-#define bind_textdomain_codeset(Domain,Codeset) (Codeset) 
+#define bindtextdomain(Domain,Directory) (Domain)
+#define bind_textdomain_codeset(Domain,Codeset) (Codeset)
 #endif /* ENABLE_NLS */
 
 #if GTK_CHECK_VERSION(2,10,0)
 #define PRINT_SUPPORTED
 #endif
+
+#define FAST_DB
 
 #define PRINT_TIME print_time(__FUNCTION__, __LINE__)
 #define BZERO(x) memset(&x, 0, sizeof(x))
@@ -132,6 +134,9 @@ enum cat_systems {
     NUM_SYSTEMS
 };
 #define CAT_IJF_DOUBLE_REPECHAGE CAT_ESP_REPESCA_DOBLE
+
+#define POOL_SYS -1
+#define CUST_SYS -2
 
 enum french_systems {
     FRENCH_8 = 0,
@@ -503,9 +508,9 @@ struct match {
     guint number;
     guint blue;
     guint white;
-    guint blue_score; 
+    guint blue_score;
     guint white_score;
-    guint blue_points; 
+    guint blue_points;
     guint white_points;
     guint match_time;
     guint comment;
@@ -530,6 +535,44 @@ struct pool_matches {
     gboolean all_matched[21];
     gboolean tie[21];
     gint num_matches;
+};
+
+struct custom_matches {
+    struct custom_data *cd;
+
+    struct match m[NUM_CUSTOM_MATCHES+1];
+    gint num_matches;
+
+    struct judoka *j[NUM_COMPETITORS+1];
+    gint num_competitors;
+
+    struct pool {
+        gchar name[16];
+        //gint m[NUM_RR_MATCHES];
+        //gint num_matches;
+        struct poolcomp {
+            gint index;
+            gint wins, pts, mw[21];
+            gboolean all_matched;
+            gboolean tie;
+            gint position;
+        } competitors[21];
+        gint num_competitors;
+        gboolean finished;
+    } pm[NUM_ROUND_ROBIN_POOLS];
+    gint num_round_robin_pools;
+
+    struct bestof3 {
+        gchar name[16];
+        struct comppair {
+            gint index;
+            gint wins;
+            gint pts;
+        } competitors[2];
+        gboolean finished;
+        gint winner, loser;
+    } best_of_three[NUM_BEST_OF_3_PAIRS];
+    gint num_best_of_three;
 };
 
 struct next_match_info {
@@ -776,8 +819,8 @@ extern GtkWidget *get_menubar_menu( GtkWidget  *window );
 extern void open_shiai_display(void);
 extern void new_judoka(GtkWidget *w, gpointer   data );
 extern void new_regcategory(GtkWidget *w, gpointer   data );
-extern void view_popup_menu(GtkWidget *treeview, 
-                            GdkEventButton *event, 
+extern void view_popup_menu(GtkWidget *treeview,
+                            GdkEventButton *event,
                             gpointer userdata,
                             gchar *regcategory,
                             gboolean visible);
@@ -806,9 +849,9 @@ extern void set_menu_active(void);
 extern gboolean find_iter(GtkTreeIter *iter, guint index);
 extern gboolean find_iter_model(GtkTreeIter *iter, guint index, GtkTreeModel *model);
 extern gboolean find_iter_name(GtkTreeIter *iter, const gchar *last, const gchar *first, const gchar *club);
-extern gboolean find_iter_name_2(GtkTreeIter *iter, const gchar *last, const gchar *first, 
+extern gboolean find_iter_name_2(GtkTreeIter *iter, const gchar *last, const gchar *first,
 				 const gchar *club, const gchar *category);
-extern gboolean find_iter_name_id(GtkTreeIter *iter, const gchar *last, const gchar *first, 
+extern gboolean find_iter_name_id(GtkTreeIter *iter, const gchar *last, const gchar *first,
                                   const gchar *club, const gchar *category, const gchar *id);
 extern gboolean find_iter_category(GtkTreeIter *iter, const gchar *category);
 extern gboolean find_iter_category_model(GtkTreeIter *iter, const gchar *category, GtkTreeModel *model);
@@ -870,7 +913,7 @@ extern gint db_get_competitors_position(gint competitor, gint *catindex);
 extern void db_create_default_teams(gint index);
 
 extern void db_read_competitor_statistics(gint *numcomp, gint *numweighted);
-extern void db_add_competitors(const gchar *competition, gboolean with_weight, gboolean weighted, 
+extern void db_add_competitors(const gchar *competition, gboolean with_weight, gboolean weighted,
 			       gboolean cleanup, gint *added, gint *not_added);
 extern void db_update_weights(const gchar *competition, gint *updated);
 extern void db_set_match(struct match *m);
@@ -885,7 +928,7 @@ extern gboolean db_matched_matches_exist(gint category);
 extern gint db_category_match_status(gint category);
 extern gint db_competitor_match_status(gint competitor);
 extern void db_remove_matches(guint category);
-extern void db_set_points(gint category, gint number, gint minutes, 
+extern void db_set_points(gint category, gint number, gint minutes,
                           gint blue, gint white, gint blue_score, gint white_score, gint legend);
 extern void db_set_score(gint category, gint number, gint score, gboolean is_blue);
 extern void db_read_match(gint category, gint number);
@@ -895,7 +938,7 @@ extern void db_write_c_matches(void);
 extern struct match *db_matches_waiting(void);
 extern struct match *get_cached_next_matches(gint tatami);
 extern void db_freeze_matches(gint tatami, gint category, gint number, gint arg);
-extern void db_change_freezed(gint category, gint number, 
+extern void db_change_freezed(gint category, gint number,
 			      gint tatami, gint position, gboolean after);
 extern gboolean db_has_hansokumake(gint competitor);
 extern gint db_find_match_tatami(gint category, gint number);
@@ -941,11 +984,11 @@ extern void db_free_blob(unsigned char *zBlob);
 /* categories */
 extern void create_categories(GtkWidget *w, gpointer   data);
 extern void create_best_categories(GtkWidget *w, gpointer   data);
-extern void toggle_w_belt(gpointer callback_data, 
+extern void toggle_w_belt(gpointer callback_data,
                           guint callback_action, GtkWidget *menu_item);
-extern void toggle_gender(gpointer callback_data, 
+extern void toggle_gender(gpointer callback_data,
                           guint callback_action, GtkWidget *menu_item);
-extern void toggle_age(gpointer callback_data, 
+extern void toggle_age(gpointer callback_data,
                        guint callback_action, GtkWidget *menu_item);
 extern void toggle_three_matches(GtkWidget *menu_item, gpointer data);
 extern void draw_all(GtkWidget *w, gpointer data);
@@ -989,11 +1032,13 @@ extern void matches_refresh(void);
 extern void matches_clear(void);
 extern void set_match(struct match *m);
 extern void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean final_pool);
+extern void fill_custom_struct(gint category, struct custom_matches *cm);
+extern void empty_custom_struct(struct custom_matches *cm);
 extern void empty_pool_struct(struct pool_matches *pm);
 extern void set_competitor_position(gint ix, gint status);
 extern void write_competitor_positions(void);
-extern void get_pool_winner(gint num, gint c[21], gboolean yes[21], 
-                            gint wins[21], gint pts[21], 
+extern void get_pool_winner(gint num, gint c[21], gboolean yes[21],
+                            gint wins[21], gint pts[21],
                             gboolean mw[21][21], struct judoka *ju[21], gboolean all_matched[21], gboolean tie[21]);
 extern void update_competitors_categories(gint competitor);
 extern void set_points_and_score(struct message *msg);
@@ -1001,7 +1046,7 @@ extern void set_comment_from_net(struct message *msg);
 extern void set_points_from_net(struct message *msg);
 extern gint find_match_time(const gchar *cat);
 extern void set_points(GtkWidget *menuitem, gpointer userdata);
-extern gboolean pool_finished(gint numcomp, gint nummatches, gint sys, gboolean yes[], 
+extern gboolean pool_finished(gint numcomp, gint nummatches, gint sys, gboolean yes[],
                               struct pool_matches *pm);
 extern void update_matches_small(guint category, struct compsys sys_or_tatami);
 extern void update_matches(guint category, struct compsys sys, gint tatami);
@@ -1028,21 +1073,21 @@ extern void write_sheet_to_stream(gint cat, cairo_write_func_t write_func, void 
 gint find_gender(const gchar *name);
 
 /* comm */
-extern void toggle_tatami_1(gpointer callback_data, 
+extern void toggle_tatami_1(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_2(gpointer callback_data, 
+extern void toggle_tatami_2(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_3(gpointer callback_data, 
+extern void toggle_tatami_3(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_4(gpointer callback_data, 
+extern void toggle_tatami_4(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_5(gpointer callback_data, 
+extern void toggle_tatami_5(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_6(gpointer callback_data, 
+extern void toggle_tatami_6(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_7(gpointer callback_data, 
+extern void toggle_tatami_7(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
-extern void toggle_tatami_8(gpointer callback_data, 
+extern void toggle_tatami_8(gpointer callback_data,
                             guint callback_action, GtkWidget *menu_item);
 extern gpointer server_thread(gpointer args);
 extern gpointer node_thread(gpointer args);
@@ -1107,7 +1152,7 @@ extern void set_category_graph_page(GtkWidget *notebook);
 /* trees */
 extern void init_trees(void);
 extern struct category_data *avl_get_category(gint index);
-extern void avl_set_category(gint index, const gchar *category, gint tatami, 
+extern void avl_set_category(gint index, const gchar *category, gint tatami,
                              gint group, struct compsys system, gint deleted);
 extern void avl_set_category_rest_times(void);
 extern gint avl_get_category_status_by_name(const gchar *name);
@@ -1127,7 +1172,7 @@ extern void club_stat_add(const gchar *club, const gchar *country, gint num);
 extern void club_stat_print(FILE *f);
 extern const gchar *utf8_to_html(const gchar *txt);
 extern void init_club_name_tree(void);
-extern void club_name_set(const gchar *club, 
+extern void club_name_set(const gchar *club,
 			  const gchar *abbr,
 			  const gchar *address);
 extern struct club_name_data *club_name_get(const gchar *club);
@@ -1221,7 +1266,7 @@ extern gint props_get_grade(gchar *b);
 extern gpointer ftp_thread(gpointer args);
 
 /* custom categories */
-extern gint get_custom_pos(struct match *m, gint table, gint pos, gint *real_res);
+extern gint get_custom_pos(struct custom_matches *cm, gint table, gint pos, gint *real_res);
 extern guint get_custom_table_number_by_competitors(gint num_comp);
 extern struct custom_data *get_custom_table(guint table);
 extern void read_custom_from_db(void);
@@ -1229,13 +1274,6 @@ extern void read_custom_from_db(void);
 /* profiling stuff */
 extern guint64 cumul_db_time;
 extern gint    cumul_db_count;
-
-#if 1 // not compatible with ARM processor
-static __inline__ guint64 rdtsc(void) {
-    guint32 lo, hi;
-    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
-    return (guint64)hi << 32 | lo;
-}
 
 #define NUM_PROF 32
 
@@ -1245,11 +1283,20 @@ struct profiling_data {
         gint line;
 };
 
-#if 0
+#ifdef PROFILE
+
+static __inline__ guint64 rdtsc(void) {
+    guint32 lo, hi;
+    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+    return (guint64)hi << 32 | lo;
+}
+
 extern struct profiling_data prof_data[NUM_PROF];
 extern gint num_prof_data;
 extern guint64 prof_start;
 extern gboolean prof_started;
+
+#define RDTSC(_a) do { _a = rdtsc(); } while(0)
 
 #define PROF_START do { memset(&prof_data, 0, sizeof(prof_data));       \
         num_prof_data = 0; cumul_db_time = 0; cumul_db_count = 0;       \
@@ -1260,7 +1307,7 @@ extern gboolean prof_started;
             prof_data[num_prof_data].func = __FUNCTION__;         \
             prof_data[num_prof_data++].line = __LINE__; }} while (0)
 
-static inline void PROF_END(void) {
+static inline void prof_end(void) {
     gint i;
     guint64 stop = rdtsc(), prev = prof_start;
     g_print("PROF:\n");
@@ -1273,15 +1320,20 @@ static inline void PROF_END(void) {
     guint64 relative_time = cumul_db_time/tot_time_div;
     g_print("\nDB-writes=%d db-time=%ld\n", cumul_db_count, relative_time);
 
-} 
+}
+#define PROF_END prof_end()
+
 #else
 
+static __inline__ guint64 rdtsc(void) {
+    return 0;
+}
+
+#define RDTSC(_a) do {} while(0)
 #define PROF_START do {} while(0)
 #define PROF do {} while(0)
-#define PROF_END(_x) do {} while(0)
+#define PROF_END do {} while(0)
 
-#endif
-
-#endif
+#endif // profiling
 
 #endif

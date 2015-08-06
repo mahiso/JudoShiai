@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +37,7 @@ static gboolean ftp_update = FALSE, do_ftp = FALSE;
         if (!_d) _d = g_strdup(""); } while (0)
 #define GETINT(_d, _s) do { GError *x=NULL; _d = g_key_file_get_integer(keyfile, "preferences", _s, &x); } while (0)
 
-static void ftp_to_server_callback(GtkWidget *widget, 
+static void ftp_to_server_callback(GtkWidget *widget,
                                    GdkEvent *event,
                                    GtkWidget *data)
 {
@@ -48,7 +48,7 @@ static void ftp_to_server_callback(GtkWidget *widget,
         if (proto < 0) proto = 0;
         g_key_file_set_integer(keyfile, "preferences", "ftpproto", proto);
 
-        STRDUP(ftp_server, gtk_entry_get_text(GTK_ENTRY(uri->address))); 
+        STRDUP(ftp_server, gtk_entry_get_text(GTK_ENTRY(uri->address)));
         g_key_file_set_string(keyfile, "preferences", "ftpserver", ftp_server);
 
         ftp_port = atoi(gtk_entry_get_text(GTK_ENTRY(uri->port)));
@@ -57,22 +57,22 @@ static void ftp_to_server_callback(GtkWidget *widget,
         STRDUP(ftp_path, gtk_entry_get_text(GTK_ENTRY(uri->path)));
         g_key_file_set_string(keyfile, "preferences", "ftppath", ftp_path);
 
-        STRDUP(proxy_host, gtk_entry_get_text(GTK_ENTRY(uri->proxy_address))); 
+        STRDUP(proxy_host, gtk_entry_get_text(GTK_ENTRY(uri->proxy_address)));
         g_key_file_set_string(keyfile, "preferences", "ftpproxyaddress", proxy_host);
 
         proxy_port = atoi(gtk_entry_get_text(GTK_ENTRY(uri->proxy_port)));
         g_key_file_set_integer(keyfile, "preferences", "ftpproxyport", proxy_port);
 
-        STRDUP(ftp_user, gtk_entry_get_text(GTK_ENTRY(uri->user))); 
+        STRDUP(ftp_user, gtk_entry_get_text(GTK_ENTRY(uri->user)));
         g_key_file_set_string(keyfile, "preferences", "ftpuser", ftp_user);
 
-        STRDUP(ftp_password, gtk_entry_get_text(GTK_ENTRY(uri->password))); 
+        STRDUP(ftp_password, gtk_entry_get_text(GTK_ENTRY(uri->password)));
         g_key_file_set_string(keyfile, "preferences", "ftppassword", ftp_password);
 
-        STRDUP(proxy_user, gtk_entry_get_text(GTK_ENTRY(uri->proxy_user))); 
+        STRDUP(proxy_user, gtk_entry_get_text(GTK_ENTRY(uri->proxy_user)));
         g_key_file_set_string(keyfile, "preferences", "ftpproxyuser", proxy_user);
 
-        STRDUP(proxy_password, gtk_entry_get_text(GTK_ENTRY(uri->proxy_password))); 
+        STRDUP(proxy_password, gtk_entry_get_text(GTK_ENTRY(uri->proxy_password)));
         g_key_file_set_string(keyfile, "preferences", "ftpproxypassword", proxy_password);
 
         do_ftp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(uri->do_it));
@@ -116,7 +116,7 @@ void ftp_to_server(GtkWidget *w, gpointer data)
     gtk_entry_set_width_chars(GTK_ENTRY(uri->address), 20);
 
     GETINT(ftp_port, "ftpport");
-    sprintf(buf, "%d", ftp_port); 
+    sprintf(buf, "%d", ftp_port);
     uri->port = gtk_entry_new();
     gtk_entry_set_text(GTK_ENTRY(uri->port), buf);
     gtk_entry_set_width_chars(GTK_ENTRY(uri->port), 4);
@@ -190,15 +190,15 @@ void ftp_to_server(GtkWidget *w, gpointer data)
     gtk_grid_attach_next_to(GTK_GRID(hbox3), gtk_label_new(_("Proxy Password:")), NULL, GTK_POS_RIGHT, 1, 1);
     gtk_grid_attach_next_to(GTK_GRID(hbox3), uri->proxy_password, NULL, GTK_POS_RIGHT, 1, 1);
 
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox2, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox1, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox3, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        uri->do_it, FALSE, FALSE, 0);
 #else
     hbox = gtk_hbox_new(FALSE, 4);
@@ -258,19 +258,19 @@ static void init_curl(void)
         ftp_log("Cannot curl_easy_init!");
         return;
     }
-    
+
     /* verbose printing */
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
-    /* we want to use our own read function */ 
+    /* we want to use our own read function */
     if ((err = curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback)))
         ftp_log("Read function option error: %s!", curl_easy_strerror(err));
- 
-    /* enable uploading */ 
+
+    /* enable uploading */
     if ((err = curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L)))
         ftp_log("Upload option error: %s!", curl_easy_strerror(err));
-        
- 
+
+
     /* user & password */
     if (ftp_user && ftp_user[0]) {
 #if 0
@@ -279,7 +279,7 @@ static void init_curl(void)
             curl_easy_setopt(curl, CURLOPT_PASSWORD, ftp_password);
 #else
         gchar pwd[64];
-        snprintf(pwd, sizeof(pwd), "%s:%s", ftp_user, 
+        snprintf(pwd, sizeof(pwd), "%s:%s", ftp_user,
                  ftp_password?ftp_password:"");
         if ((err = curl_easy_setopt(curl, CURLOPT_USERPWD, pwd)))
             ftp_log("Username/password option error: %s!", curl_easy_strerror(err));
@@ -297,7 +297,7 @@ static void init_curl(void)
     /* proxy user & password */
     if (proxy_user && proxy_user[0]) {
         gchar pwd[64];
-        snprintf(pwd, sizeof(pwd), "%s:%s", proxy_user, 
+        snprintf(pwd, sizeof(pwd), "%s:%s", proxy_user,
                  proxy_password?proxy_password:"");
         if ((err = curl_easy_setopt(curl, CURLOPT_PROXYUSERPWD, pwd)))
             ftp_log("Proxy user/password option error: %s!", curl_easy_strerror(err));
@@ -314,7 +314,7 @@ static void init_curl(void)
 
 static void cleanup_curl(void)
 {
-    /* always cleanup */ 
+    /* always cleanup */
     if (curl) {
         curl_easy_cleanup(curl);
         curl = NULL;
@@ -324,14 +324,14 @@ static void cleanup_curl(void)
 gpointer ftp_thread(gpointer args)
 {
     CURLcode res;
-    
+
 
     ftp_log("Starting FTP");
 
     while ((res = curl_global_init(CURL_GLOBAL_DEFAULT))) {
         ftp_log("Cannot init curl: %s!", curl_easy_strerror(res));
         g_usleep(120000000);
-    }        
+    }
 
     for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
     {
@@ -365,31 +365,31 @@ gpointer ftp_thread(gpointer args)
                                         headerlist = curl_slist_append(headerlist, "RNFR TMPXYZ");
                                         headerlist = curl_slist_append(headerlist, n);
                                         g_free(n);
-                                        /* pass in that last of FTP commands to run after the transfer */ 
+                                        /* pass in that last of FTP commands to run after the transfer */
                                         if ((res = curl_easy_setopt(curl, CURLOPT_POSTQUOTE, headerlist)))
                                             ftp_log("Postquote option error: %s!", curl_easy_strerror(res));
                                     }
 
                                     curl_off_t fsize = statbuf.st_size;
 
-                                    /* specify target */ 
+                                    /* specify target */
                                     gchar *u;
 
                                     if (ftp_path && ftp_path[0])
                                         u = g_strdup_printf("%s://%s/%s/%s",
-                                                            proto == PROTO_FTP ? "ftp" : "http", 
+                                                            proto == PROTO_FTP ? "ftp" : "http",
                                                             ftp_server, ftp_path,
                                                             proto == PROTO_FTP ? "TMPXYZ" : fname);
                                     else
                                         u = g_strdup_printf("%s://%s/%s",
-                                                            proto == PROTO_FTP ? "ftp" : "http", 
+                                                            proto == PROTO_FTP ? "ftp" : "http",
                                                             ftp_server,
                                                             proto == PROTO_FTP ? "TMPXYZ" : fname);
 
                                     if ((res = curl_easy_setopt(curl, CURLOPT_URL, u)))
                                         ftp_log("URL option error: %s!", curl_easy_strerror(res));
                                     g_free(u);
-                                    
+
                                     /* specify which file to upload */
                                     if ((res = curl_easy_setopt(curl, CURLOPT_READDATA, f)))
                                         ftp_log("Read data option error: %s!", curl_easy_strerror(res));
@@ -397,21 +397,21 @@ gpointer ftp_thread(gpointer args)
                                     /* Set the size of the file to upload (optional).  If you give a *_LARGE
                                        option you MUST make sure that the type of the passed-in argument is a
                                        curl_off_t. If you use CURLOPT_INFILESIZE (without _LARGE) you must
-                                       make sure that to pass in a type 'long' argument. */ 
+                                       make sure that to pass in a type 'long' argument. */
                                     if ((res = curl_easy_setopt(curl, CURLOPT_INFILESIZE_LARGE,
                                                                 (curl_off_t)fsize)))
                                         ftp_log("Large option error: %s!", curl_easy_strerror(res));
-                                
+
                                     //curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
                                     //curl_easy_setopt(curl, CURLOPT_FTP_USE_EPSV, 0);
 
-                                    /* Now run off and do what you've been told! */ 
+                                    /* Now run off and do what you've been told! */
                                     if ((res = curl_easy_perform(curl)))
                                         ftp_log("Cannot execute: %s!\n",
                                                 curl_easy_strerror(res));
 
                                     if (headerlist) {
-                                        /* clean up the FTP commands list */ 
+                                        /* clean up the FTP commands list */
                                         curl_slist_free_all(headerlist);
                                         headerlist = NULL;
                                         if ((res = curl_easy_setopt(curl, CURLOPT_POSTQUOTE, headerlist)))

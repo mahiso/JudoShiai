@@ -1,6 +1,7 @@
 info "Round Robin" "rr3" 3 3
 
-rr pooli c1 c2 c3
+rr pooli: c1 c2 c3
 
 pos1 pooli.1
 pos2 pooli.2
+pos3 pooli.3

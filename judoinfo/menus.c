@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,10 +46,10 @@ extern void set_svg_file(GtkWidget *menu_item, gpointer data);
 static void about_judoinfo( GtkWidget *w,
 			    gpointer   data )
 {
-    gtk_show_about_dialog (NULL, 
+    gtk_show_about_dialog (NULL,
                            "name", "JudoInfo",
                            "title", _("About JudoInfo"),
-                           "copyright", "Copyright 2006-2013 Hannu Jokinen",
+                           "copyright", "Copyright 2006-2015 Hannu Jokinen",
                            "version", SHIAI_VERSION,
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
@@ -63,11 +63,11 @@ static void tatami_selection(GtkWidget *w,
     SPRINTF(buf, "tatami%d", tatami);
 #if (GTKVER == 3)
     conf_show_tatami[tatami-1] = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(w));
-    g_key_file_set_boolean(keyfile, "preferences", buf, 
+    g_key_file_set_boolean(keyfile, "preferences", buf,
                            gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(w)));
 #else
     conf_show_tatami[tatami-1] = GTK_CHECK_MENU_ITEM(w)->active;
-    g_key_file_set_boolean(keyfile, "preferences", buf, 
+    g_key_file_set_boolean(keyfile, "preferences", buf,
                            GTK_CHECK_MENU_ITEM(w)->active);
 #endif
     gint i;
@@ -104,7 +104,7 @@ gint number_of_conf_tatamis(void)
 static void change_menu_label(GtkWidget *item, const gchar *new_text)
 {
     GtkWidget *menu_label = gtk_bin_get_child(GTK_BIN(item));
-    gtk_label_set_text(GTK_LABEL(menu_label), new_text); 
+    gtk_label_set_text(GTK_LABEL(menu_label), new_text);
 }
 
 static GtkWidget *get_picture(const gchar *name)
@@ -126,10 +126,11 @@ static void set_menu_item_picture(GtkImageMenuItem *menu_item, gchar *name)
 static gint light_callback(gpointer data)
 {
     extern gboolean connection_ok;
-    extern time_t traffic_last_rec_time;
     static gboolean last_ok = FALSE;
+#if 0
+    extern time_t traffic_last_rec_time;
     static gboolean yellow_set = FALSE;
-        
+
     if (yellow_set == FALSE && connection_ok && time(NULL) > traffic_last_rec_time + 6) {
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "yellowlight.png");
         yellow_set = TRUE;
@@ -138,6 +139,9 @@ static gint light_callback(gpointer data)
         yellow_set = FALSE;
         last_ok = !connection_ok;
     }
+
+
+#endif
 
     if (connection_ok == last_ok)
         return TRUE;
@@ -151,9 +155,10 @@ static gint light_callback(gpointer data)
         msg.type = MSG_ALL_REQ;
         msg.sender = my_address;
         send_packet(&msg);
+	g_print("JudoInfo connection ok: requesting all\n");
 
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "greenlight.png");
-    } else		
+    } else
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "redlight.png");
 
     return TRUE;
@@ -192,15 +197,15 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     preferencesmenu  = gtk_menu_new ();
     helpmenu         = gtk_menu_new ();
-        
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (preferences), preferencesmenu); 
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (help), helpmenu);
-  
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), preferences); 
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), help);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), lang_menu_item); 
 
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menu_light); 
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (preferences), preferencesmenu);
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (help), helpmenu);
+
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), preferences);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), help);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), lang_menu_item);
+
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menu_light);
 #if (GTKVER == 3)
     gtk_widget_set_halign(menu_light, GTK_ALIGN_FILL);
     //gtk_widget_set_hexpand(menu_light, TRUE);
@@ -210,11 +215,11 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(menu_light), "button_press_event",
                      G_CALLBACK(ask_node_ip_address), (gpointer)NULL);
 
-  
+
     /* Create the Preferences menu content. */
     full_screen = gtk_check_menu_item_new_with_label("");
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), full_screen);
-    g_signal_connect(G_OBJECT(full_screen), "activate", 
+    g_signal_connect(G_OBJECT(full_screen), "activate",
                      G_CALLBACK(toggle_full_screen), 0);
 
     normal_display     = gtk_radio_menu_item_new_with_label(NULL, "");
@@ -226,26 +231,26 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), horizontal_display);
     create_separator(preferencesmenu);
 
-    g_signal_connect(G_OBJECT(normal_display), "activate", 
+    g_signal_connect(G_OBJECT(normal_display), "activate",
                      G_CALLBACK(toggle_small_display), (gpointer)NORMAL_DISPLAY);
-    g_signal_connect(G_OBJECT(small_display), "activate", 
+    g_signal_connect(G_OBJECT(small_display), "activate",
                      G_CALLBACK(toggle_small_display), (gpointer)SMALL_DISPLAY);
-    g_signal_connect(G_OBJECT(horizontal_display), "activate", 
+    g_signal_connect(G_OBJECT(horizontal_display), "activate",
                      G_CALLBACK(toggle_small_display), (gpointer)HORIZONTAL_DISPLAY);
 
     mirror = gtk_check_menu_item_new_with_label("");
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), mirror);
-    g_signal_connect(G_OBJECT(mirror), "activate", 
+    g_signal_connect(G_OBJECT(mirror), "activate",
                      G_CALLBACK(toggle_mirror), 0);
 
     whitefirst = gtk_check_menu_item_new_with_label("");
-    gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), whitefirst);
-    g_signal_connect(G_OBJECT(whitefirst), "activate", 
+    //gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), whitefirst);
+    g_signal_connect(G_OBJECT(whitefirst), "activate",
                      G_CALLBACK(toggle_whitefirst), 0);
 
     redbackground = gtk_check_menu_item_new_with_label("");
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), redbackground);
-    g_signal_connect(G_OBJECT(redbackground), "activate", 
+    g_signal_connect(G_OBJECT(redbackground), "activate",
                      G_CALLBACK(toggle_redbackground), 0);
 
     node_ip = create_menu_item(preferencesmenu, ask_node_ip_address, 0);
@@ -255,20 +260,20 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     for (i = 0; i < NUM_TATAMIS; i++) {
         tatami_show[i] = gtk_check_menu_item_new_with_label("");
         gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), tatami_show[i]);
-        g_signal_connect(G_OBJECT(tatami_show[i]), "activate", 
+        g_signal_connect(G_OBJECT(tatami_show[i]), "activate",
                          G_CALLBACK(tatami_selection), gint_to_ptr(i+1));
     }
 
     create_separator(preferencesmenu);
     writefile = gtk_menu_item_new_with_label("");
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), writefile);
-    g_signal_connect(G_OBJECT(writefile), "activate", 
+    g_signal_connect(G_OBJECT(writefile), "activate",
                      G_CALLBACK(set_write_file), 0);
 
     create_separator(preferencesmenu);
     svgfile = gtk_menu_item_new_with_label("");
     gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), svgfile);
-    g_signal_connect(G_OBJECT(svgfile), "activate", 
+    g_signal_connect(G_OBJECT(svgfile), "activate",
                      G_CALLBACK(set_svg_file), 0);
 
     create_separator(preferencesmenu);
@@ -279,7 +284,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     about  = create_menu_item(helpmenu, about_judoinfo, 0);
 
     /* Attach the new accelerator group to the window. */
-    gtk_widget_add_accelerator(quit, "activate", group, GDK_Q, GDK_CONTROL_MASK, 
+    gtk_widget_add_accelerator(quit, "activate", group, GDK_Q, GDK_CONTROL_MASK,
                                GTK_ACCEL_VISIBLE);
     gtk_window_add_accel_group (GTK_WINDOW (window), group);
 
@@ -358,7 +363,7 @@ void set_preferences(void)
         language = i;
     else
         language = LANG_FI;
-        
+
     error = NULL;
     str = g_key_file_get_string(keyfile, "preferences", "svgfile", &error);
     if (!error) {
@@ -406,4 +411,3 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     return TRUE;
 }
-

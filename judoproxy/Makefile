@@ -1,5 +1,8 @@
 include ../common/Makefile.inc
 
+LIBS += -L/usr/local/lib -lavutil -lavformat -lavcodec -lz -lavutil -lm \
+-lswscale -lxml2 -llzma -lfdk-aac -lmp3lame -lx264 -lswresample
+
 OBJDIR := $(JS_BUILD_DIR)/$(LASTPART)/$(OBJDIR)
 
 all: $(OBJDIR) $(OBJDIR)/judoproxy$(SUFF)
@@ -8,10 +11,12 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/comm.o $(OBJDIR)/ip.o \
-	$(OBJDIR)/protocol.o $(OBJDIR)/language.o $(OBJDIR)/video.o
+	$(OBJDIR)/protocol.o $(OBJDIR)/language.o \
+	$(OBJDIR)/camera-video.o $(OBJDIR)/html.o
 
 CFLAGS += -DAPPLICATION="\"judoproxy\""
 CFLAGS += -DAPP_NUM=6
+CFLAGS += -I/usr/include/libxml2
 
 ### Windows executable ###
 ifeq ($(TGT),WIN32)

@@ -1,4 +1,4 @@
-info "Ranskalainen 8" "Ranska8" 0 8
+info "Ranskalainen 8" "Ranska8" 7 8
 
 svg page 1
 

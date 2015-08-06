@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #if defined(__WIN32__) || defined(WIN32)
 
@@ -88,6 +88,17 @@ static struct {
 //static volatile struct message message_queue[MSG_QUEUE_LEN];
 //static volatile gint msg_put = 0, msg_get = 0;
 //static GStaticMutex msg_mutex = G_STATIC_MUTEX_INIT;
+
+void send_info_packet(struct message *msg)
+{
+    gint i;
+
+    for (i = 0; i < NUM_CONNECTIONS; i++) {
+	if (connections[i].fd > 0 &&
+	    connections[i].conn_type == APPLICATION_TYPE_INFO)
+	    send_msg(connections[i].fd, msg);
+    }
+}
 
 void add_client_ssdp_info(gchar *rec, struct sockaddr_in *client)
 {
@@ -261,7 +272,7 @@ void msg_received(struct message *input_msg)
         break;
 
     case MSG_CANCEL_REST_TIME:
-        db_reset_last_match_times(input_msg->u.cancel_rest_time.category, 
+        db_reset_last_match_times(input_msg->u.cancel_rest_time.category,
                                   input_msg->u.cancel_rest_time.number,
                                   input_msg->u.cancel_rest_time.blue,
                                   input_msg->u.cancel_rest_time.white);
@@ -314,6 +325,7 @@ void msg_received(struct message *input_msg)
                 j->deleted = input_msg->u.edit_competitor.deleted;
                 if (j->visible) {
                     db_update_judoka(j->index, j);
+                    make_backup();
 
                     memset(&output_msg, 0, sizeof(output_msg));
                     output_msg.type = MSG_EDIT_COMPETITOR;
@@ -345,15 +357,15 @@ void msg_received(struct message *input_msg)
                         else
                             gender = IS_MALE;
 
-                        estim = find_correct_category(current_year - j->birthyear, 
-                                                      j->weight, 
-                                                      gender, 
+                        estim = find_correct_category(current_year - j->birthyear,
+                                                      j->weight,
+                                                      gender,
                                                       NULL, TRUE);
                     } else {
                         estim = find_correct_category(0, j->weight, 0, j->regcategory, FALSE);
                     }
 
-                    strncpy(output_msg.u.edit_competitor.estim_category, 
+                    strncpy(output_msg.u.edit_competitor.estim_category,
                             estim ? estim : "", sizeof(output_msg.u.edit_competitor.estim_category)-1);
                     g_free(estim);
 
@@ -384,7 +396,7 @@ void msg_received(struct message *input_msg)
 	    SET_J(clubseeding);
 	    SET_J(comment);
 	    SET_J(coachid);
-	    if (j2.index) { // edit old competitor 
+	    if (j2.index) { // edit old competitor
 		j = get_data(j2.index);
 		if (j) {
 //		    j2.category = j->category;
@@ -406,7 +418,7 @@ void msg_received(struct message *input_msg)
 			current_index = j2.index + 1;
 
 		    display_one_judoka(&j2);
-                
+
 		    avl_set_competitor(j2.index, &j2);
 		    //avl_set_competitor_status(j2.index, j2.deleted);
 		}
@@ -484,7 +496,7 @@ static void send_packet_1(struct message *msg)
     gint old_val;
 
     if (msg->type == MSG_NEXT_MATCH) {
-        /* Update rest time. rest_time has an absolute value 
+        /* Update rest time. rest_time has an absolute value
          * while we send the remaining time. */
         old_val = msg->u.next_match.rest_time;
         time_t now = time(NULL);
@@ -525,12 +537,12 @@ void set_tatami_state(GtkWidget *menu_item, gpointer data)
 #if (GTKVER == 3)
     tatami_state[tatami-1] = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
     sprintf(buf, "tatami%d", tatami);
-    g_key_file_set_integer(keyfile, "preferences", buf, 
+    g_key_file_set_integer(keyfile, "preferences", buf,
                            gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item)));
 #else
     tatami_state[tatami-1] = GTK_CHECK_MENU_ITEM(menu_item)->active;
     sprintf(buf, "tatami%d", tatami);
-    g_key_file_set_integer(keyfile, "preferences", buf, 
+    g_key_file_set_integer(keyfile, "preferences", buf,
                            GTK_CHECK_MENU_ITEM(menu_item)->active)a;
 #endif
 }
@@ -554,7 +566,8 @@ static gboolean send_message_to_application[NUM_MESSAGES][NUM_APPLICATION_TYPES]
     {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_CANCEL_REST_TIME,
     {TRUE,  FALSE, TRUE , FALSE, FALSE, FALSE, FALSE}, // MSG_UPDATE_LABEL,
     {FALSE, FALSE, FALSE, FALSE, TRUE , TRUE , FALSE}, // MSG_EDIT_COMPETITOR,
-    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}  // MSG_SCALE,
+    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SCALE,
+    {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_11_NAME_INFO,
 };
 
 /*
@@ -579,6 +592,7 @@ gpointer node_thread(gpointer args)
     gint xmllen = strlen(xml);
     struct message msg_out;
     gboolean msg_out_ready;
+    FILE *loki = fopen("loki.txt", "w");
 
 #ifndef WIN32
     signal(SIGPIPE, SIG_IGN);
@@ -615,10 +629,10 @@ gpointer node_thread(gpointer args)
     {
         struct timeval timeout;
         gint r, i;
-                
+
         fds = read_fd;
         timeout.tv_sec = 0;
-        timeout.tv_usec = 10000;
+        timeout.tv_usec = 1000;
 
         r = select(32, &fds, NULL, NULL, &timeout);
 
@@ -627,18 +641,21 @@ gpointer node_thread(gpointer args)
         // Mutex may be locked for a long time if there are network problems
         // during send. Thus we send a copy to unlock the mutex immediatelly.
         msg_out_ready = FALSE;
+
 #if (GTKVER == 3)
         G_LOCK(send_mutex);
 #else
         g_static_mutex_lock(&send_mutex);
 #endif
+
         if (msg_queue_get != msg_queue_put) {
             msg_out = msg_to_send[msg_queue_get];
             msg_queue_get++;
             if (msg_queue_get >= MSG_QUEUE_LEN)
                 msg_queue_get = 0;
-            msg_out_ready = TRUE;
+	    msg_out_ready = TRUE;
         }
+
 #if (GTKVER == 3)
         G_UNLOCK(send_mutex);
 #else
@@ -646,6 +663,10 @@ gpointer node_thread(gpointer args)
 #endif
 
         if (msg_out_ready) {
+	    struct timeval cpu_start, cpu_end;
+	    int cpu_diff;
+	    gettimeofday(&cpu_start, NULL);
+
             for (i = 0; i < NUM_CONNECTIONS; i++) {
                 if (connections[i].fd == 0)
                     continue;
@@ -659,7 +680,7 @@ gpointer node_thread(gpointer args)
                     continue;
 
                 extern time_t msg_out_start_time;
-                extern gulong msg_out_addr; 
+                extern gulong msg_out_addr;
                 msg_out_addr = connections[i].addr;
                 msg_out_start_time = time(NULL);
                 if (send_msg(connections[i].fd, &msg_out) < 0) {
@@ -668,6 +689,17 @@ gpointer node_thread(gpointer args)
                 }
                 msg_out_start_time = 0;
             }
+
+	    gettimeofday(&cpu_end, NULL);
+	    cpu_diff = cpu_end.tv_usec - cpu_start.tv_usec;
+	    if (cpu_diff < 0) cpu_diff += 1000000;
+	    /*
+	    fprintf(loki, "msg %02d.%03d-%02d.%03d type=%d\r\n",
+		    cpu_start.tv_sec%100, cpu_start.tv_usec/1000,
+		    cpu_end.tv_sec%100, cpu_end.tv_usec/1000,
+		    msg_out.type);
+	    fflush(loki);
+	    */
         }
 
         if (r <= 0)
@@ -683,7 +715,7 @@ gpointer node_thread(gpointer args)
             }
 #if 0
             const int nodelayflag = 1;
-            if (setsockopt(tmp_fd, IPPROTO_TCP, TCP_NODELAY, 
+            if (setsockopt(tmp_fd, IPPROTO_TCP, TCP_NODELAY,
                            (const void *)&nodelayflag, sizeof(nodelayflag))) {
                 g_print("CANNOT SET TCP_NODELAY (2)\n");
             }
@@ -702,14 +734,14 @@ gpointer node_thread(gpointer args)
             connections[i].addr = caller.sin_addr.s_addr;
             connections[i].id = 0;
             connections[i].conn_type = 0;
-            g_print("Node: new connection[%d]: fd=%d addr=%s\n", 
+            g_print("Node: new connection[%d]: fd=%d addr=%s\n",
                     i, tmp_fd, inet_ntoa(caller.sin_addr));
             FD_SET(tmp_fd, &read_fd);
         }
 
         for (i = 0; i < NUM_CONNECTIONS; i++) {
             static guchar inbuf[2000];
-			
+
             if (connections[i].fd == 0)
                 continue;
 
@@ -856,7 +888,7 @@ gint read_file_from_net(gchar *filename, gint num)
         perror("client socket");
         return -1;
     }
-        
+
     memset(&server, 0, sizeof(server));
     server.sin_family      = AF_INET;
     server.sin_port        = htons(SHIAI_PORT+1);
@@ -925,8 +957,8 @@ void show_node_connections( GtkWidget *w,
         }
 
         myaddr = ntohl(connections[i].addr);
-        snprintf(addrstr, sizeof(addrstr), "%ld.%ld.%ld.%ld", 
-                (myaddr>>24)&0xff, (myaddr>>16)&0xff, 
+        snprintf(addrstr, sizeof(addrstr), "%ld.%ld.%ld.%ld",
+                (myaddr>>24)&0xff, (myaddr>>16)&0xff,
                  (myaddr>>8)&0xff, (myaddr)&0xff);
         label = gtk_label_new(addrstr);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -944,10 +976,10 @@ void show_node_connections( GtkWidget *w,
     for (i = 0; i < NUM_CONNECTIONS; i++) {
         if (noconnections[i].addr == 0)
             continue;
-        
+
         myaddr = ntohl(noconnections[i].addr);
-        snprintf(addrstr, sizeof(addrstr), "%ld.%ld.%ld.%ld", 
-                (myaddr>>24)&0xff, (myaddr>>16)&0xff, 
+        snprintf(addrstr, sizeof(addrstr), "%ld.%ld.%ld.%ld",
+                (myaddr>>24)&0xff, (myaddr>>16)&0xff,
                  (myaddr>>8)&0xff, (myaddr)&0xff);
         label = gtk_label_new(addrstr);
         gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
@@ -966,7 +998,7 @@ void show_node_connections( GtkWidget *w,
     }
 
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        vbox, FALSE, FALSE, 0);
 #else
     gtk_box_pack_start_defaults(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox);
@@ -986,4 +1018,3 @@ gint get_port(void)
 {
     return SHIAI_PORT;
 }
-

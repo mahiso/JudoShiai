@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +26,7 @@ enum draw_dialog_buttons {
 };
 
 guint french_matches_blue[64] = {
-    1, 33, 17, 49,  9, 41, 25, 57,  5, 37, 21, 53, 13, 45, 29, 61, 3, 35, 19, 51, 11, 43, 27, 59, 7, 39, 23, 55, 15, 47, 31, 63, 
+    1, 33, 17, 49,  9, 41, 25, 57,  5, 37, 21, 53, 13, 45, 29, 61, 3, 35, 19, 51, 11, 43, 27, 59, 7, 39, 23, 55, 15, 47, 31, 63,
     2, 34, 18, 50, 10, 42, 26, 58,  6, 38, 22, 54, 14, 46, 30, 62, 4, 36, 20, 52, 12, 44, 28, 60, 8, 40, 24, 56, 16, 48, 32, 64
 };
 guint french_matches_white_offset[NUM_FRENCH] = {4, 8, 16, 32, 64};
@@ -44,6 +44,7 @@ struct mdata {
         gchar *club;
         gchar *country;
         GtkWidget *eventbox, *label;
+	gchar distance[NUM_COMPETITORS+1];
     } mcomp[NUM_COMPETITORS+1];
 
     struct mpos {
@@ -56,15 +57,18 @@ struct mdata {
     gboolean hidden, edit;
     gint drawn, seeded1, seeded2, seeded3;
     struct compsys sys;
+    struct custom_data *custom_table;
+    guint64 mask;
 };
 
-GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors, 
+GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
                                         struct mdata *mdata);
-static void make_manual_matches_callback(GtkWidget *widget, 
+static void make_manual_matches_callback(GtkWidget *widget,
                                          GdkEvent *event,
                                          void *data);
 static gboolean select_competitor(GtkWidget *eventbox, GdkEventButton *event, void *param);
 static gint get_competitor_number(gint pos, struct mdata *mdata);
+static gint get_rr_by_comp(struct custom_data *ct, gint cnum);
 
 #if 0
 static gint get_free_pos(gint pos[], gint num_competitors, gint group)
@@ -94,7 +98,7 @@ static gint get_free_pos(gint pos[], gint num_competitors, gint group)
 }
 #endif
 
-static gint cmp_clubs(struct mcomp *m1, struct mcomp *m2) 
+static gint cmp_clubs(struct mcomp *m1, struct mcomp *m2)
 {
     gint result = 0;
 
@@ -103,10 +107,10 @@ static gint cmp_clubs(struct mcomp *m1, struct mcomp *m2)
 	m1->club[0] && m2->club[0] &&
 	strcmp(m1->club, m2->club) == 0)
 	result |= CLUB_TEXT_CLUB;
-    
+
     // country name is the same
-    if (m1->country && m2->country && 
-	m1->country[0] && m2->country[0] && 
+    if (m1->country && m2->country &&
+	m1->country[0] && m2->country[0] &&
 	strcmp(m1->country, m2->country) == 0)
 	result |= CLUB_TEXT_COUNTRY;
 
@@ -164,7 +168,7 @@ static void free_mdata(struct mdata *mdata)
 static gint last_selected = 0;
 
 /* Competitors are drawed in the following order:
- * - seeded. 
+ * - seeded.
  * - their clubmates.
  * - competitors from the biggest club.
  * - competitors from the same country.
@@ -177,12 +181,12 @@ static gint get_next_comp(struct mdata *mdata)
     gint i, seed, x = (rand()%mdata->mjudokas) + 1;
     gint highest_val = -1, highest_num = 0, same_club = 0, same_country = 0;
     gint club_seeding = 0, same_club_seeding = 0, same_country_seeding = 0;
-    
+
     // find seeded in order
     for (seed = 1; seed <= NUM_SEEDED; seed++) {
         for (i = 0; i < mdata->mjudokas; i++) {
             if (mdata->mcomp[x].pos == 0 &&
-                mdata->mcomp[x].index && 
+                mdata->mcomp[x].index &&
                 mdata->mcomp[x].seeded == seed)
                 return x;
 
@@ -198,21 +202,21 @@ static gint get_next_comp(struct mdata *mdata)
             if (mdata->mcomp[x].pos == 0 && mdata->mcomp[x].index) {
                     gint c = cmp_clubs(&mdata->mcomp[x], &mdata->mcomp[last_selected]);
                     if (c & CLUB_TEXT_CLUB)
-                        if ((same_club_seeding && mdata->mcomp[x].clubseeded && 
+                        if ((same_club_seeding && mdata->mcomp[x].clubseeded &&
                              same_club_seeding > mdata->mcomp[x].clubseeded) ||
                             (same_club_seeding == 0)) {
                             same_club_seeding = mdata->mcomp[x].clubseeded;
                             same_club = x;
-                        }                        
+                        }
                     if (c & CLUB_TEXT_COUNTRY)
-                        if ((same_country_seeding && mdata->mcomp[x].clubseeded && 
+                        if ((same_country_seeding && mdata->mcomp[x].clubseeded &&
                              same_country_seeding > mdata->mcomp[x].clubseeded) ||
                             (same_country_seeding == 0)) {
                             same_country_seeding = mdata->mcomp[x].clubseeded;
                             same_country = x;
-                        }           
+                        }
             }
-            
+
             if (++x > mdata->mjudokas)
                 x = 1;
         }
@@ -237,7 +241,7 @@ static gint get_next_comp(struct mdata *mdata)
                     highest_val = mdata->mcomp[x].num_mates;
                     highest_num = x;
                     club_seeding = mdata->mcomp[x].clubseeded;
-                } 
+                }
 
                 if ((club_seeding && mdata->mcomp[x].clubseeded && club_seeding > mdata->mcomp[x].clubseeded) ||
                     (club_seeding == 0 && mdata->mcomp[x].clubseeded)) {
@@ -261,7 +265,7 @@ static gint get_section(gint num, struct mdata *mdata)
     gint sec_max = sec_siz;
 
     // for pool & double pool section is competitor number
-    if (mdata->mfrench_sys < 0)
+    if (mdata->mfrench_sys == POOL_SYS)
         return (num - 1);
 
     // for french system section is A1, A2, B1, B2, C1, C2, D1 or D2.
@@ -313,78 +317,112 @@ static void calc_place_values(gint *place_values, struct mdata *mdata)
 #if (NUM_COMPETITORS > 64)
     case FRENCH_128: num = 128; break;
 #endif
+    case CUST_SYS: num = mdata->mpositions; break;
     default: return;
-    }        
-
-    // add one to place value if fight has the other competitor
-    // add also a seeding based number if the competitor is seeded
-    for (x = 1; x <= mdata->mpositions-1; x += 2) {
-        if (mdata->mpos[x].judoka) {
-            place_values[x+1]++;
-            if (mdata->mcomp[mdata->mpos[x].judoka].seeded)
-                place_values[x+1] += NUM_SEEDED + 1 - mdata->mcomp[mdata->mpos[x].judoka].seeded;
-        }
-        if (mdata->mpos[x+1].judoka) {
-            place_values[x]++;
-            if (mdata->mcomp[mdata->mpos[x+1].judoka].seeded)
-                place_values[x] += NUM_SEEDED + 1 - mdata->mcomp[mdata->mpos[x+1].judoka].seeded;
-        }
     }
 
-    // calculate number of competitors in each quarter
-    for (x = 1; x <= mdata->mpositions; x++) {
-        if (mdata->mpos[x].judoka == 0)
-            continue;
+    if (mdata->mfrench_sys != CUST_SYS) {
+	// add one to place value if fight has the other competitor
+	// add also a seeding based number if the competitor is seeded
+	for (x = 1; x <= mdata->mpositions-1; x += 2) {
+	    if (mdata->mpos[x].judoka) {
+		place_values[x+1]++;
+		if (mdata->mcomp[mdata->mpos[x].judoka].seeded)
+		    place_values[x+1] += NUM_SEEDED + 1 - mdata->mcomp[mdata->mpos[x].judoka].seeded;
+	    }
+	    if (mdata->mpos[x+1].judoka) {
+		place_values[x]++;
+		if (mdata->mcomp[mdata->mpos[x+1].judoka].seeded)
+		    place_values[x] += NUM_SEEDED + 1 - mdata->mcomp[mdata->mpos[x+1].judoka].seeded;
+	    }
+	}
+	// calculate number of competitors in each quarter
+	for (x = 1; x <= mdata->mpositions; x++) {
+	    if (mdata->mpos[x].judoka == 0)
+		continue;
 
-        if (x <= mdata->mpositions/4)
-            q1++;
-        else if (x <= mdata->mpositions/2)
-            q2++;
-        else if (x <= mdata->mpositions*3/4)
-            q3++;
-        else
-            q4++;
-    }
+	    if (x <= mdata->mpositions/4)
+		q1++;
+	    else if (x <= mdata->mpositions/2)
+		q2++;
+	    else if (x <= mdata->mpositions*3/4)
+		q3++;
+	    else
+		q4++;
+	}
 
-    // balance halfs 
-    if (q1 + q2 > q3 + q4) {
-        for (x = 1; x <= mdata->mpositions/2; x++)
-            place_values[x] += 2;
-    } else if (q1 + q2 < q3 + q4) {
-        for (x = mdata->mpositions/2 + 1; x <= mdata->mpositions; x++)
-            place_values[x] += 2;
-    }
+	// balance halfs
+	if (q1 + q2 > q3 + q4) {
+	    for (x = 1; x <= mdata->mpositions/2; x++)
+		place_values[x] += 2;
+	} else if (q1 + q2 < q3 + q4) {
+	    for (x = mdata->mpositions/2 + 1; x <= mdata->mpositions; x++)
+		place_values[x] += 2;
+	}
 
-    // balance 1st and 2nd quarters
-    if (q1 > q2) {
-        for (x = 1; x <= mdata->mpositions/4; x++)
-            place_values[x]++;
-    } else if (q1 < q2) {
-        for (x = mdata->mpositions/4 + 1; x <= mdata->mpositions/2; x++)
-            place_values[x]++;
-    }
+	// balance 1st and 2nd quarters
+	if (q1 > q2) {
+	    for (x = 1; x <= mdata->mpositions/4; x++)
+		place_values[x]++;
+	} else if (q1 < q2) {
+	    for (x = mdata->mpositions/4 + 1; x <= mdata->mpositions/2; x++)
+		place_values[x]++;
+	}
 
-    // balance 3rd and 4th quarters
-    if (q3 > q4) {
-        for (x = mdata->mpositions/2 + 1; x <= mdata->mpositions*3/4; x++)
-            place_values[x]++;
-    } else if (q3 < q4) {
-        for (x = mdata->mpositions*3/4 + 1; x <= mdata->mpositions; x++)
-            place_values[x]++;
-    }
+	// balance 3rd and 4th quarters
+	if (q3 > q4) {
+	    for (x = mdata->mpositions/2 + 1; x <= mdata->mpositions*3/4; x++)
+		place_values[x]++;
+	} else if (q3 < q4) {
+	    for (x = mdata->mpositions*3/4 + 1; x <= mdata->mpositions; x++)
+		place_values[x]++;
+	}
 
-    // add value based on the closeness of the club mates
-    cnt = 2;
-    while (cnt < num) {
-        for (x = 1; x <= mdata->mpositions; x += cnt) {
-            if ((s = club_mate_in_range(x, cnt, mdata))) {
-                for (j = x; j < x+cnt; j++)
-                    place_values[j] += 4*s;
-            }
-        }
-        cnt *= 2;
-    }
+	cnt = 2;
+	while (cnt < num) {
+	    for (x = 1; x <= mdata->mpositions; x += cnt) {
+		if ((s = club_mate_in_range(x, cnt, mdata))) {
+		    for (j = x; j < x+cnt; j++)
+			place_values[j] += 4*s;
+		}
+	    }
+	    cnt *= 2;
+	}
+    } else {
+	// cust sys
+	for (x = 1; x <= mdata->mpositions; x++) {
+	    gint cmp, y;
 
+	    for (y = 1; y <= mdata->mpositions; y++) {
+		if (x == y)
+		    continue;
+
+		if (mdata->mpos[x].judoka)
+		    continue;
+
+		gint other = mdata->mpos[y].judoka;
+		if (other == 0)
+		    continue;
+
+		if ((cmp = cmp_clubs(&mdata->mcomp[mdata->selected], &mdata->mcomp[other]))) {
+		    gint val = 0;
+
+		    if (cmp & CLUB_TEXT_CLUB)
+			val++;
+		    if (cmp & CLUB_TEXT_COUNTRY)
+			val++;
+		    if (mdata->mcomp[other].seeded)
+			val++;
+
+		    gint dist = mdata->mcomp[x].distance[y];
+		    if (dist > 0)
+			place_values[x] += val*16/dist;
+		    else
+			place_values[x] += val*32;
+		}
+	    }
+	}
+    } // cust sys
     /***
     g_print("\nplace values: ");
     for (x = 1; x <= mdata->mpositions; x++)
@@ -404,7 +442,7 @@ static gint get_free_pos_by_mask(gint mask, struct mdata *mdata)
     if (mask == 0)
         return 0;
 
-    if (mdata->mfrench_sys < 0) {
+    if (mdata->mfrench_sys == POOL_SYS) {
         // pool or double pool
         x = rand()%mdata->mpositions + 1;
         for (i = 1; i <= mdata->mpositions; i++) {
@@ -447,7 +485,9 @@ static gint get_free_pos_by_mask(gint mask, struct mdata *mdata)
     for (i = 1; i <= mdata->mpositions; i++) {
         // is this position in a valid mask section
         gint currmask = 1<<get_section(x, mdata);
-        if ((currmask & mask) && mdata->mpos[x].judoka == 0 
+        if (((!mdata->mask && (currmask & mask)) ||
+	     (mdata->mask & (1<<(x-1)))) &&
+	    mdata->mpos[x].judoka == 0
             /*XXX && get_competitor_number(x, mdata) <= mdata->mjudokas*/) {
             // update the lowest avoid value
             if (place_values[x] < best_value) {
@@ -513,13 +553,13 @@ static gint get_seeded_mask(gint mask, struct mdata *mdata)
 static gint get_club_mask(struct mdata *mdata)
 {
     gint i, res = 0;
-	
+
     if (mdata->selected == 0)
         return 0;
 
     for (i = 1; i <= mdata->mpositions; i++) {
         gint comp = mdata->mpos[i].judoka;
-        if (comp && 
+        if (comp &&
             cmp_clubs(&mdata->mcomp[comp], &mdata->mcomp[mdata->selected])) {
             res |= 1<<get_section(i, mdata);
         }
@@ -532,13 +572,13 @@ static gint get_club_mask(struct mdata *mdata)
 static gint get_club_only_mask(struct mdata *mdata)
 {
     gint i, res = 0;
-	
+
     if (mdata->selected == 0)
         return 0;
 
     for (i = 1; i <= mdata->mpositions; i++) {
         gint comp = mdata->mpos[i].judoka;
-        if (comp && 
+        if (comp &&
             (cmp_clubs(&mdata->mcomp[comp], &mdata->mcomp[mdata->selected]) & CLUB_TEXT_CLUB)) {
             res |= 1<<get_section(i, mdata);
         }
@@ -561,7 +601,7 @@ gint get_drawed_number(gint pos, gint sys)
     if (sys >= 0 && (pos&1))
         return french_matches_blue[(pos-1)/2 * french_mul[sys]];
     else if (sys >= 0 && (pos&1) == 0)
-        return french_matches_blue[(pos-1)/2 * french_mul[sys]] 
+        return french_matches_blue[(pos-1)/2 * french_mul[sys]]
             + french_matches_white_offset[sys];
     return pos;
 }
@@ -594,11 +634,11 @@ static gboolean select_number(GtkWidget *eventbox, GdkEventButton *event, void *
     if (num && mdata->mpos[num].judoka) {
 #if (GTKVER == 3)
         gdk_rgba_parse(&bg, "#000000");
-        gtk_widget_override_color(mdata->mcomp[mdata->mpos[num].judoka].label, 
+        gtk_widget_override_color(mdata->mcomp[mdata->mpos[num].judoka].label,
                                   GTK_STATE_FLAG_NORMAL, &bg);
 #else
-        gdk_color_parse("#000000", &bg); 
-        gtk_widget_modify_fg(mdata->mcomp[mdata->mpos[num].judoka].label, 
+        gdk_color_parse("#000000", &bg);
+        gtk_widget_modify_fg(mdata->mcomp[mdata->mpos[num].judoka].label,
                              GTK_STATE_NORMAL, &bg);
 #endif
         sprintf(buf, "%2d.", get_competitor_number(num, mdata));
@@ -632,8 +672,8 @@ static gboolean select_number(GtkWidget *eventbox, GdkEventButton *event, void *
         mdata->mpos[num].judoka = 0;
         mdata->mcomp[mdata->selected].pos = 0;
     }
-        
-    snprintf(buf, sizeof(buf), "%2d. %s", get_competitor_number(num, mdata), 
+
+    snprintf(buf, sizeof(buf), "%2d. %s", get_competitor_number(num, mdata),
              gtk_label_get_text(GTK_LABEL(mdata->mcomp[mdata->selected].label)));
     gtk_label_set_text(GTK_LABEL(mdata->mpos[num].label), buf);
 
@@ -643,9 +683,9 @@ static gboolean select_number(GtkWidget *eventbox, GdkEventButton *event, void *
     gdk_rgba_parse(&bg, "#FFFFFF");
     gtk_widget_override_background_color(mdata->mcomp[mdata->selected].eventbox, GTK_STATE_FLAG_NORMAL, &bg);
 #else
-    gdk_color_parse("#7F7F7F", &bg); 
+    gdk_color_parse("#7F7F7F", &bg);
     gtk_widget_modify_fg(mdata->mcomp[mdata->selected].label, GTK_STATE_NORMAL, &bg);
-    gdk_color_parse("#FFFFFF", &bg); 
+    gdk_color_parse("#FFFFFF", &bg);
     gtk_widget_modify_bg(mdata->mcomp[mdata->selected].eventbox, GTK_STATE_NORMAL, &bg);
 #endif
     nxt = get_next_comp(mdata);
@@ -682,18 +722,18 @@ static gboolean select_competitor(GtkWidget *eventbox, GdkEventButton *event, vo
     }
 
 #if (GTKVER == 3)
-    gdk_rgba_parse(&bg, "#FFFFFF"); 
+    gdk_rgba_parse(&bg, "#FFFFFF");
     for (i = 1; i <= mdata->mjudokas; i++)
         gtk_widget_override_background_color(mdata->mcomp[i].eventbox, GTK_STATE_FLAG_NORMAL, &bg);
 
-    gdk_rgba_parse(&bg, "#E0E0FF"); 
+    gdk_rgba_parse(&bg, "#E0E0FF");
     gtk_widget_override_background_color(mdata->mcomp[index].eventbox, GTK_STATE_FLAG_NORMAL, &bg);
 #else
-    gdk_color_parse("#FFFFFF", &bg); 
+    gdk_color_parse("#FFFFFF", &bg);
     for (i = 1; i <= mdata->mjudokas; i++)
         gtk_widget_modify_bg(mdata->mcomp[i].eventbox, GTK_STATE_NORMAL, &bg);
 
-    gdk_color_parse("#E0E0FF", &bg); 
+    gdk_color_parse("#E0E0FF", &bg);
     gtk_widget_modify_bg(mdata->mcomp[index].eventbox, GTK_STATE_NORMAL, &bg);
 #endif
     mdata->selected = index;
@@ -740,7 +780,95 @@ static gboolean draw_one_comp(struct mdata *mdata)
     if (mdata->selected == 0)
         return 0;
 
-    if (mdata->mfrench_sys >= 0) {
+    mdata->mask = 0;
+
+    if (mdata->mfrench_sys == CUST_SYS) { // custom
+	struct custom_data *ct = mdata->custom_table;
+	gint rr = get_rr_by_comp(ct, 1);
+
+	if (rr) {
+	    gint seeded = mdata->mcomp[comp].seeded;
+	    gint num_start_pools = 0, r;
+	    guint64 first_match_mask = 0;
+	    guint64 last_match_mask = 0;
+
+	    // Calculate number of starter pools.
+	    // Find first match and last match masks.
+	    for (r = 0; r < ct->num_round_robin_pools; r++) {
+		round_robin_bare_t *rr = &ct->round_robin_pools[r];
+		gint mnum = rr->rr_matches[0] - 1;
+		match_bare_t *m = &ct->matches[mnum];
+		competitor_bare_t *c1 = &m->c1;
+		competitor_bare_t *c2 = &m->c2;
+		if (c1->type == COMP_TYPE_COMPETITOR &&
+		    c2->type == COMP_TYPE_COMPETITOR)
+		    num_start_pools++;
+		if (c1->type == COMP_TYPE_COMPETITOR)
+		    first_match_mask |= 1<<(c1->num-1);
+		if (c2->type == COMP_TYPE_COMPETITOR)
+		    first_match_mask |= 1<<(c2->num-1);
+
+		mnum = rr->rr_matches[rr->num_rr_matches-1] - 1;
+		m = &ct->matches[mnum];
+		c1 = &m->c1;
+		c2 = &m->c2;
+		if (c1->type == COMP_TYPE_COMPETITOR)
+		    last_match_mask |= 1<<(c1->num-1);
+		if (c2->type == COMP_TYPE_COMPETITOR)
+		    last_match_mask |= 1<<(c2->num-1);
+	    }
+
+	    if (seeded) {
+		mdata->mask = last_match_mask;
+		found = get_free_pos_by_mask(create_mask(0,1,1), mdata);
+		mdata->mask = 0;
+	    }
+
+	    // Most probably club mates go to different pools. If not (too many)
+	    // then they should have the first match with each other.
+	    if (!found && !seeded &&
+		(mdata->mcomp[comp].num_mates & 7) > num_start_pools) {
+		// Competitor has many club mates. Try to select the first match.
+		mdata->mask = first_match_mask;
+		found = get_free_pos_by_mask(create_mask(0,1,1), mdata);
+		mdata->mask = 0;
+	    }
+	} else {
+	    gint seeded = mdata->mcomp[comp].seeded;
+	    if (seeded > 1) {
+		gint d = 0, k = 2;
+		gint test_mask = create_mask(d,NUM_SEEDED,2); // AB
+
+		do {
+		    mask = get_seeded_mask(1<<(seeded-k), mdata); // look for the previous seeded
+		    k++;
+		} while (mask == 0 && (seeded-k >= 0));
+
+		if (seeded & 1) {
+		    // put to same half as the previous
+		    if ((mask & test_mask) == 0)
+			d = NUM_SEEDED/2; // prev seeded in CD half
+
+		    test_mask = create_mask(d,NUM_SEEDED,4);
+		    if (mask & test_mask)
+			d += NUM_SEEDED/4;
+
+		    test_mask = create_mask(d,NUM_SEEDED,4);
+		} else {
+		    // put to different half as the previous
+		    if (mask & test_mask)
+			d = NUM_SEEDED/2; // prev seeded in AB half
+
+		    test_mask = create_mask(d,NUM_SEEDED,2);
+		}
+
+		found = get_free_pos_by_mask((test_mask ^ mask) & test_mask, mdata);
+	    }
+	} // french cust
+
+	if (!found)
+            found = get_free_pos_by_mask(create_mask(0,1,1), mdata); // look everywhere
+    } else if (mdata->mfrench_sys >= 0) { // french
         if (prop_get_int_val(PROP_SEEDED_TO_FIXED_PLACES) &&
             mdata->mcomp[comp].seeded > 0 && mdata->mcomp[comp].seeded <= NUM_SEEDED) {
             gint x;
@@ -750,7 +878,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
             case 3: case 7: x = 1; break;
             case 4: case 8: x = 3; break;
             }
-            found = mdata->mpositions*(x)/4 + 
+            found = mdata->mpositions*(x)/4 +
                 mdata->mcomp[comp].seeded > 4 ? mdata->mpositions/8 + 1 : 1;
 
             if (mdata->mpos[found].judoka)
@@ -772,7 +900,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                     // put to same half as the previous
                     if ((mask & test_mask) == 0)
                         d = NUM_SEEDED/2; // prev seeded in CD half
-                    
+
                     test_mask = create_mask(d,NUM_SEEDED,4);
                     if (mask & test_mask)
                         d += NUM_SEEDED/4;
@@ -782,7 +910,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                     // put to different half as the previous
                     if (mask & test_mask)
                         d = NUM_SEEDED/2; // prev seeded in AB half
-                    
+
                     test_mask = create_mask(d,NUM_SEEDED,2);
                 }
 
@@ -792,7 +920,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
 
         if (!found)
             found = get_free_pos_by_mask(create_mask(0,1,1), mdata); // look everywhere
-    } else if (sys != SYSTEM_QPOOL) {
+    } else if (sys != SYSTEM_QPOOL) { // pool and dpool
         gint getmask;
 
         if (mdata->mcomp[comp].seeded) {
@@ -818,7 +946,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                     if (mdata->drawn == 1 || mdata->drawn == 2 ) {
                         if (mdata->seeded1 <= 3)
                             getmask = 0x30;
-                        else 
+                        else
                             getmask = 0x06;
                         break;
                     } else
@@ -833,7 +961,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                     if (mdata->drawn == 1 || mdata->drawn == 2 ) {
                         if (mdata->seeded1 <= 4)
                             getmask = 0x60;
-                        else 
+                        else
                             getmask = 0x06;
                         break;
                     } else
@@ -844,7 +972,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                 if (mdata->drawn == 1 || mdata->drawn == 2 ) {
                     if (mdata->seeded1 <= 5)
                         getmask = 0xc0;
-                    else 
+                    else
                         getmask = 0x12;
                     break;
                 } else
@@ -854,7 +982,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                 if (mdata->drawn == 1 || mdata->drawn == 2 ) {
                     if (mdata->seeded1 <= 5)
                         getmask = 0x240;
-                    else 
+                    else
                         getmask = 0x12;
                     break;
                 } else
@@ -864,7 +992,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                 if (mdata->drawn == 1 || mdata->drawn == 2 ) {
                     if (mdata->seeded1 <= 6)
                         getmask = 0x480;
-                    else 
+                    else
                         getmask = 0x22;
                     break;
                 } else
@@ -874,7 +1002,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                 if (mdata->drawn == 1 || mdata->drawn == 2 ) {
                     if (mdata->seeded1 <= 6)
                         getmask = 0x880;
-                    else 
+                    else
                         getmask = 0x22;
                     break;
                 } else
@@ -882,13 +1010,13 @@ static gboolean draw_one_comp(struct mdata *mdata)
                 break;
             }
             found = get_free_pos_by_mask((mask ^ getmask) & getmask, mdata);
-        } else {
-            gint a_pool = 0, b_pool = 0, a_pool_club = 0, b_pool_club = 0, 
+        } else { // not seeded
+            gint a_pool = 0, b_pool = 0, a_pool_club = 0, b_pool_club = 0,
                 a_mask = 0, b_mask = 0;
             mask = get_club_mask(mdata);
             gint clubmask = get_club_only_mask(mdata);
 
-            if (sys == SYSTEM_POOL || sys == SYSTEM_BEST_OF_3) {
+            if (sys == SYSTEM_POOL || sys == SYSTEM_BEST_OF_3) { // pool or best of 3
                 switch (mdata->mpositions) {
                 case 2:
                     getmask = 0x3;
@@ -903,7 +1031,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                         getmask = 0x7;
                     break;
                 case 4:
-                    if (mdata->mcomp[comp].num_mates && 
+                    if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[1].judoka == 0 && mdata->mpos[2].judoka == 0) ||
                          ((mdata->mpos[1].judoka == 0 || mdata->mpos[2].judoka == 0) &&
                           (mask & 0x3))))
@@ -914,12 +1042,12 @@ static gboolean draw_one_comp(struct mdata *mdata)
                         getmask = 0xf;
                     break;
                 case 5:
-                    if (mdata->mcomp[comp].num_mates && 
+                    if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[4].judoka == 0 && mdata->mpos[5].judoka == 0) ||
                          ((mdata->mpos[4].judoka == 0 || mdata->mpos[5].judoka == 0) &&
                           (mask & 0x18))))
                         getmask = 0x18;
-                    else if (mdata->mcomp[comp].num_mates && 
+                    else if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[1].judoka == 0 && mdata->mpos[2].judoka == 0) ||
                          ((mdata->mpos[1].judoka == 0 || mdata->mpos[2].judoka == 0) &&
                           (mask & 0x3))))
@@ -930,12 +1058,12 @@ static gboolean draw_one_comp(struct mdata *mdata)
                         getmask = 0x1f;
                     break;
                 case 6:
-                    if (mdata->mcomp[comp].num_mates && 
+                    if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[1].judoka == 0 && mdata->mpos[2].judoka == 0) ||
                          ((mdata->mpos[1].judoka == 0 || mdata->mpos[2].judoka == 0) &&
                           (mask & 0x3))))
                         getmask = 0x3;
-                    else if (mdata->mcomp[comp].num_mates && 
+                    else if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[3].judoka == 0 && mdata->mpos[5].judoka == 0) ||
                          ((mdata->mpos[3].judoka == 0 || mdata->mpos[5].judoka == 0) &&
                           (mask & 0x14))))
@@ -946,12 +1074,12 @@ static gboolean draw_one_comp(struct mdata *mdata)
                         getmask = 0x3f;
                     break;
                 case 7:
-                    if (mdata->mcomp[comp].num_mates && 
+                    if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[1].judoka == 0 && mdata->mpos[2].judoka == 0) ||
                          ((mdata->mpos[1].judoka == 0 || mdata->mpos[2].judoka == 0) &&
                           (mask & 0x3))))
                         getmask = 0x3;
-                    else if (mdata->mcomp[comp].num_mates && 
+                    else if (mdata->mcomp[comp].num_mates &&
                         ((mdata->mpos[3].judoka == 0 && mdata->mpos[5].judoka == 0) ||
                          ((mdata->mpos[3].judoka == 0 || mdata->mpos[5].judoka == 0) &&
                           (mask & 0x14))))
@@ -997,7 +1125,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
                     getmask = b_mask;
                 else
                     getmask = a_mask | b_mask;
-            }
+            } // end dpool
 
             found = get_free_pos_by_mask(getmask, mdata);
         }
@@ -1022,7 +1150,7 @@ static gboolean draw_one_comp(struct mdata *mdata)
             gint rem = mdata->mpositions - size*4;
 
             mask = get_club_mask(mdata);
-            
+
             for (i = 0; i < 4; i++) {
                 pool_size[i] = size;
                 mates[i] = clubmates[i] = pool_mask[i] = 0;
@@ -1084,18 +1212,18 @@ static gboolean draw_one_comp(struct mdata *mdata)
         if (!found)
             found = get_free_pos_by_mask(0xfffff, mdata);
     } // QPOOL
-    
+
     if (found)
         select_number(mdata->mpos[found].eventbox, NULL, mdata);
 
     mdata->drawn++;
-    if (mdata->mcomp[comp].seeded && mdata->drawn == 1) 
+    if (mdata->mcomp[comp].seeded && mdata->drawn == 1)
         mdata->seeded1 = found;
 
     return (found > 0);
 }
 
-static void make_manual_matches_callback(GtkWidget *widget, 
+static void make_manual_matches_callback(GtkWidget *widget,
                                          GdkEvent *event,
                                          void *data)
 {
@@ -1104,14 +1232,14 @@ static void make_manual_matches_callback(GtkWidget *widget,
 
     if (ptr_to_gint(event) == BUTTON_NEXT) {
         draw_one_comp(mdata);
-                
+
         return;
     }
 
     if (ptr_to_gint(event) == BUTTON_REST) {
         while (draw_one_comp(mdata))
             ;
-                
+
         return;
     }
 
@@ -1128,12 +1256,13 @@ static void make_manual_matches_callback(GtkWidget *widget,
 
     db_remove_matches(mdata->mcategory_ix);
 
-    if (mdata->mfrench_sys == -2) { // custom system
+    if (mdata->mfrench_sys == CUST_SYS) { // custom system
         struct custom_data *ct =  get_custom_table(mdata->sys.table);
+
         for (i = 0; i < ct->num_matches; i++) {
             struct match m;
             gint c;
-                
+
             memset(&m, 0, sizeof(m));
             m.category = mdata->mcategory_ix;
             m.number = i+1;
@@ -1149,10 +1278,10 @@ static void make_manual_matches_callback(GtkWidget *widget,
             set_match(&m);
             db_set_match(&m);
         }
-    } else if (mdata->mfrench_sys < 0) {
+    } else if (mdata->mfrench_sys == POOL_SYS) {
         for (i = 0; i < num_matches(mdata->sys.system, mdata->mjudokas); i++) {
             struct match m;
-                
+
             memset(&m, 0, sizeof(m));
             m.category = mdata->mcategory_ix;
             m.number = i+1;
@@ -1176,7 +1305,7 @@ static void make_manual_matches_callback(GtkWidget *widget,
         for (i = 1; i < mdata->mpositions; i += 2) {
             struct match m;
             gint b, w;
-                
+
             memset(&m, 0, sizeof(m));
             m.category = mdata->mcategory_ix;
             m.number = ((i - 1)/2) + 1;
@@ -1339,7 +1468,7 @@ struct compsys get_system_for_category(gint index, gint competitors)
             sys = SYSTEM_FRENCH_128;
         }
     }
-    
+
     systm.system  = sys;
     systm.numcomp = competitors;
     systm.table   = table;
@@ -1348,7 +1477,142 @@ struct compsys get_system_for_category(gint index, gint competitors)
     return systm;
 }
 
-GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors, 
+static gint get_rr_by_match(struct custom_data *ct, gint mnum)
+{
+    gint r, f;
+
+    if (!ct)
+	return 0;
+
+    for (r = 0; r < ct->num_round_robin_pools; r++) {
+	round_robin_bare_t *rr = &ct->round_robin_pools[r];
+	for (f = 0; f < rr->num_rr_matches; f++) {
+	    if (rr->rr_matches[f] == mnum)
+		return r + 1;
+	}
+    }
+    return 0;
+}
+
+static gint get_rr_by_comp(struct custom_data *ct, gint cnum)
+{
+    gint r, f;
+
+    if (!ct)
+	return 0;
+
+    for (r = 0; r < ct->num_round_robin_pools; r++) {
+	round_robin_bare_t *rr = &ct->round_robin_pools[r];
+	for (f = 0; f < rr->num_competitors; f++) {
+	    competitor_bare_t *c = &rr->competitors[f];
+	    if (c->type == COMP_TYPE_COMPETITOR &&
+		c->num == cnum)
+		return r + 1;
+	}
+    }
+    return 0;
+}
+
+static void calc_distances(struct mdata *mdata)
+{
+    struct custom_data *ct = mdata->custom_table;
+    gchar mlist[NUM_COMPETITORS+1][16];
+    gint c, i, j, k, n;
+
+    memset(&mlist, 0, sizeof(mlist));
+
+#if 0
+    g_print("MATCHES:\n");
+    for (c = 0; c < ct->num_matches; c++) {
+	match_bare_t *m = &ct->matches[c];
+	competitor_bare_t *c1 = &m->c1;
+	competitor_bare_t *c2 = &m->c2;
+	g_print("%d: type=%d num=%d pos=%d - type=%d num=%d pos=%d\n",
+	  c, c1->type, c1->num, c1->pos, c2->type, c2->num, c2->pos);
+    }
+#endif
+
+    for (c = 1; c <= mdata->mpositions; c++) {
+	gint depth = 0;
+	competitor_bare_t cmp;
+	cmp.type = COMP_TYPE_COMPETITOR;
+	cmp.num = c;
+	cmp.pos = 0;
+	//g_print("\n-- competitor %d\n", c);
+	while (1) {
+	    gboolean found = FALSE;
+
+	    //g_print("cmp=%d %d:%d:%d\n", c, cmp.type, cmp.num, cmp.pos);
+
+	    for (i = 0; i < ct->num_matches && !found; i++) {
+		gint mnum = i + 1;
+		match_bare_t *m = &ct->matches[i];
+		competitor_bare_t *c1 = &m->c1;
+		competitor_bare_t *c2 = &m->c2;
+		if ((c1->type == cmp.type && c1->num == cmp.num &&
+		     c1->prev[0] == 0 && (cmp.pos == 0 || cmp.pos == c1->pos)) ||
+		    (c2->type == cmp.type && c2->num == cmp.num &&
+		     c2->prev[0] == 0 && (cmp.pos == 0 || cmp.pos == c2->pos))) {
+		    cmp.type = COMP_TYPE_MATCH;
+		    cmp.num = i + 1;
+		    cmp.pos = 1;
+		    found = TRUE;
+
+		    // is this match part of round robin?
+		    gint rrnum = get_rr_by_match(ct, i + 1);
+		    if (rrnum) {
+			mnum = ct->round_robin_pools[rrnum-1].rr_matches[0];
+			cmp.type = COMP_TYPE_ROUND_ROBIN;
+			cmp.num = rrnum;
+		    }
+
+		    if (depth < 16)
+			mlist[c][depth++] = mnum;
+		    break;
+		}
+	    }
+
+	    if (!found)
+		break;
+	} // while
+    }
+
+    for (i = 1; i <= mdata->mpositions; i++) {
+	for (j = 1; j <= mdata->mpositions; j++) {
+	    gboolean found = FALSE;
+	    if (i == j)
+		continue;
+	    for (k = 0; k < 16 && mlist[i][k] && !found; k++) {
+		for (n = 0; n < 16 && mlist[j][n]; n++) {
+		    if (mlist[i][k] == mlist[j][n]) {
+			mdata->mcomp[i].distance[j] = k + n;
+			found = TRUE;
+			break;
+		    }
+		}
+	    }
+	}
+    }
+#if 0
+    g_print("\n");
+    for (c = 1; c <= mdata->mpositions; c++) {
+	g_print("comp=%d:", c);
+	for (i = 0; i < 16 && mlist[c][i]; i++)
+	    g_print(" %d", mlist[c][i]);
+	g_print("\n");
+    }
+
+    for (i = 1; i <= mdata->mpositions; i++) {
+	g_print("i=%d", i);
+	for (j = 1; j <= mdata->mpositions; j++) {
+	    g_print(" %d", mdata->mcomp[i].distance[j]);
+	}
+	g_print("\n");
+    }
+#endif
+}
+
+GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 					struct mdata *mdata)
 {
     gint i;
@@ -1371,9 +1635,9 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
     gdk_rgba_parse(&bg1, "#AFAF9F");
     gdk_rgba_parse(&bg2, "#AFAFBF");
 #else
-    gdk_color_parse("#FFFFFF", &bg); 
-    gdk_color_parse("#AFAF9F", &bg1); 
-    gdk_color_parse("#AFAFBF", &bg2); 
+    gdk_color_parse("#FFFFFF", &bg);
+    gdk_color_parse("#AFAF9F", &bg1);
+    gdk_color_parse("#AFAFBF", &bg2);
 #endif
 
     // find the index of the category
@@ -1398,7 +1662,9 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
     case SYSTEM_CUSTOM:
         mdata->mfrench_sys = -2;
         custom_table = get_custom_table(mdata->sys.table);
+	mdata->custom_table = custom_table;
         mdata->mpositions = custom_table->competitors_max;
+	calc_distances(mdata);
         break;
     case SYSTEM_FRENCH_8:
         mdata->mpositions = 8;
@@ -1467,7 +1733,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
         gtk_tree_model_iter_nth_child(current_model,
                                       &iter,
                                       parent,
-                                      i);                
+                                      i);
         gtk_tree_model_get(current_model, &iter,
                            COL_INDEX, &index,
                            COL_CLUB, &club,
@@ -1479,13 +1745,13 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 
         j = get_data(index);
 	if (j && j->club && j->club[0] && j->country && j->country[0])
-	    snprintf(buf, sizeof(buf), "%s %s, %s/%s", 
+	    snprintf(buf, sizeof(buf), "%s %s, %s/%s",
 		     j->first, j->last, j->club, j->country);
 	else if (j && j->club && j->club[0])
-	    snprintf(buf, sizeof(buf), "%s %s, %s", 
+	    snprintf(buf, sizeof(buf), "%s %s, %s",
 		     j->first, j->last, j->club);
 	else if (j && j->country && j->country[0])
-	    snprintf(buf, sizeof(buf), "%s %s, %s", 
+	    snprintf(buf, sizeof(buf), "%s %s, %s",
 		     j->first, j->last, j->country);
 	else
 	    snprintf(buf, sizeof(buf), "%s %s", j->first, j->last);
@@ -1499,7 +1765,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
         mdata->mcomp[i+1].clubseeded = clubseeding;
         free_judoka(j);
     }
-        
+
     // Create the dialog.
     dialog = gtk_dialog_new_with_buttons (_("Move the competitors"), //XXXX
                                           NULL,
@@ -1560,7 +1826,19 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
                          G_CALLBACK(select_number), mdata);
         g_object_set(label, "xalign", 0.0, NULL);
 
-        if ((mdata->mfrench_sys < 0 && i > (mdata->mjudokas - mdata->mjudokas/2)) ||
+        if (mdata->mfrench_sys == CUST_SYS) {
+	    int rr = get_rr_by_comp(mdata->custom_table, i);
+	    if (rr) {
+		if (!(rr & 1))
+		    gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg1);
+		else
+		    gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg2);
+	    } else if ((i > mdata->mjudokas/4 && i <= mdata->mjudokas/2) ||
+		       (mdata->mfrench_sys == CUST_SYS && i > mdata->mjudokas*3/4))
+		gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg1);
+	    else
+		gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg2);
+	} else if ((mdata->mfrench_sys == POOL_SYS && i > (mdata->mjudokas - mdata->mjudokas/2)) ||
             (mdata->mfrench_sys == 0 && i > 2 && i <= 4) ||
             (mdata->mfrench_sys == 0 && i > 6) ||
             (mdata->mfrench_sys == 1 && i > 4 && i <= 8) ||
@@ -1569,8 +1847,8 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
             (mdata->mfrench_sys == 2 && i > 24) ||
             (mdata->mfrench_sys == 3 && i > 16 && i <= 32) ||
             (mdata->mfrench_sys == 3 && i > 48) ||
-            (mdata->mfrench_sys == 3 && i > 32 && i <= 64) ||
-            (mdata->mfrench_sys == 3 && i > 96))
+            (mdata->mfrench_sys == 4 && i > 32 && i <= 64) ||
+            (mdata->mfrench_sys == 4 && i > 96))
 #if (GTKVER == 3)
             gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg1);
         else
@@ -1590,17 +1868,17 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
                 gtk_grid_attach(GTK_GRID(vbox1), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), 0, r1++, 1, 1);
 #else
             if ((i & 1) == 0)
-                gtk_box_pack_start(GTK_BOX(vbox1), 
+                gtk_box_pack_start(GTK_BOX(vbox1),
                                    gtk_hseparator_new(), FALSE, FALSE, 0);
             if ((i & 3) == 0)
-                gtk_box_pack_start(GTK_BOX(vbox1), 
+                gtk_box_pack_start(GTK_BOX(vbox1),
                                    gtk_hseparator_new(), FALSE, FALSE, 0);
             if ((i & 7) == 0)
-                gtk_box_pack_start(GTK_BOX(vbox1), 
+                gtk_box_pack_start(GTK_BOX(vbox1),
                                    gtk_hseparator_new(), FALSE, FALSE, 0);
 #endif
         }
-    }        
+    }
 
     // cut button
     if (mdata->edit && mdata->mfrench_sys >= 0) {
@@ -1632,7 +1910,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
                     continue;
 
                 if (cmp_clubs(&mdata->mcomp[i], &mdata->mcomp[j]))
-                    mdata->mcomp[j].num_mates = 
+                    mdata->mcomp[j].num_mates =
                         MAX_MATES - mdata->mcomp[i].seeded;
             }
         }
@@ -1670,20 +1948,20 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 #endif
         g_signal_connect(G_OBJECT(eventbox), "button_press_event",
                          G_CALLBACK(select_competitor), mdata);
-                
+
 #if (GTKVER == 3)
         gtk_widget_override_background_color(eventbox, GTK_STATE_FLAG_NORMAL, &bg);
 #else
         gtk_widget_modify_bg(eventbox, GTK_STATE_NORMAL, &bg);
 #endif
         g_object_set(label, "xalign", 0.0, NULL);
-    }        
+    }
 
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        gtk_label_new(_("Select first a competitor and then a number.")), FALSE, FALSE, 0);
 #else
-    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), 
+    gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),
                        gtk_label_new(_("Select first a competitor and then a number.")),
                        FALSE, FALSE, 0);
 #endif
@@ -1698,7 +1976,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
         GTK_SCROLLED_WINDOW(scrolled_window), hbox);
 #endif
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        scrolled_window, TRUE, TRUE, 0);
 #else
     gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), scrolled_window,
@@ -1712,7 +1990,7 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
 
     last_selected = 0;
     gboolean retval = FALSE;
-    g_signal_emit_by_name(mdata->mcomp[get_next_comp(mdata)].eventbox, "button_press_event", 
+    g_signal_emit_by_name(mdata->mcomp[get_next_comp(mdata)].eventbox, "button_press_event",
                           NULL, &retval);
 
     if (mdata->edit) {
@@ -1764,25 +2042,25 @@ GtkWidget *draw_one_category_manually_1(GtkTreeIter *parent, gint competitors,
                 if (cnum) {
                     mdata->mpos[i].judoka = cnum;
                     mdata->mcomp[cnum].pos = i;
-                    snprintf(buf, sizeof(buf), "%2d. %s", get_competitor_number(i, mdata), 
+                    snprintf(buf, sizeof(buf), "%2d. %s", get_competitor_number(i, mdata),
                              gtk_label_get_text(GTK_LABEL(mdata->mcomp[cnum].label)));
                     gtk_label_set_text(GTK_LABEL(mdata->mpos[i].label), buf);
 
 #if (GTKVER == 3)
-                    gdk_rgba_parse(&bg, "#7F7F7F"); 
+                    gdk_rgba_parse(&bg, "#7F7F7F");
                     gtk_widget_override_color(mdata->mcomp[cnum].label, GTK_STATE_FLAG_NORMAL, &bg);
-                    gdk_rgba_parse(&bg, "#FFFFFF"); 
-                    gtk_widget_override_background_color(mdata->mcomp[cnum].eventbox, 
+                    gdk_rgba_parse(&bg, "#FFFFFF");
+                    gtk_widget_override_background_color(mdata->mcomp[cnum].eventbox,
                                                          GTK_STATE_FLAG_NORMAL, &bg);
 #else
-                    gdk_color_parse("#7F7F7F", &bg); 
+                    gdk_color_parse("#7F7F7F", &bg);
                     gtk_widget_modify_fg(mdata->mcomp[cnum].label, GTK_STATE_NORMAL, &bg);
-                    gdk_color_parse("#FFFFFF", &bg); 
+                    gdk_color_parse("#FFFFFF", &bg);
                     gtk_widget_modify_bg(mdata->mcomp[cnum].eventbox, GTK_STATE_NORMAL, &bg);
 #endif
                 }
             }
-        } 
+        }
         mdata->selected = 0;
     }
 
@@ -1832,4 +2110,3 @@ void draw_all(GtkWidget *w, gpointer data)
 
     progress_show(0.0, "");
 }
-

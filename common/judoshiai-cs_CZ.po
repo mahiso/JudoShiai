@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-23 09:40+0300\n"
+"POT-Creation-Date: 2015-02-12 15:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -369,7 +369,7 @@ msgid "Weights Visible in Pool Sheets"
 msgstr "Hmotnosti viditelné v tabulkách"
 
 msgid "Sheet Font"
-msgstr "Font listu" 
+msgstr "Font listu"
 
 msgid "Password"
 msgstr "Heslo"
@@ -590,20 +590,14 @@ msgstr "Je spuštěn další JudoShiai ?"
 msgid "Yes, another JudoShiai program is running"
 msgstr "Ano, další JudoShiai už běží"
 
-
-msgid ""
-"No, this the only JudoShiai program. \n"
-""
-msgstr ""
-"Ne, toto je jediný JudoShiai \n"
-""
+msgid "No, this the only JudoShiai program. \n"
+msgstr "Ne, toto je jediný JudoShiai \n"
 
 msgid ""
 "Communication is blocked! \n"
 "You can still use the program to create categories etc."
 msgstr ""
-"Kumunikace je blokována"
-"Můžete stále vytvářet kategorie v tomto programu např."
+"Kumunikace je blokovánaMůžete stále vytvářet kategorie v tomto programu např."
 
 msgid "Pool"
 msgstr "Pool"
@@ -705,8 +699,7 @@ msgid "Add competitors"
 msgstr "Vložit závodníky"
 
 msgid "Clean up duplicates and update reg. categories"
-msgstr ""
-"Vyčisti zdvojené a updatuj kategorie"
+msgstr "Vyčisti zdvojené a updatuj kategorie"
 
 msgid "competitors added and updated"
 msgstr "závodníci vloženi a udatování"
@@ -1677,4 +1670,225 @@ msgid "Weighted:"
 msgstr ""
 
 msgid "Print SVG"
+msgstr ""
+
+msgid "Hikiwake"
+msgstr ""
+
+msgid "Clear selection"
+msgstr ""
+
+msgid "If equal score less shido wins"
+msgstr ""
+
+msgid "Require judogi control"
+msgstr ""
+
+msgid "VLC control"
+msgstr ""
+
+msgid "CTL"
+msgstr ""
+
+msgid "Show Flags"
+msgstr ""
+
+msgid "Show Initial of Name"
+msgstr ""
+
+msgid "Flag size:"
+msgstr ""
+
+msgid "Name size:"
+msgstr ""
+
+msgid "No Limit"
+msgstr ""
+
+msgid "CONTROL"
+msgstr ""
+
+msgid "X:"
+msgstr ""
+
+msgid "Y:"
+msgstr ""
+
+msgid "Scale:"
+msgstr ""
+
+msgid "THIS APPLICATION"
+msgstr ""
+
+msgid "NOT CONNECTED"
+msgstr ""
+
+msgid "Team:"
+msgstr ""
+
+msgid "Tatami:"
+msgstr ""
+
+msgid "Create default members:"
+msgstr ""
+
+msgid "Team"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Corrupted competitor data:\n"
+msgstr ""
+
+msgid "Corrupted category data:\n"
+msgstr ""
+
+msgid "Server URL"
+msgstr ""
+
+msgid "Copy to Server"
+msgstr ""
+
+msgid "Proxy User:"
+msgstr ""
+
+msgid "Proxy Password:"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Reg.Cat"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Index"
+msgstr ""
+
+msgid ""
+"No, this the only JudoShiai program. \n"
+"Purge erroneous lock file."
+msgstr ""
+
+msgid "Double Pool 3"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "UKR Dbl Repchg"
+msgstr ""
+
+msgid "DEN Dbl Elim"
+msgstr ""
+
+msgid "EST D klass 1 brz"
+msgstr ""
+
+msgid "UKR Double Repechage"
+msgstr ""
+
+msgid "SWE Direct Repechage"
+msgstr ""
+
+msgid "DEN Double Elimination"
+msgstr ""
+
+msgid "EST Double Elim One Bronze"
+msgstr ""
+
+msgid "Customized"
+msgstr ""
+
+msgid "Set score"
+msgstr ""
+
+msgid "Weighed only"
+msgstr ""
+
+msgid "Load Custom Systems"
+msgstr ""
+
+msgid "New Team"
+msgstr ""
+
+msgid "New Team Category"
+msgstr ""
+
+msgid "Edit Drawing"
+msgstr ""
+
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+msgid "Results in Polish"
+msgstr ""
+
+msgid "Results in Slovak"
+msgstr ""
+
+msgid "Results in Dutch"
+msgstr ""
+
+msgid "Results in German"
+msgstr ""
+
+msgid "Results in Russian"
+msgstr ""
+
+msgid "Win in Golden Score gives 1 point"
+msgstr ""
+
+msgid "British System"
+msgstr ""
+
+msgid "Australian System"
+msgstr ""
+
+msgid "Danish System"
+msgstr ""
+
+msgid "Polish System"
+msgstr ""
+
+msgid "Slovakian System"
+msgstr ""
+
+msgid "Ukrainian System"
+msgstr ""
+
+msgid "Tatami"
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+msgid "WARNING: NO CONTROL"
+msgstr ""
+
+msgid "New Password:"
+msgstr ""
+
+msgid "Old Password:"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "No manual edit"
+msgstr ""
+
+msgid "Automatic send"
+msgstr ""
+
+msgid "Print label"
+msgstr ""
+
+msgid "No margins"
+msgstr ""
+
+msgid "Fit page"
 msgstr ""

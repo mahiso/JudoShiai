@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -762,6 +762,7 @@ static void create_ask_window(void)
     gtk_window_get_size(GTK_WINDOW(main_window), &width, &height);
 
     GtkWindow *window = ask_window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
+    gtk_window_set_keep_above(GTK_WINDOW(ask_window), TRUE);
     gtk_window_set_title(GTK_WINDOW(window), _("Start New Match?"));
     if (fullscreen ) // Clicking outside  && show_competitor_names && get_winner())
         gtk_window_fullscreen(GTK_WINDOW(window));
@@ -1497,6 +1498,8 @@ void clock_key(guint key, guint event_state)
         }
         break;
     case GDK_F5:
+	if ((st[0].whitepts[0] & 2) && !shift)
+	    break;
         incdecpts(&st[0].whitepts[0], shift);
         if (rules_no_koka_dsp) {
             incdecpts(&st[0].whitepts[0], shift);
@@ -1559,6 +1562,8 @@ void clock_key(guint key, guint event_state)
         }
         break;
     case GDK_F1:
+	if ((st[0].bluepts[0] & 2) && !shift)
+	    break;
         incdecpts(&st[0].bluepts[0], shift);
         if (rules_no_koka_dsp) {
             incdecpts(&st[0].bluepts[0], shift);
@@ -1691,18 +1696,18 @@ static void gen_random_key(void)
             next_time = now + rand()%20 + 10;
         } else {
             clock_key(GDK_space, 0);
-            next_time = now + rand()%20 + 10;
+            next_time = now + rand()%100 + 50;
         }
     } else {
         if (current_category == last_cat &&
             current_match == last_num) {
             clock_key(GDK_0, 0);
-            next_time = now + rand()%40 + 20;
+            next_time = now + rand()%60 + 40;
         } else {
             clock_key(GDK_space, 0);
             last_cat = current_category;
             last_num = current_match;
-            next_time = now + rand()%80 + 40;
+            next_time = now + rand()%1000 + 100;
         }
     }
 

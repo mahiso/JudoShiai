@@ -1,4 +1,4 @@
-SHIAI_VER_NUM=2.4-beta3
+SHIAI_VER_NUM=2.4-beta10
 SHIAI_VERSION="\"$(SHIAI_VER_NUM)\""
 
 ifndef JS_BUILD_DIR
@@ -14,11 +14,12 @@ OBJS=
 ### Target executable type ###
 ifeq ($(TARGETOS),WIN32)
 TGT=WIN32
-else 
+else
 ifeq ($(OS),Windows_NT)
 TGT=WIN32
 else
 TGT=LINUX
+JUDOPROXY=YES
 endif
 endif
 
@@ -36,6 +37,8 @@ DEVELDIR=/opt/win32/gtk
 SOUNDDIR=/opt/win32/mpg123
 RSVGDIR=/opt/win32/rsvg
 CURLDIR=/opt/win32/curl
+WEBKITDIR=/opt/win32/webkitgtk
+SOAPDIR=/opt/win32/soup
 RESHACKER=wine "C:\\bin\\ResHacker.exe"
 WINDRES=wine "/opt/win32/MinGW/bin/windres.exe"
 INNOSETUP=wine "/opt/win32/Inno Setup 5/ISCC.exe"
@@ -88,6 +91,11 @@ CFLAGS=-Wall -g \
 -DENABLE_NLS \
 -DGTKVER=$(GTKVER)
 
+ifeq ($(JUDOPROXY),YES)
+CFLAGS += -I/opt/win32/webkitgtk/include/webkitgtk-3.0 \
+       -I/opt/win32/soup/include/libsoup-2.4
+endif
+
 LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib  \
 -L/opt/win32/gtk/bin \
 -lgtk-win32-$(GTKVER).0 -lgdk-win32-$(GTKVER).0 -latk-1.0 -lgio-2.0 -lgdk_pixbuf-2.0 \
@@ -96,6 +104,11 @@ LIBS=-L$(DEVELDIR)/lib $(DEVELDIR)/lib/glib-2.0.lib  \
 -L/opt/win32/rsvg/bin -lcroco-0.6-3 -lrsvg-2-2 -lxml2-2 \
 -L/opt/win32/curl/bin -lcurl \
 -L/opt/win32/w32api/lib -lws2_32 -mwindows
+
+ifeq ($(JUDOPROXY),YES)
+LIBS += -L/opt/win32/webkitgtk/lib -lwebkitgtk-3.0.dll \
+     -L/opt/win32/soup/lib -lsoup-2.4.dll
+endif
 
 ### Linux ###
 else

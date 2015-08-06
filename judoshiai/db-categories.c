@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -97,7 +97,6 @@ void db_add_category(int num, struct judoka *j)
         g_print("%s: ERROR, num = %d\n", __FUNCTION__, num);
         return;
     }
-    g_print("add cat del=0x%x\n", j->deleted);
     db_exec_str(NULL, db_callback_categories, 
             "INSERT INTO categories VALUES ("
             "%d, \"%s\", %d, %d, %d, 0, 0, 0, 0, "

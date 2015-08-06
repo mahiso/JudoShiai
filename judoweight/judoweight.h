@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -55,6 +55,8 @@ extern gint my_address;
 extern gint weightpwcrc32;
 extern gboolean password_protected, automatic_send;
 extern gchar *svg_file;
+extern gboolean nomarg;
+extern gboolean scale;
 
 extern gboolean this_is_shiai(void);
 extern void msg_to_queue(struct message *msg);
@@ -79,6 +81,8 @@ extern gboolean ask_password_dialog(void);
 extern void set_password_protected(GtkWidget *w, gpointer data);
 extern void set_automatic_send(GtkWidget *w, gpointer data);
 extern void set_print_label(GtkWidget *menu_item, gpointer data);
+extern void set_nomarg(GtkWidget *menu_item, gpointer data);
+extern void set_scale(GtkWidget *menu_item, gpointer data);
 extern void do_print(gpointer userdata);
 extern void do_print_svg(struct paint_data *pd);
 extern void read_svg_file(void);

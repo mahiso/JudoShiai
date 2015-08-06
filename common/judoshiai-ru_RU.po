@@ -1,0 +1,1800 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-12 15:04+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Blue won the voting"
+msgstr "Синий победил по голосованию"
+
+msgid "White won the voting"
+msgstr "Белый победил по голосованию"
+
+msgid "Match:"
+msgstr "Матч"
+
+msgid "Next:"
+msgstr "Следующий"
+
+msgid "Match"
+msgstr "Матч"
+
+msgid "Contest"
+msgstr "Турнир"
+
+msgid "Preferences"
+msgstr "Настройки"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Quit"
+msgstr "Выход"
+
+msgid "Red background"
+msgstr "Красный фон"
+
+msgid "Communication node"
+msgstr "Соединение"
+
+msgid "Own IP addresses"
+msgstr "Ваш IP адрес"
+
+msgid "Manual"
+msgstr "Инструкция"
+
+msgid "About"
+msgstr "Инфо"
+
+msgid "Address of the communication node"
+msgstr "Адрес соединения"
+
+msgid "IP address:"
+msgstr "ИП адрес"
+
+msgid "(Connection OK)"
+msgstr "Соединение ОК"
+
+msgid "(Connection broken)"
+msgstr "Соединение прервалось"
+
+msgid "Contest duration automatically from JudoShiai program"
+msgstr "Автоматический выбор продолжительности турнира из программы JudiShiai"
+
+msgid "Fight:"
+msgstr "Участики"
+
+msgid "Match duration: automatic"
+msgstr "Продолжительность матчя: автоматическое"
+
+msgid "Match duration: 2 min E-juniors"
+msgstr "Длительность матча: 2 мин. Е класс"
+
+msgid "Match duration: 2 min"
+msgstr "Продолжительность матча 2 мин."
+
+msgid "Match duration: 3 min"
+msgstr "Продолжительность матча 3 мин."
+
+msgid "Match duration: 4 min"
+msgstr "Продолжительность матча 4 мин."
+
+msgid "Match duration: 5 min"
+msgstr "Продолжительность матча 5 мин."
+
+msgid "Contest duration: automatic"
+msgstr "Продолжительность матча: автоматически"
+
+msgid "Contest duration: 2 min (short pin times)"
+msgstr "Длительность матча: 2 мин. Е-класс"
+
+msgid "Contest duration: 2 min"
+msgstr "Продолжительность матча 2 мин."
+
+msgid "Contest duration: 3 min"
+msgstr "Продолжительность матча 3 мин."
+
+msgid "Contest duration: 4 min"
+msgstr "Продолжительность матча 4 мин."
+
+msgid "Contest duration: 5 min"
+msgstr "Продолжительность матча 5 мин."
+
+msgid "Hantei: blue wins"
+msgstr "Hantei: победа синего"
+
+msgid "Hantei: white wins"
+msgstr "Hantei: победа белого"
+
+msgid "Contest area not chosen"
+msgstr "Татами не выбран"
+
+msgid "Contest area 1"
+msgstr "Татами 1"
+
+msgid "Contest area 2"
+msgstr "Татами 2"
+
+msgid "Contest area 3"
+msgstr "Татами 3"
+
+msgid "Contest area 4"
+msgstr "Татами 4"
+
+msgid "Contest area 5"
+msgstr "Татами 5"
+
+msgid "Contest area 6"
+msgstr "Татами 6"
+
+msgid "Contest area 7"
+msgstr "Татами 7"
+
+msgid "Contest area 8"
+msgstr "Татами 8"
+
+msgid "Increment time"
+msgstr "Добавить время сек"
+
+msgid "Decrement time"
+msgstr "Уменьшить время сек"
+
+msgid "View clocks only"
+msgstr "Показать только часы"
+
+msgid "Increment pin time"
+msgstr "Добавить время захвата"
+
+msgid "Decrement pin time"
+msgstr "Уменьшить время захвата"
+
+msgid "Points going to blue"
+msgstr "Оценка синему"
+
+msgid "Points going to white"
+msgstr "Оценка белому"
+
+msgid "About Judotimer"
+msgstr "О Judotimer"
+
+msgid "Full screen mode"
+msgstr "На весь экран"
+
+msgid "Normal operation"
+msgstr "Стандартный экран"
+
+msgid "Master mode"
+msgstr "Главный режим"
+
+msgid "Slave mode"
+msgstr "Вторичный режим"
+
+msgid "Undo!"
+msgstr "Вернуть"
+
+msgid "Set clocks"
+msgstr "Настройка часов"
+
+msgid "Clock:"
+msgstr "Время"
+
+msgid "Short pin times"
+msgstr "Короткое время захвата"
+
+msgid "Hansoku-make to blue"
+msgstr "Hansoku-make синему"
+
+msgid "Hansoku-make to white"
+msgstr "Hansoku-make белому"
+
+msgid "Clear selection"
+msgstr "Аннулировать выбор"
+
+msgid "Display layout 1"
+msgstr "Дисплей 1"
+
+msgid "Display layout 2"
+msgstr "Дисплей 2"
+
+msgid "Display layout 3"
+msgstr "Дисплей 3"
+
+msgid "Display layout 4"
+msgstr "Дисплей 4"
+
+msgid "Display layout 5"
+msgstr "Дисплей 5"
+
+msgid "Quick guide"
+msgstr "Краткая инструкция"
+
+msgid "Advertise"
+msgstr "реклама"
+
+msgid "Run Advertisements"
+msgstr "Реклама"
+
+msgid "Competitors"
+msgstr "Участники"
+
+msgid "Categories"
+msgstr "Категории"
+
+msgid "Drawing"
+msgstr "Жеребьёвка"
+
+msgid "Results"
+msgstr "Результаты"
+
+msgid "Judotimer"
+msgstr "Judotimer"
+
+msgid "New Tournament"
+msgstr "Создать турнир"
+
+msgid "Open Tournament"
+msgstr "Открыть турнир"
+
+msgid "Open Tournament from Net"
+msgstr "Выбрать турнир из сети"
+
+msgid "Properties"
+msgstr "Свойства"
+
+msgid "New Competitor"
+msgstr "Новый участник"
+
+msgid "Search Competitor"
+msgstr "Поиск участника"
+
+msgid "Select From Another Shiai"
+msgstr "Добывить из другого турнира"
+
+msgid "Add From a Text File"
+msgstr "Добавить из текстового файла"
+
+msgid "Add All From Another Shiai"
+msgstr "Добавить всех из другого турнира"
+
+msgid "Remove Unweighted"
+msgstr "Удалить, если не взвешан"
+
+msgid "Restore Removed"
+msgstr "Восстановить удалённых"
+
+msgid "Bar Code Search"
+msgstr "Поиск штрихкода"
+
+msgid "Print Weight Notes"
+msgstr "Печать протоколов взвешивания"
+
+msgid "New Category"
+msgstr "Новая весовая категория"
+
+msgid "Remove Empty"
+msgstr "Удалить пустые"
+
+msgid "Create Categories"
+msgstr "Сортировать по категориям"
+
+msgid "Print All"
+msgstr "Печать всех категорий"
+
+msgid "Place To"
+msgstr "Разместить в"
+
+msgid "Tatamis"
+msgstr "татами"
+
+msgid "Draw All Categories"
+msgstr "Жеребьёвка всех категорий"
+
+msgid "Print All (Web And PDF)"
+msgstr "Распечатать все категории (Веб и pdf)"
+
+msgid "Print Schedule to Printer"
+msgstr "Распечатать программу на принтере"
+
+msgid "Print Schedule to PDF"
+msgstr "Распечатать программу (PDF)"
+
+msgid "Print Schedule"
+msgstr "Распечатать программу"
+
+msgid "Control Tatami"
+msgstr "Проверить татами"
+
+msgid "Communication Node"
+msgstr "Сетевое соединение"
+
+msgid "Own IP Addresses"
+msgstr "Персональный IP адрес"
+
+msgid "Show Attached Connections"
+msgstr "Показать добавленные соединения"
+
+msgid "Automatic Sheet Update"
+msgstr "Автоматическое обновление программы"
+
+msgid "Automatic Web Page Update"
+msgstr "Автоматическое обновление веб-страницы"
+
+msgid "Results in Finnish"
+msgstr "Распечатать на финском языке"
+
+msgid "Results in Swedish"
+msgstr "Распечатать на шведском языке"
+
+msgid "Results in English"
+msgstr "Распечатать на английском языке"
+
+msgid "Results in Spanish"
+msgstr "Распечатать на испанском языке"
+
+msgid "Results in Estonian"
+msgstr "распечатать на эстонском языке"
+
+msgid "Results in Ukrainian"
+msgstr "Printimine Ukraina keeles"
+
+msgid "Weights Visible in Pool Sheets"
+msgstr "Вес виден в случае круговой системы"
+
+msgid "Sheet Font"
+msgstr "Фонт"
+
+msgid "Password"
+msgstr "пароль"
+
+msgid "Password:"
+msgstr "Пароль"
+
+msgid "Competitor already exists!"
+msgstr "Участник уже существует"
+
+msgid "Competitor"
+msgstr "Участники"
+
+msgid "copied"
+msgstr "скопирован"
+
+msgid "Category already exists!"
+msgstr "Категория уже существует"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "has been copied with competitors and matches"
+msgstr "Спортсмены и категории скопированы"
+
+msgid "Last Name"
+msgstr "Фамилия"
+
+msgid "First Name"
+msgstr "имя"
+
+msgid "Year of Birth"
+msgstr "год рождения"
+
+msgid "Grade"
+msgstr "Цвет пояса"
+
+msgid "Club"
+msgstr "Клуб"
+
+msgid "Reg. Category"
+msgstr "Регистрация категории"
+
+msgid "Weight"
+msgstr "вес"
+
+msgid "Drawing not finished!"
+msgstr "Жеребьёвка не закончена"
+
+msgid "Matches matched in category"
+msgstr "количество боёв в категории"
+
+msgid "Clear the results first"
+msgstr "Аннулировать результаты в категории"
+
+msgid "Move the competitors"
+msgstr "перенести спортсменов"
+
+msgid "Number"
+msgstr "Номер"
+
+msgid "Select first a competitor and then a number."
+msgstr "Выбери вначале спортсмена, потом номер"
+
+msgid "All the categories has been drawn"
+msgstr "Жеребьёвка всех категорий завершена"
+
+msgid "Choose a directory"
+msgstr "Выбрать каталог"
+
+msgid "Category drawn"
+msgstr "Жеребьёвка категории завершена"
+
+msgid "All the categories located to the tatamis"
+msgstr "Все категории размещены на татами"
+
+msgid "Unlocated"
+msgstr "не размещено"
+
+msgid "Connections to this node"
+msgstr "Соединение на этот комп."
+
+msgid "already exists!"
+msgstr "Уже существует"
+
+msgid "Group"
+msgstr "Группа"
+
+msgid "Group:"
+msgstr "Группа"
+
+msgid "Last Name:"
+msgstr "Фамилия"
+
+msgid "First Name:"
+msgstr "Имя "
+
+msgid "Year of Birth:"
+msgstr "Год рождения"
+
+msgid "Grade:"
+msgstr "Пояс"
+
+msgid "Club:"
+msgstr "Клуб"
+
+msgid "Reg. Category:"
+msgstr "Регистрация категории"
+
+msgid "Weight:"
+msgstr "Вес"
+
+msgid "Category:"
+msgstr "Категория"
+
+msgid "No seeding"
+msgstr "нет рейтинга"
+
+msgid "Empty categories removed"
+msgstr "Пустые категории удалены"
+
+msgid "Unweighted competitors removed"
+msgstr "Невзвешанные спортсмены удалены"
+
+msgid "Matches exist. Undo the drawing first."
+msgstr "Матчи уже существуют. Удатить жеребьёвку"
+
+msgid "Competitors removed"
+msgstr "Спортсмены удалены"
+
+msgid "Type the barcode:"
+msgstr "Ввести штрихкод"
+
+msgid "Bar code search"
+msgstr "Поиск штрихкода"
+
+msgid "Matches"
+msgstr "Матчи"
+
+msgid "Contests"
+msgstr "Соперники"
+
+msgid "Sheet"
+msgstr "Лист"
+
+msgid "Previous winner"
+msgstr "Предыдущий победитель"
+
+msgid "Cancel the match"
+msgstr "Аннулирать матч"
+
+msgid "Select a tatami"
+msgstr "Выбрать татами"
+
+msgid "Password accepted.<br>"
+msgstr "Пароль акцептирован"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Wrong password"
+msgstr "Неверный пароль"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Login"
+msgstr "Логин"
+
+msgid "No rights to give results"
+msgstr "нет прав на выдачу результатов"
+
+msgid "Not used"
+msgstr "не использовано"
+
+msgid "Column"
+msgstr "Столбец"
+
+msgid "Import from file"
+msgstr "Импорт из файла"
+
+msgid "Sex:"
+msgstr "Пол"
+
+msgid "Girl Text:"
+msgstr "Девочки (обозначение)"
+
+msgid "Column Separator:"
+msgstr "Разделитель столбца"
+
+msgid "competitors added"
+msgstr "спортсмен добавлен"
+
+msgid "errors"
+msgstr "ошибки"
+
+msgid "competitors existed already"
+msgstr "спортсмен уже добавлен"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Class"
+msgstr "Категория"
+
+msgid "Message"
+msgstr "Сообщение"
+
+msgid "Log"
+msgstr "Лог"
+
+msgid "Is there another JudoShiai program running?"
+msgstr "Здесь работает другая программа JudoShiai?"
+
+msgid "Yes, another JudoShiai program is running"
+msgstr "Да, работает другая программа JudoShiai"
+
+msgid ""
+"No, this the only JudoShiai program. \n"
+"Purge erroneous lock file."
+msgstr ""
+"Нет, это единственная программа JudoShiai \n"
+"Удали неверную"
+
+msgid ""
+"Communication is blocked! \n"
+"You can still use the program to create categories etc."
+msgstr ""
+"Сетевое соединение заблокировано. \n"
+"Вы можете использовать программу для создания категорий и тд."
+
+msgid "Pool"
+msgstr "Пул"
+
+msgid "Next match"
+msgstr "Следующий матч"
+
+msgid "Preparing"
+msgstr "Готовятся"
+
+msgid "Preparing:"
+msgstr "Готовятся"
+
+msgid "Delay the match"
+msgstr "Матч перенесён"
+
+msgid "Matches matched. Clear the results first."
+msgstr "Матч проведён. Аннулировать результат"
+
+msgid "canceled"
+msgstr "Отменён"
+
+msgid "changed"
+msgstr "Изменён"
+
+msgid "points"
+msgstr "Оценки"
+
+msgid "Expand All"
+msgstr "Открыть все"
+
+msgid "Collapse All"
+msgstr "развернуть всё"
+
+msgid "Remove comment"
+msgstr "Удалить комментарии"
+
+msgid "Blue"
+msgstr "Синий"
+
+msgid "White"
+msgstr "Белый"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Points"
+msgstr "Очки"
+
+msgid "Prev. winner:"
+msgstr "Предыдущий победитель"
+
+msgid "Delayed"
+msgstr "Перенесён"
+
+msgid "Remove delay"
+msgstr "Удалить перенесение"
+
+msgid "Date:"
+msgstr "Дата"
+
+msgid "Place:"
+msgstr "Место"
+
+msgid "Start time:"
+msgstr "Начало"
+
+msgid "Tournament from the net"
+msgstr "Турнир из сети"
+
+msgid "Select sheet font"
+msgstr "Выбрать фонт листа"
+
+msgid "Tournament"
+msgstr "Турнир"
+
+msgid "Tournament:"
+msgstr "Турнир"
+
+msgid "Tournaments"
+msgstr "Турниры"
+
+msgid "Competitors:"
+msgstr "Участники"
+
+msgid "Add competitors"
+msgstr "Добавить участников"
+
+msgid "Clean up duplicates and update reg. categories"
+msgstr "Очистить продублированных и ообновить зарегистрированные категории"
+
+msgid "competitors added and updated"
+msgstr "участники добавлены и обновлены"
+
+msgid "competitors already existed"
+msgstr "Участник уже существует"
+
+msgid "competitors added unchanged"
+msgstr "участник добавлен без изменений"
+
+msgid "Remove drawing first"
+msgstr "Вначале удалить жеребьёвку"
+
+msgid "already exists"
+msgstr "уже существует"
+
+msgid "Move Competitors to Category..."
+msgstr "Перенести участника в категорию"
+
+msgid "Move Competitors Here"
+msgstr "Перенести участников сюда"
+
+msgid "Compose Unofficial Category"
+msgstr "Создать неофициальную категорию"
+
+msgid "Draw Manually"
+msgstr "Жеребьёвка вручную"
+
+msgid "Remove Drawing"
+msgstr "Удалить жеребьёвку"
+
+msgid "Copy Competitors"
+msgstr "Копирование участников"
+
+msgid "Remove Competitors"
+msgstr "Удалить участников"
+
+msgid "Show Sheet"
+msgstr "Показать лист"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "----- Men -----"
+msgstr "----- Мужчины -----"
+
+msgid "----- Women -----"
+msgstr "----- Женщины -----"
+
+msgid "Highest age:"
+msgstr "Максимальный возвраст"
+
+msgid "Age text:"
+msgstr "Текст возвраста"
+
+msgid "Match time:"
+msgstr "Время турнира"
+
+msgid "Rest time:"
+msgstr "Перерыв»"
+
+msgid "Pin times (IWY):"
+msgstr "Время захвата (IWY)"
+
+msgid "Highest weight (g):"
+msgstr "Максимальный вес (г)"
+
+msgid "Weight text:"
+msgstr "Вес текстом"
+
+msgid "Save file"
+msgstr "Сохранить файл"
+
+msgid "Which one is correct?"
+msgstr "Укажите правильный"
+
+msgid "Own database"
+msgstr "Своя база данных"
+
+msgid "Foreign database"
+msgstr "Чужая база данных"
+
+msgid "Do not change"
+msgstr "Без изменений"
+
+msgid "Stop synchronization"
+msgstr "Остановить синхронизацию"
+
+msgid "Number of tatamis:"
+msgstr "Кол-во татами"
+
+msgid "Sheets"
+msgstr "Таблицы"
+
+msgid "Category starts"
+msgstr "Начало весовой категории"
+
+msgid "Gold medal match"
+msgstr "Матч за золото"
+
+msgid "Bronze match A"
+msgstr "Матч за бронзу А"
+
+msgid "Bronze match B"
+msgstr "Матч за бронзу Б"
+
+msgid "Semifinal A"
+msgstr "Полуфинал А"
+
+msgid "Semifinal B"
+msgstr "Полуфинал Б"
+
+msgid "Show Tatami"
+msgstr "Укажи татами"
+
+msgid "Start New Match?"
+msgstr "Начать новый матч?"
+
+msgid "Hansokumake to blue"
+msgstr "Hansokumake синему"
+
+msgid "Hansokumake to white"
+msgstr "Hansokumake белому"
+
+msgid "Golden Score"
+msgstr "Дополнительное время"
+
+msgid "Start Golden Score?"
+msgstr "Начать \"golden score\"?"
+
+msgid "Hantei"
+msgstr "Hantei"
+
+msgid "Blue wins"
+msgstr "Победа синему"
+
+msgid "White wins"
+msgstr "Победа белому"
+
+msgid "REST TIME"
+msgstr "Перерыв"
+
+msgid "Seeding:"
+msgstr "Посев"
+
+msgid "Freeze match order"
+msgstr "Заморозить порядок матчей"
+
+msgid "Unfreeze exported"
+msgstr "Разморозить экспорт"
+
+msgid "Unfreeze imported"
+msgstr "Разморозить импорт"
+
+msgid "Unfreeze this"
+msgstr "Освободить это"
+
+msgid "SQL Dialog"
+msgstr "SQL диалог"
+
+msgid "Print All (PDF)"
+msgstr "Распечатать всё (PDF)"
+
+msgid "Golden Score:"
+msgstr "Дополнительное время"
+
+msgid "SQL"
+msgstr "SQL"
+
+msgid "About JudoInfo"
+msgstr "О Judoinfo"
+
+msgid "Next"
+msgstr "Следующий"
+
+msgid "Rest"
+msgstr "Остальные"
+
+msgid "Do Backup"
+msgstr "Создать копию"
+
+msgid "CANNOT OPEN BACKUP FILE"
+msgstr "Невозможно открыть копию"
+
+msgid "Tournament Backup"
+msgstr "Копия турнира"
+
+msgid "Small display"
+msgstr "Маленький дисплей"
+
+msgid "Draw Selected"
+msgstr "Жеребьёвка выбранных категорий"
+
+msgid "Draw and Print Selected"
+msgstr "Жеребьёвка и печать выбранных категорий"
+
+msgid "Print Selected Sheets (Printer)"
+msgstr "Печать турнирную таблицу (принтер)"
+
+msgid "Print Selected Sheets (PDF)"
+msgstr "Сохранить турнирную таблицу (PDF)"
+
+msgid "Advertisement"
+msgstr "Реклама"
+
+msgid "Tournament properties"
+msgstr "Настройки турнира"
+
+msgid "Print Matches (CSV)"
+msgstr "Сохранить турниры (CSV)"
+
+msgid "Match File"
+msgstr "Инфо о матче"
+
+msgid "Print Not Started Categories"
+msgstr "Распечатать неначавшиеся категории"
+
+msgid "Print Started Categories"
+msgstr "Распечатать начавшиеся категории"
+
+msgid "Print Finished Categories"
+msgstr "Распечатать закончившееся категории"
+
+msgid "Print Result"
+msgstr "Распечатать результаты"
+
+msgid "Print IWYKS"
+msgstr "Распечатать IWYKS"
+
+msgid "Print Comment"
+msgstr "Распечатать комментарии"
+
+msgid "Create Statistics"
+msgstr "Создать статистику"
+
+msgid "NOTE"
+msgstr "NB"
+
+msgid "is not a valid ASCII string!"
+msgstr "это не ASCII"
+
+msgid "No koka"
+msgstr "кока не используется"
+
+msgid "Leave points for GS"
+msgstr "Оставить оценки на табло"
+
+msgid "Automatic Match Delay"
+msgstr "Отдых"
+
+msgid "Cannot move"
+msgstr "Нельзя перенести"
+
+msgid "Mirror Tatami Order"
+msgstr "«зеркальный» Порядок татами"
+
+msgid "Mirror tatami order"
+msgstr "«зеркальный» Порядок татами"
+
+msgid "Country"
+msgstr "Страна"
+
+msgid "Id"
+msgstr "ИД"
+
+msgid "Country:"
+msgstr "Страна"
+
+msgid "Id:"
+msgstr "ИД"
+
+msgid "System:"
+msgstr "Система"
+
+msgid "Default"
+msgstr "По умолчанию"
+
+msgid "FIN Double Repechage"
+msgstr "Двойной утешительный"
+
+msgid "SWE Double Repechage"
+msgstr "Двойной утешительный"
+
+msgid "SWE Direct Repechage"
+msgstr "Прямой утешительный"
+
+msgid "EST Double Elimination"
+msgstr "EST Pitkä keräily"
+
+msgid "Single Elimination"
+msgstr "Дисквалификация"
+
+msgid "SWE Single Repechage"
+msgstr "Утешительный"
+
+msgid "Club Name Only"
+msgstr "Только название клуба"
+
+msgid "Country Name Only"
+msgstr "Только название страны"
+
+msgid "Both Club and Country"
+msgstr "Название страны и клуба"
+
+msgid "International System"
+msgstr "Международная система"
+
+msgid "Finnish System"
+msgstr "Финская система"
+
+msgid "Swedish System"
+msgstr "Шведская система"
+
+msgid "Estonian System"
+msgstr "Эстонская система"
+
+msgid "Reset to Defaults"
+msgstr "Восстановить по умолчанию"
+
+msgid "View Log"
+msgstr "Показать лог"
+
+msgid "Double Pool"
+msgstr "двойной пул"
+
+msgid "Cannot handle: Database created with newer JudoShiai version."
+msgstr "Не возможно отобразить: база данных сождана новой версией Judoshisai"
+
+msgid "Database tables updated."
+msgstr "Таблицы базы данных обновлены"
+
+msgid "Cannot open"
+msgstr "Невозможно открыть"
+
+msgid "Abbreviations in Sheets"
+msgstr "Сокращённые таблицы"
+
+msgid "Display layout"
+msgstr "Настройки экрана"
+
+msgid "Contest area"
+msgstr "Татами"
+
+msgid "Set time"
+msgstr "Настройка времени"
+
+msgid "Sound"
+msgstr "Звук"
+
+msgid "Choose a file"
+msgstr "Выбери файл"
+
+msgid "Sound Files"
+msgstr "Звуковые файлы"
+
+msgid "All Files"
+msgstr "Все файлы"
+
+msgid "Best of 3"
+msgstr "Лучший из 3-х"
+
+msgid "One match"
+msgstr "Один матч"
+
+msgid "Quad Pool"
+msgstr "4 пул"
+
+msgid "IJF Qrt Final Rep"
+msgstr "IJF Prant."
+
+msgid "FIN Dbl Repchg"
+msgstr "FIN Prant."
+
+msgid "SWE Dubb återkv"
+msgstr "SWE Ransk."
+
+msgid "SWE Dir återkv"
+msgstr "SWE Suora ker."
+
+msgid "EST D klass"
+msgstr "EST Pitkä ker."
+
+msgid "No Repechg"
+msgstr "Ei keräilyjä"
+
+msgid "SWE Enkelt återkv"
+msgstr "SWE Lyhyet ker."
+
+msgid "ESP Dbl Lost"
+msgstr "ESP Pitkä ker."
+
+msgid "ESP Dbl Rep"
+msgstr "ESP Ransk."
+
+msgid "ESP Simple Rep"
+msgstr "утешительный"
+
+msgid "ESP Double Lost"
+msgstr "двойное поражение"
+
+msgid "ESP Double Repechage"
+msgstr "двойной утешительный"
+
+msgid "ESP Simple Repechage"
+msgstr "утешительный"
+
+msgid "IJF Quarter Final Repechage"
+msgstr "1\\4 финал утешительный"
+
+msgid "Picture Files"
+msgstr "фотофайлы"
+
+msgid "Print Headers"
+msgstr "печать header"
+
+msgid "Language Selection"
+msgstr "выбор языка"
+
+msgid "Spanish System"
+msgstr "испанская система"
+
+msgid "Communication"
+msgstr "Сетевое соединение"
+
+msgid "Club Text Selection"
+msgstr "Текст клуба"
+
+msgid "Print Logo"
+msgstr "Печать лого"
+
+msgid "Sheet Layout"
+msgstr "Дазайн таблицы"
+
+msgid "Weights Visible"
+msgstr "Вес видимый"
+
+msgid "Grade Visible"
+msgstr "Пояса видимые"
+
+msgid "Line"
+msgstr "Ряд"
+
+msgid "Syntax error"
+msgstr "Синтаксическая ошибка"
+
+msgid "Switch sides"
+msgstr "поменять стороны"
+
+msgid "Stop clock on Ippon"
+msgstr "остановить часы на ippon"
+
+msgid "Display customized layout"
+msgstr ""
+
+msgid "No competitor found!"
+msgstr "участник не найден"
+
+msgid "Modified Dbl Elim"
+msgstr ""
+
+msgid "FIN Dbl Repchg One Bronze"
+msgstr ""
+
+msgid "Modified Double Elimination"
+msgstr ""
+
+msgid "FIN Double Repechage One Bronze"
+msgstr ""
+
+msgid "Silver medal match"
+msgstr "Hõbe medal kohtumine"
+
+msgid "Pool Style 2"
+msgstr "Ringi süsteem 2"
+
+msgid "Use Belt Colors"
+msgstr "использовать цвет пояса"
+
+msgid "Print Unmatched"
+msgstr ""
+
+msgid "White first"
+msgstr "Белый первым"
+
+msgid "Show"
+msgstr "Показать"
+
+msgid "Show Deleted"
+msgstr "Показать удалённые"
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "White first:"
+msgstr "Белый первый"
+
+msgid "Serial Communication"
+msgstr ""
+
+msgid "In Use"
+msgstr "Использован"
+
+msgid "Device"
+msgstr "Устройство"
+
+msgid "Baudrate"
+msgstr "Сторость передачи данных"
+
+msgid "Basic Scripts"
+msgstr "Основные скрипты"
+
+msgid "Select Script"
+msgstr "выбрать скрипт"
+
+msgid "No script available"
+msgstr "скрипт недоступен"
+
+msgid "Run Script"
+msgstr "запустить скрипт"
+
+msgid "Repeat Script"
+msgstr "повторить скрипт"
+
+msgid "Double Pool 2"
+msgstr "двойной 2-й татами"
+
+msgid "Write to file"
+msgstr "Записать в файл"
+
+msgid "Confirm New Match"
+msgstr "подтвердить новый матч"
+
+msgid "Contest area 9"
+msgstr "Зона 9"
+
+msgid "Contest area 10"
+msgstr "зона 10"
+
+msgid "Move Medal Matches"
+msgstr "перенести призовые матчи"
+
+msgid "Move match "
+msgstr "перенести матч"
+
+msgid "to tatami and/or"
+msgstr "на татами и\\или"
+
+msgid " delay"
+msgstr "задерживается"
+
+msgid "Final"
+msgstr "финал"
+
+msgid "Bronze1"
+msgstr "Бронза 1"
+
+msgid "Bronze2"
+msgstr "Бронза 2"
+
+msgid "Pool's last"
+msgstr "Последний на татами"
+
+msgid "No move"
+msgstr "не переносить"
+
+msgid "Print Accreditation Cards"
+msgstr "Печать карт аккредитации"
+
+msgid "Name Format"
+msgstr "Формат имени"
+
+msgid "Name Surname, Country/Club"
+msgstr "Имя Фамилия, страна\\клуб"
+
+msgid "Surname, Name, Country/Club"
+msgstr "Фамилия, имя, страна\\клуб"
+
+msgid "Country/Club  Surname, Name"
+msgstr "Страна\\клуб, фамилия, имя"
+
+msgid "Medal Matches..."
+msgstr "Призовые матчи"
+
+msgid "Print Selected Accreditation Cards"
+msgstr "Печать выбранных карт аккредетаций"
+
+msgid "Layout:"
+msgstr "Макет"
+
+msgid "Print To:"
+msgstr "Печатать на"
+
+msgid "Template"
+msgstr "шаблон"
+
+msgid "Printer"
+msgstr "Принтер"
+
+msgid "PDF"
+msgstr "PDF"
+
+msgid "One Card Per Page"
+msgstr "Одна карта на странице"
+
+msgid "Normal display"
+msgstr "Стандартный экран"
+
+msgid "Horizontal display"
+msgstr "Горизонтальный экран"
+
+msgid "White has a judogi problem."
+msgstr "Проблема с дзюдо-го у белого"
+
+msgid "Blue has a judogi problem."
+msgstr "Проблема с дзюдо-го у синего"
+
+msgid "Show Competitors"
+msgstr "Показать участников"
+
+msgid "Show competitors"
+msgstr "Показать участников"
+
+msgid "Name format"
+msgstr "Формат имени"
+
+msgid "Country  Surname, Name"
+msgstr "Страна, фамилия, имя"
+
+msgid "Club  Surname, Name"
+msgstr "Клуб, фамилия, имя"
+
+msgid "Country Surname"
+msgstr "страна, фамилия"
+
+msgid "Club Surname"
+msgstr "клуб, фамилия"
+
+msgid "Surname, Name"
+msgstr "фамилия, имя"
+
+msgid "Surname"
+msgstr "фамилия"
+
+msgid "WINNER"
+msgstr "победитель"
+
+msgid "Cancel"
+msgstr "отменить"
+
+msgid "Club Seeding:"
+msgstr "посев клубов"
+
+msgid "Gender:"
+msgstr "пол"
+
+msgid "Male"
+msgstr "мужской"
+
+msgid "Female"
+msgstr "женский"
+
+msgid "Control:"
+msgstr "контроль"
+
+msgid "NOK"
+msgstr ""
+
+msgid "Seeding"
+msgstr "посев"
+
+msgid "Club Seeding"
+msgstr "посев клубов"
+
+msgid "Database Validation"
+msgstr "проверка базы данных"
+
+msgid "Duplicate seedings:\n"
+msgstr "продублировать посев:\n"
+
+msgid "seeding"
+msgstr "посев"
+
+msgid "defined"
+msgstr "определено"
+
+msgid "times"
+msgstr "повторы"
+
+msgid "Duplicate club seedings:\n"
+msgstr "дублирование посева клубов:\n"
+
+msgid "Missing category definitions:\n"
+msgstr "отсутствует определение категории:\n"
+
+msgid "is not"
+msgstr "не"
+
+msgid "Typing errors:\n"
+msgstr "типы ошибок:\n"
+
+msgid "UTF-8 errors"
+msgstr "ошибка UTF-8"
+
+msgid "Extra spaces"
+msgstr "дополнительные поля"
+
+msgid "Possible duplicate competitors:\n"
+msgstr "возможная дупликация участников:\n"
+
+msgid "Possible duplicate club names:\n"
+msgstr "возможная дупликация клубов:\n"
+
+msgid "Suspicious weights:\n"
+msgstr "подозрительный вес:\n"
+
+msgid "warnings"
+msgstr "предупреждения"
+
+msgid "Weighed only"
+msgstr "только вес"
+
+msgid "With weights"
+msgstr "с весом"
+
+msgid "Validate Database"
+msgstr "проверка базы данных"
+
+msgid "Results in Icelandic"
+msgstr "Printimine Islandi keeles"
+
+msgid "Surname Name, Country/Club"
+msgstr "Фамилия, имя, страна, клуб"
+
+msgid "Country/Club,  Surname Name"
+msgstr "страна, клуб, фамилия, имя"
+
+msgid "Scale Serial Interface..."
+msgstr ""
+
+msgid "Type"
+msgstr "тип"
+
+msgid "ID:"
+msgstr "ИД"
+
+msgid "Name:"
+msgstr "Имя"
+
+msgid "About JudoWeight"
+msgstr "о взвешивании"
+
+msgid "No match soon! Please wait for a while."
+msgstr "матчей нет! Просим подождать"
+
+msgid "About JudoJudogi"
+msgstr "О Дзюдо-ги"
+
+msgid "Norwegian System"
+msgstr "Norra süsteem"
+
+msgid "Confirm:"
+msgstr "Подтверждение"
+
+msgid "- - -"
+msgstr ""
+
+msgid "syntax errors"
+msgstr "синтаксические ошибки"
+
+msgid "Rep. time:"
+msgstr ""
+
+msgid "Results in Norwegian"
+msgstr "Printimine Norra keeles"
+
+msgid "Landscape"
+msgstr "ландшафт"
+
+msgid "Resolution (min):"
+msgstr "разрешение (мин)"
+
+msgid "Compressed timeline"
+msgstr "сжатый график"
+
+msgid "Select font"
+msgstr "выбор шрифта"
+
+msgid "Font"
+msgstr "шрифт"
+
+msgid "Communication error"
+msgstr "ошибка в связи"
+
+msgid "Double Lost"
+msgstr "двойной проигрыш"
+
+msgid "Replay Video"
+msgstr "повторить видео"
+
+msgid "Video server"
+msgstr "видео-сервер"
+
+msgid "Video server URL"
+msgstr "видео-сервер URL"
+
+msgid "User:"
+msgstr "пользователь"
+
+msgid "Proxy:"
+msgstr "прокси"
+
+msgid "Show Video"
+msgstr "показать видео"
+
+msgid "GBR Knock Out"
+msgstr "GBR нокаут"
+
+msgid "SVG Templates"
+msgstr "SVG шаблоны"
+
+msgid "General"
+msgstr "Основное"
+
+msgid "Reset to"
+msgstr "возврат к..."
+
+msgid "Initialize"
+msgstr "Инициализировать"
+
+msgid "Players"
+msgstr "игроки"
+
+msgid "Max age"
+msgstr "макс. возвраст"
+
+msgid "Min"
+msgstr "мин."
+
+msgid "Max"
+msgstr "макс."
+
+msgid "System"
+msgstr "система"
+
+msgid "Default systems"
+msgstr "система по умолчанию"
+
+msgid "Use SVG Templates"
+msgstr "использовать SVG шаблоны"
+
+msgid "Seeded to fixed places:"
+msgstr "посеять в фиксированные места"
+
+msgid "Double Pool 2 with carried forward points:"
+msgstr ""
+
+msgid "Two pool bronzes:"
+msgstr "бронза на 2-х татами"
+
+msgid "Resolve 3-way ties by weights:"
+msgstr ""
+
+msgid "Coach Id:"
+msgstr "ИД судьи"
+
+msgid "Comment:"
+msgstr "комментарий"
+
+msgid "Best two out of three matches:"
+msgstr "лучшие 2 из 3-х матчей"
+
+msgid ""
+"Medal will be awarded \n"
+"only if a contest was won:"
+msgstr ""
+"Медаль присуждается, \n"
+"если участник выигрывает"
+
+msgid "Pool settings"
+msgstr "Настройка матов"
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "Grade names"
+msgstr "наиманования оценок"
+
+msgid "Coach"
+msgstr "тренер"
+
+msgid "Weights do not match"
+msgstr "вес не сходится"
+
+msgid "Copy Weights"
+msgstr "копирование весовых категорий"
+
+msgid "weights updated"
+msgstr "обновление весов"
+
+msgid "Update Weights From Another Shiai"
+msgstr "обновление весов из других турниров"
+
+msgid "Weighted:"
+msgstr "взвешен"
+
+msgid "Print SVG"
+msgstr ""
+
+msgid "No Limit"
+msgstr "без ограничений"
+
+msgid "Corrupted competitor data:\n"
+msgstr ""
+
+msgid "Corrupted category data:\n"
+msgstr ""
+
+msgid "Server URL"
+msgstr "URL сервер"
+
+msgid "Copy to Server"
+msgstr "копирование в сервер"
+
+msgid "Proxy User:"
+msgstr "прокси-сервер"
+
+msgid "Proxy Password:"
+msgstr "пароль прокси"
+
+msgid "DEN Dbl Elim"
+msgstr ""
+
+msgid "EST D klass 1 brz"
+msgstr ""
+
+msgid "DEN Double Elimination"
+msgstr ""
+
+msgid "EST Double Elim One Bronze"
+msgstr ""
+
+msgid "Remote address"
+msgstr ""
+
+msgid "Remote Control"
+msgstr ""
+
+msgid "If equal score less shido wins"
+msgstr ""
+
+msgid "Set score"
+msgstr ""
+
+msgid "Edit Drawing"
+msgstr "изменить жеребьёвку"
+
+msgid "VLC control"
+msgstr ""
+
+msgid "X:"
+msgstr ""
+
+msgid "Y:"
+msgstr ""
+
+msgid "Scale:"
+msgstr "шкала"
+
+msgid "Name"
+msgstr "имя"
+
+msgid "Reg.Cat"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Index"
+msgstr ""
+
+msgid "Results in Polish"
+msgstr ""
+
+msgid "Results in Slovak"
+msgstr ""
+
+msgid "Results in Dutch"
+msgstr ""
+
+msgid "Win in Golden Score gives 1 point"
+msgstr ""
+
+msgid "WARNING: NO CONTROL"
+msgstr ""
+
+msgid "British System"
+msgstr ""
+
+msgid "Australian System"
+msgstr ""
+
+msgid "Danish System"
+msgstr ""
+
+msgid "Polish System"
+msgstr ""
+
+msgid "Slovakian System"
+msgstr ""
+
+msgid "Tatami"
+msgstr ""
+
+msgid "Hikiwake"
+msgstr ""
+
+msgid "Require judogi control"
+msgstr ""
+
+msgid "CTL"
+msgstr ""
+
+msgid "Show Flags"
+msgstr ""
+
+msgid "Show Initial of Name"
+msgstr ""
+
+msgid "Flag size:"
+msgstr ""
+
+msgid "Name size:"
+msgstr ""
+
+msgid "CONTROL"
+msgstr ""
+
+msgid "THIS APPLICATION"
+msgstr ""
+
+msgid "NOT CONNECTED"
+msgstr ""
+
+msgid "Team:"
+msgstr ""
+
+msgid "Tatami:"
+msgstr ""
+
+msgid "Create default members:"
+msgstr ""
+
+msgid "Team"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Double Pool 3"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "UKR Dbl Repchg"
+msgstr ""
+
+msgid "UKR Double Repechage"
+msgstr ""
+
+msgid "Customized"
+msgstr ""
+
+msgid "Load Custom Systems"
+msgstr ""
+
+msgid "New Team"
+msgstr ""
+
+msgid "New Team Category"
+msgstr ""
+
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+msgid "Results in German"
+msgstr ""
+
+msgid "Results in Russian"
+msgstr ""
+
+msgid "Ukrainian System"
+msgstr ""
+
+msgid "Pin times (IWYK):"
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+msgid "New Password:"
+msgstr ""
+
+msgid "Old Password:"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "No manual edit"
+msgstr ""
+
+msgid "Automatic send"
+msgstr ""
+
+msgid "Print label"
+msgstr ""
+
+msgid "No margins"
+msgstr ""
+
+msgid "Fit page"
+msgstr ""

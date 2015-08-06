@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -53,7 +53,7 @@ gint           language = LANG_EN;
 gint           num_lines = NUM_LINES;
 gint           display_type = NORMAL_DISPLAY;
 gboolean       mirror_display = FALSE;
-gboolean       white_first = FALSE;
+gboolean       white_first = TRUE;
 gboolean       red_background = FALSE;
 gboolean       menu_hidden = FALSE;
 gchar         *filename = NULL;
@@ -629,9 +629,9 @@ void toggle_mirror(GtkWidget *menu_item, gpointer data)
 void toggle_whitefirst(GtkWidget *menu_item, gpointer data)
 {
 #if (GTKVER == 3)
-    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
+    if (TRUE || gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
 #else
-    if (GTK_CHECK_MENU_ITEM(menu_item)->active) {
+    if (TRUE || GTK_CHECK_MENU_ITEM(menu_item)->active) {
 #endif
         white_first = TRUE;
         g_key_file_set_boolean(keyfile, "preferences", "whitefirst", TRUE);
@@ -873,9 +873,12 @@ gint application_type(void)
 
 void refresh_window(void)
 {
+    gtk_widget_queue_draw(GTK_WIDGET(main_window));
+    return;
+
+#if 0
     GtkWidget *widget;
     widget = GTK_WIDGET(main_window);
-
 #if (GTKVER == 3)
     if (gtk_widget_get_window(widget)) {
         gdk_window_invalidate_rect(gtk_widget_get_window(widget), NULL, TRUE);
@@ -899,6 +902,7 @@ void refresh_window(void)
         gdk_window_invalidate_region(widget->window, region, TRUE);
         gdk_window_process_updates(widget->window, TRUE);
     }
+#endif
 #endif
 }
 

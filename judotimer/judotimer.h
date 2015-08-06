@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2011 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -232,5 +232,10 @@ extern void video_init(void);
 extern void ask_tvlogo_settings(GtkWidget *w, gpointer data);
 extern void write_tv_logo(struct msg_update_label *msg);
 extern void tvlogo_send_new_frame(gchar *frame, gint length);
+
+#define ACTIVE (mode != MODE_SLAVE)
+extern void set_menu_active(void);
+
+extern void set_menu_white_first(gboolean flag);
 
 #endif

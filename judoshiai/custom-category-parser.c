@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -59,21 +59,23 @@
   -----
  */
 
-static void block(void);
+#define expect(_s) do { expect1(_s); if (stop) { /*fprintf(stderr, "%s:%d\n", __FUNCTION__, __LINE__); */ return 0; }} while (0)
+
+static int block(void);
 
 static FILE *f;
 
 
 typedef enum { 
-    dummy, rr, ko, match, dot, colon, prev, ident, number, 
+    dummy, rr, ko, b3, match, dot, colon, prev, ident, number, 
     competitor, eol, eof, pos, dash, lparen, rparen, order,
-    page, svg, info, err, id
+    page, svg, info, err, id, group
 } Symbol;
 
 static char *labels[] = {
-    "", "rr", "ko", "match", "p", "colon", "prev", "ident", "number", 
+    "", "rr", "ko", "b3", "match", "p", "colon", "prev", "ident", "number", 
     "competitor", "eol", "eof", "pos", "dash", "lparen", "rparen", "order",
-    "page", "svg", "info", "error", "id"
+    "page", "svg", "info", "error", "id", "group"
 };
 
 typedef struct symbol {
@@ -122,10 +124,30 @@ typedef struct round_robin {
     sym_t *name;
     sym_t *rr_matches[NUM_RR_MATCHES];
     int   num_rr_matches;
+    competitor_t competitors[NUM_COMPETITORS];
+    int   num_competitors;
 } round_robin_t;
 
 static round_robin_t round_robin_pools[NUM_ROUND_ROBIN_POOLS];
 static int num_round_robin_pools = 0;
+
+typedef struct best_of_three {
+    sym_t *name;
+    sym_t *matches[3];
+} best_of_three_t;
+
+static best_of_three_t best_of_three_pairs[NUM_BEST_OF_3_PAIRS];
+static int num_best_of_three_pairs = 0;
+
+typedef struct group {
+    int competitors[NUM_COMPETITORS];
+    int num_competitors;
+} group_t;
+
+static group_t groups[NUM_GROUPS];
+static int num_groups = 0;
+static int groups_type = 0;
+static int group_set = 0;
 
 #define NUM_SYMBOLS 1024 
 static struct symbol symbols[NUM_SYMBOLS];
@@ -156,80 +178,11 @@ static char name_long[64];
 static char name_short[16];
 static int  competitors_min, competitors_max;
 
-static double x_shift = 100.0, y_shift = 60.0;
-
-#ifdef MAKE_SVG_FILES
-
-#define NUM_PAGES 16
-static struct {
-    double current_y;
-    FILE *fd;
-    int opened;
-    char name[128];
-    double res_start_y;
-    int num_res;
-#define PAGE_FLAG_POS_HDR 1
-    int    flags;
-} page_data[NUM_PAGES];
-
-static double res_x = 200.0, res_w = 150, res_line = 16.0, x_init = 200.0;
-
-static char *svg_start =
-    "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-    "<svg\n"
-    "   xmlns=\"http://www.w3.org/2000/svg\"   width=\"630px\"\n"
-    "   height=\"891px\"\n"
-    "   id=\"judoshiai\"\n"
-    "   version=\"1.1\"\n"
-    "   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n"
-    "   xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\">\n"
-    "<style type=\"text/css\"> <![CDATA[ tspan.cmpx { fill: red; } ]]> </style>\n"
-    "<sodipodi:namedview\n"
-    "id=\"base\"\n"
-    "pagecolor=\"#ffffff\"\n"
-    "bordercolor=\"#666666\"\n"
-    "borderopacity=\"1.0\"\n"
-    "inkscape:pageopacity=\"0.0\"\n"
-    "inkscape:pageshadow=\"2\"\n"
-    "inkscape:zoom=\"1\"\n"
-    "inkscape:cx=\"185.84668\"\n"
-    "inkscape:cy=\"880.85263\"\n"
-    "inkscape:document-units=\"px\"\n"
-    "inkscape:current-layer=\"layer1\"\n"
-    "inkscape:window-width=\"877\"\n"
-    "inkscape:window-height=\"739\"\n"
-    "inkscape:window-x=\"177\"\n"
-    "inkscape:window-y=\"31\"\n"
-    "showgrid=\"false\"\n"
-    "inkscape:window-maximized=\"0\" />\n"
-    "   <g\n"
-    "      id=\"layer1\"\n"
-    "      style=\"opacity:1\">\n"
-    "<rect x='0.00' y='0.00' width='630.00' height='891.00' style='fill:white;stroke:none'/>\n";
-
-static char *svg_end =
-    "   </g>\n"
-    "</svg>\n";
-
-static char *svg_page_header_text =
-    "<text\n"
-    "   style=\"font-size:21.38px;font-style:normal;font-weight:bold;letter-spacing:0px;\n"
-    "           word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;\n"
-    "           text-anchor:middle;text-align:center\"\n"
-    "   x=\"315.00\" y=\"44.55\" id=\"text1100\">\n"
-    "  <tspan id=\"tspan1300\">%i-competition  %i-date  %i-place   %i-catname</tspan></text>\n";
-
-#define svg_text \
-    "<text x=\"%.2f\" y=\"%.2f\" font-family=\"Arial\" font-size=\"10\" fill=\"black\"><tspan>%s</tspan></text>\n"
-
-static char *competitor_style  = "font-size:10px;font-family:Arial;fill:#000000";
-static char *competitor_name_1 = "hm1-first-s-last-s-club";
-static char *competitor_name_2 = "hm1-last";
-#endif
-
 static char errstr[128];
 #define ERR_SYM(_test, _str...) \
     do { if (_test) { snprintf(errstr, sizeof(errstr), _str); sym = err; goto out; } } while (0)
+
+static char *readname = NULL;
 
 static sym_t *get_sym(char *name) {
     int i;
@@ -250,9 +203,11 @@ static match_t *get_match_or_create(char *name) {
             return &matches[i];
         }
     }
-    
-    matches[num_matches].name = get_sym(name); 
-    return &matches[num_matches++];
+    if (num_matches < NUM_CUSTOM_MATCHES) {
+        matches[num_matches].name = get_sym(name); 
+        return &matches[num_matches++];
+    }
+    return NULL;
 }
 
 static match_t *get_match(char *name) {
@@ -367,6 +322,11 @@ static void getsym(void)
             goto out;
         }
 
+        if (!strcmp(line, "b3")) {
+            sym = b3;
+            goto out;
+        }
+
         if (!strcmp(line, "p")) {
             sym = prev;
             goto out;
@@ -395,6 +355,12 @@ static void getsym(void)
         if (!strncmp(line, "pos", 3) && line[3] >= '0' && line[3] <= '9') {
             sym = pos;
             value = atoi(&line[3]);
+            goto out;
+        }
+
+        if (!strncmp(line, "group", 5) && line[5] >= '0' && line[5] <= '9') {
+            sym = group;
+            value = atoi(&line[5]);
             goto out;
         }
 
@@ -436,12 +402,14 @@ static int accept(Symbol s) {
     }
     return 0;
 }
+
+static char message[128];
  
-static int expect(Symbol s) {
+static int expect1(Symbol s) {
     if (accept(s))
         return 1;
-    fprintf(stderr, "Error on line %d: Expected %s: unexpected symbol %s\n", 
-            linenum, labels[s], labels[sym]);
+    snprintf(message, sizeof(message), "%s line %d:\n  Unexpected symbol \"%s\" (expected \"%s\")", 
+            readname, linenum, labels[sym], labels[s]);
     stop = 1;
     return 0;
 }
@@ -469,9 +437,13 @@ static int player(void) {
     }
     return 0;
 }
- 
-static void block(void)
+
+#define checkval(exp, errstr...) do { if (!exp) { stop = 1; snprintf(message, sizeof(message), errstr); return 0; }} while(0) 
+
+static int block(void)
 {
+    if (stop) return 0;
+
     if (accept(number)) {
         ordernum = numvalue;
     } else {
@@ -488,7 +460,7 @@ static void block(void)
         expect(number);
         competitors_max = numvalue;
         expect(eol);
-        return;
+        return 1;
     }
 
     if (accept(svg)) {
@@ -497,7 +469,7 @@ static void block(void)
             pagenum = numvalue;
         }
         expect(eol);
-        return;
+        return 1;
     }
 
     if (accept(ident)) {
@@ -511,15 +483,44 @@ static void block(void)
         player();
         m->c2 = compvalue;
         expect(eol);
-        return;
+        return 1;
+    }
+
+    if (accept(b3)) {
+        char buf[64];
+        match_t *m[3];
+        int i;
+        checkval((num_best_of_three_pairs < NUM_BEST_OF_3_PAIRS), 
+                 "Too many best of three pools, max = %d", NUM_BEST_OF_3_PAIRS);
+        expect(ident);
+        best_of_three_pairs[num_best_of_three_pairs].name = get_sym(strvalue);
+        for (i = 0; i < 3; i++) {
+            snprintf(buf, sizeof(buf), "%s_%d", strvalue, i+1);
+            m[i] = get_match_or_create(buf);
+            m[i]->ordernum = ordernum;
+            m[i]->number = linenum;
+            m[i]->page = pagenum;
+            best_of_three_pairs[num_best_of_three_pairs].matches[i] = get_sym(buf);
+        }
+        expect(colon);
+        player();
+        m[0]->c1 = m[1]->c1 = m[2]->c1 = compvalue;
+        player();
+        m[0]->c2 = m[1]->c2 = m[2]->c2 = compvalue;
+        expect(eol);
+        num_best_of_three_pairs++;
+        return 1;
     }
 
     if (accept(rr)) {
+        round_robin_t *pool = &round_robin_pools[num_round_robin_pools];
         competitor_t c[20];
         int num_players = 0, i, j;
         char buf[64];
+        checkval((num_round_robin_pools < NUM_ROUND_ROBIN_POOLS), 
+                 "Too many round robin pools, max = %d", NUM_ROUND_ROBIN_POOLS);
         expect(ident);
-        round_robin_pools[num_round_robin_pools].name = get_sym(strvalue);
+        pool->name = get_sym(strvalue);
         /*
         match_t *m1 = get_match(strvalue);
         m1->ordernum = ordernum;
@@ -530,10 +531,14 @@ static void block(void)
         expect(colon);
         while (player()) {
             c[num_players++] = compvalue;
+            pool->competitors[pool->num_competitors++] = compvalue;
         }
         // Create round robin matches
         for (i = 0; i < num_players-1; i++) {
             for (j = i+1; j < num_players; j++) {
+                checkval((pool->num_rr_matches < NUM_RR_MATCHES), 
+                         "Too many round robin matches, max = %d", NUM_RR_MATCHES);
+
                 sprintf(buf, "%s_%d_%d", round_robin_pools[num_round_robin_pools].name->name, i, j);
                 match_t *m = get_match_or_create(buf);
                 m->ordernum = ordernum;
@@ -541,14 +546,12 @@ static void block(void)
                 m->page = pagenum;
                 m->c1 = c[i];
                 m->c2 = c[j];
-
-                round_robin_pools[num_round_robin_pools].
-                    rr_matches[round_robin_pools[num_round_robin_pools].num_rr_matches++] = get_sym(buf);
+                pool->rr_matches[pool->num_rr_matches++] = get_sym(buf);
             }
         }
         expect(eol);
         num_round_robin_pools++;
-        return;
+        return 1;
     }
 
     if (accept(ko)) {
@@ -559,12 +562,15 @@ static void block(void)
         expect(colon);
         int i = 1, n, lev = 1;
         while (player()) {
+            checkval((num_matches < NUM_CUSTOM_MATCHES), 
+                     "Too many matches, max = %d", NUM_CUSTOM_MATCHES);
+
             sprintf(buf, "%s_%d_%d", name->name, lev, i);
             match_t *m = get_match_or_create(buf);
             if (i == 1) reference = get_sym(buf);
             else {
                 m->reference = reference;
-                m->x = 0.0; m->y = y_shift*(i - 1);
+                //m->x = 0.0; m->y = y_shift*(i - 1);
             }
             m->ordernum = ordernum;
             m->number = linenum;
@@ -572,7 +578,7 @@ static void block(void)
             m->c1 = compvalue;
             if (!player()) {
                 fprintf(stderr, "Line %d: missing player\n", linenum);
-                return;
+                return 1;
             }
             m->c2 = compvalue;
             m->flags |= FLAG_LONG_NAME;
@@ -603,11 +609,13 @@ static void block(void)
                 m->c2.match = get_sym(buf);
                 m->c2.pos = 1;
 
+                checkval((num_matches < NUM_CUSTOM_MATCHES-1), 
+                         "Too many matches, max = %d", NUM_CUSTOM_MATCHES);
                 m1 = get_match_or_create(m->c1.match->name);
                 m2 = get_match_or_create(m->c2.match->name);
                 if (m1 && m2) {
                     m->reference = reference;
-                    m->x = x_shift*(lev-1); 
+                    //m->x = x_shift*(lev-1); 
                     m->y = (m1->y + m2->y)/2;
                     m->y1 = m1->y - m->y;
                     m->y2 = m2->y - m->y;
@@ -615,11 +623,13 @@ static void block(void)
             }
         } 
         expect(eol);
-        return;
+        return 1;
     }
 
     if (accept(order)) {
         while (player()) {
+            checkval((num_ord < NUM_CUSTOM_MATCHES), 
+                     "Too many matches in order, max = %d", NUM_CUSTOM_MATCHES);
             match_order[num_ord].first = compvalue;
             expect(dash);
             if (player()) {
@@ -628,11 +638,14 @@ static void block(void)
         }
          
         expect(eol);
-        return;
+        return 1;
     }
 
     if (accept(pos)) {
         int posval = numvalue-1;
+        checkval((posval >= 0 && posval < NUM_CUST_POS), 
+                 "Wrong position number, values 1-%d are valid", NUM_CUST_POS);
+
         expect(ident);
         sym_t *s = get_sym(strvalue);
         positions[posval].match = s;
@@ -644,10 +657,28 @@ static void block(void)
             positions[posval].real_contest_pos = numvalue;
         }
         expect(eol);
-        return;
+        return 1;
+    }
+
+    if (accept(group)) {
+        int grpval = numvalue-1;
+        checkval((grpval >= 0 && grpval < NUM_GROUPS), "Wrong group index, 1-%d are valid", NUM_GROUPS);
+        if (accept(rr)) {
+            groups_type = 1;
+        }
+        groups[grpval].num_competitors = 0;
+        while (player()) {
+            if (compvalue.comp)
+                groups[grpval].competitors[groups[grpval].num_competitors++] = compvalue.comp;
+        }        
+        if (grpval+1 > num_groups) num_groups = grpval+1;
+        group_set = 1;
+        expect(eol);
+        return 1;
     }
 
     accept(eol);
+    return 1;
 }
 
 static void solve(sym_t *mname, int level, int pos) {
@@ -747,7 +778,7 @@ static void sort_matches(void) {
 static void program(void) {
     getsym();
     while (sym != eof) {
-        block();
+        if (block() == 0) return;
     }
 }
 
@@ -770,116 +801,14 @@ static int get_rr_num(char *name) {
     return 0;
 }
 
-#ifdef MAKE_SVG_FILES
-
-static char *print_comp(competitor_t *c) {
-    static char buf[2][32];
-    static int sel = 0;
-    int n = 0;
-
-    sel = sel ? 0 : 1;
-
-    if (c->comp)
-        sprintf(buf[sel], "comp%d", c->comp);
-    else if (c->match) {
-        int mn = get_match_num(c->match->name);
-        match_t *m = get_match(c->match->name);
-        if (m->type == rr)
-            n = sprintf(buf[sel], "%s.%d", c->match->name, c->pos);
-        else
-            n = sprintf(buf[sel], "M%d.%d", mn, c->pos);
-        int i = 0;
-        while (c->prev[i]) {
-            n += sprintf(buf[sel]+n, ".p.%d", c->prev[i]);
-            i++;
-        }
+static int get_b3_num(char *name) {
+    int i;
+    for (i = 0; i < num_best_of_three_pairs; i++) {
+        if (!strcmp(best_of_three_pairs[i].name->name, name))
+            return i+1;
     }
-
-    return buf[sel];
+    return 0;
 }
-
-#define TEXT(_x, _y, _t) fprintf(out, svg_text, _x, _y, _t)
-
-static void draw_match(FILE *out, int num, match_t *m)
-{
-    int longname = m->flags & FLAG_LONG_NAME;
-    double xs = m->x - (longname ? x_init : x_shift);
-    double ys1 = m->y + (m->y1 ? m->y1 : -y_shift/4.0);
-    double ys2 = m->y + (m->y2 ? m->y2 : y_shift/4.0);
-    double r = 8.05;
-
-    fprintf(out, "<g>\n");
-    fprintf(out, "  <circle cx='%.2f' cy='%.2f' r='%.2f' stroke='black' stroke-width='1' fill='white'/>\n",
-            m->x, m->y, r);
-    fprintf(out, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>%d</text>\n", 
-            m->x, m->y+4.0, competitor_style, num);
-    fprintf(out, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-1-%s</text>\n",
-            xs + r + 4.0, ys1, competitor_style, num, 
-            longname ? competitor_name_1 : competitor_name_2);
-    fprintf(out, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-2-%s</text>\n",
-            xs + r + 4.0, ys2,  competitor_style, num,
-            longname ? competitor_name_1 : competitor_name_2);
-
-    fprintf(out, "<path "
-            "d='M %.2f,%.2f l %.2f,0.00 "
-            "a%.2f,%.2f 0 0,1 %.2f,%.2f "
-            "l 0.00,%.2f "
-            "M %.2f,%.2f l %.2f,0.00 "
-            "a%.2f,%.2f 0 0,0 %.2f,-%.2f "
-            "l 0.00,-%.2f' "
-            "style='fill:none;stroke:black;stroke-width:1' />\n",
-            xs+r,ys1, (longname ? x_init : x_shift) - r*0.5 - r,
-            r*0.5,r*0.5, r*0.5,r*0.5,
-            m->y - ys1 - r - 0.5*r,
-            xs+r,ys2, (longname ? x_init : x_shift) - r*0.5 - r,
-            r*0.5,r*0.5, r*0.5,r*0.5,
-            m->y - ys1 - r - 0.5*r);
-
-    if (m->flags & FLAG_LAST) {
-        fprintf(out, "<path d='M %.2f,%.2f l %.2f,0' style='fill:none;stroke:black;stroke-width:1'/>\n",
-                m->x + r, m->y, x_shift - r);
-        fprintf(out, "<text x='%.2f' y='%.2f' style='%s'>%%m%d-winner-%s</text>\n",
-                m->x + r + 4.0, m->y,  competitor_style, num,
-                longname ? competitor_name_1 : competitor_name_2);
-    }
-
-    fprintf(out, "<text x='%.2f' y='%.2f' style='%s'>%%m%dp1-1</text>\n",
-            m->x+2.0, ys1 + 10.0,  competitor_style, num);
-    
-    fprintf(out, "<text x='%.2f' y='%.2f' style='%s'>%%m%dp2-1</text>\n",
-            m->x+2.0, ys2,  competitor_style, num);
-    
-    fprintf(out, "</g>\n");
-}
-
-static int current_page = 0;
-
-static FILE *open_file(int page, double *y)
-{
-    if (page < 1 || page > NUM_PAGES) {
-        fprintf(stderr, "Error: page = %d\n", page);
-        return NULL;
-    }
-
-    if (!page_data[page-1].fd) {
-        page_data[page-1].fd = fopen(page_data[page-1].name, "w");
-        if (!page_data[page-1].fd) return NULL;
-        fprintf(page_data[page-1].fd, "%s", svg_start);
-        fprintf(page_data[page-1].fd, "%s", svg_page_header_text);
-        page_data[page-1].current_y = 60.0; 
-    }
-
-    if (current_page != page) {
-        if (current_page > 0)
-            page_data[current_page-1].current_y = *y;
-        current_page = page;
-        *y = page_data[current_page-1].current_y;
-    }
-
-    return page_data[page-1].fd;
-}
-
-#endif
 
 static struct player_bare get_palyer_bare(struct player *c)
 {
@@ -891,6 +820,10 @@ static struct player_bare get_palyer_bare(struct player *c)
     } else if (get_rr_num(c->match->name)) {
         b.type = COMP_TYPE_ROUND_ROBIN;
         b.num = get_rr_num(c->match->name);
+        b.pos = c->pos;
+    } else if (get_b3_num(c->match->name)) {
+        b.type = COMP_TYPE_BEST_OF_3;
+        b.num = get_b3_num(c->match->name);
         b.pos = c->pos;
     } else {
         int j;
@@ -904,37 +837,53 @@ static struct player_bare get_palyer_bare(struct player *c)
     return b;
 }
 
-int read_custom_category(char *name, struct custom_data *data)
+#define checkval2(_exp, _msg...) do { if (!_exp) { snprintf(message, sizeof(message), _msg); return message;}} \
+    while (0)
+
+
+char *read_custom_category(char *name, struct custom_data *data)
 {
     int i;
 
+    readname = name;
+
     memset(&matches, 0, sizeof(matches));
+    memset(&match_list, 0, sizeof(match_list));
     memset(&positions, 0, sizeof(positions));
     memset(&round_robin_pools, 0, sizeof(round_robin_pools));
     memset(&symbols, 0, sizeof(symbols));
     memset(&match_order, 0, sizeof(match_order));
+    memset(&best_of_three_pairs, 0, sizeof(best_of_three_pairs));
     num_round_robin_pools = 0;
     num_symbols = 0;
     num_matches = 0;
+    num_best_of_three_pairs = 0;
+    num_groups = 0;
+    group_set = 0;
+    groups_type = 0;
     linenum = 1;
     stop = 0;
     max_comp = 0;
     num_ord = 0;
     competitors_min = competitors_max = 0;
+    value = numvalue = ordernum = n = max_comp = stop = 0;
+    pagenum = linenum = 1;
 
     for (i = 0; i < NUM_CUSTOM_MATCHES; i++)
         match_list[i] = i;
 
     f = fopen(name, "r");
-    if (!f)
-        return -1;
+    if (!f) {
+        snprintf(message, sizeof(message), "Cannot read %s", name);
+        return message;
+    }
 
     program();
 
     fclose(f);
 
     if (stop)
-        return -1;
+        return message;
 
     for (i = 1; i < NUM_CUST_POS ; i++) {
         if (!positions[i].match)
@@ -948,17 +897,43 @@ int read_custom_category(char *name, struct custom_data *data)
     data->num_round_robin_pools = 0;
     data->num_matches = 0;
     data->num_positions = 0;
-    
+
+    // round robin
     for (i = 0; i < num_round_robin_pools; i++) {
         int j;
-        for (j = 0; j < round_robin_pools[i].num_rr_matches; j++)
+        for (j = 0; j < round_robin_pools[i].num_rr_matches; j++) {
             data->round_robin_pools[i].rr_matches[j] = 
                 get_match_num(round_robin_pools[i].rr_matches[j]->name);
+            checkval2((data->round_robin_pools[i].rr_matches[j]), "Pool %s: match %s doesn't exist", 
+                     round_robin_pools[i].name->name,
+                     round_robin_pools[i].rr_matches[j]->name);
+        } // for
+        for (j = 0; j < round_robin_pools[i].num_competitors; j++) {
+            data->round_robin_pools[i].competitors[j] = 
+                get_palyer_bare(&round_robin_pools[i].competitors[j]);
+        }
 
         data->round_robin_pools[i].num_rr_matches = round_robin_pools[i].num_rr_matches;
+        data->round_robin_pools[i].num_competitors = round_robin_pools[i].num_competitors;
+        snprintf(data->round_robin_pools[i].name, 16, "%s", round_robin_pools[i].name->name);
     }
     data->num_round_robin_pools = num_round_robin_pools;
 
+    // best of three
+    for (i = 0; i < num_best_of_three_pairs; i++) {
+        int j;
+        for (j = 0; j < 3; j++) {
+            data->best_of_three_pairs[i].matches[j] = 
+                get_match_num(best_of_three_pairs[i].matches[j]->name);
+            checkval2((data->best_of_three_pairs[i].matches[j]), "Best of three %s: match %s doesn't exist", 
+                     best_of_three_pairs[i].name->name,
+                     best_of_three_pairs[i].matches[j]->name);
+        }
+        snprintf(data->best_of_three_pairs[i].name, 16, "%s", best_of_three_pairs[i].name->name);
+    }
+    data->num_best_of_three_pairs = num_best_of_three_pairs;
+
+    // matches
     for (i = 0; i < num_matches; i++) {
         match_t *m = &matches[match_list[i]];
         data->matches[i].c1 = get_palyer_bare(&m->c1);
@@ -966,19 +941,76 @@ int read_custom_category(char *name, struct custom_data *data)
     }
     data->num_matches = num_matches;
 
+    // positions
     for (i = 0; positions[i].match; i++) {
         if (get_rr_num(positions[i].match->name)) {
             data->positions[i].type = COMP_TYPE_ROUND_ROBIN;
             data->positions[i].match = get_rr_num(positions[i].match->name);
+        } else if (get_b3_num(positions[i].match->name)) {
+            data->positions[i].type = COMP_TYPE_BEST_OF_3;
+            data->positions[i].match = get_b3_num(positions[i].match->name);
         } else {
             data->positions[i].type = COMP_TYPE_MATCH;
             data->positions[i].match = get_match_num(positions[i].match->name);
         }
+        checkval2((data->positions[i].match > 0), "Wrong match name \"%s\" in pos%d", 
+                  positions[i].match->name, positions[i].pos);
         data->positions[i].pos = positions[i].pos;
         data->positions[i].real_contest_pos = positions[i].real_contest_pos;
     }
     data->num_positions = i;
 
+    // groups
+    if (num_groups == 0) {
+        // create default groups
+            
+        // find best of 3
+        for (i = 0; i < data->num_best_of_three_pairs && num_groups < NUM_GROUPS; i++) {
+            int n = data->best_of_three_pairs[i].matches[0];
+            if (data->matches[n].c1.type == COMP_TYPE_COMPETITOR) {
+                groups[num_groups].competitors[0] = data->matches[n].c1.num;
+                groups[num_groups].competitors[1] = data->matches[n].c2.num;
+                groups[num_groups].num_competitors = 2;
+                num_groups++;
+            }
+        }
+
+        // round robin
+        for (i = 0; i < data->num_round_robin_pools && num_groups < NUM_GROUPS; i++) {
+            if (data->round_robin_pools[i].competitors[0].type == COMP_TYPE_COMPETITOR) {
+                int j;
+                for (j = 0; j < data->round_robin_pools[i].num_competitors; j++)
+                    groups[num_groups].competitors[j] = data->round_robin_pools[i].competitors[j].num;
+                num_groups++;
+                groups_type = 1;
+            }
+        }
+
+        // matches
+        if (num_groups == 0) {
+            // assume we have a knock out system
+            int n = competitors_max/4;
+            for (i = 0; i < 4; i++) {
+                int j;
+                for (j = 0; j < n; j++) {
+                    groups[i].competitors[j] = i*n + j + 1;
+                }
+                groups[i].num_competitors = n;
+            }
+        }
+    }
+
+    for (i = 0; i < num_groups; i++) {
+        int j;
+        for (j = 0; j < groups[i].num_competitors; j++)
+            data->groups[i].competitors[j] = groups[i].competitors[j];
+        data->groups[i].num_competitors = groups[i].num_competitors;
+    }
+    data->num_groups = num_groups;
+
+    // info
+    checkval2((competitors_min >= 1 && competitors_min <= competitors_max &&
+               name_long[0] && name_short[0]), "Wrong info");
     data->competitors_min = competitors_min;
     data->competitors_max = competitors_max;
     strncpy(data->name_long, name_long, sizeof(data->name_long)-1);
@@ -986,209 +1018,3 @@ int read_custom_category(char *name, struct custom_data *data)
 
     return 0;
 }
-
-#ifdef MAKE_SVG_FILES
-
-struct custom_data test;
-
-int main(int argc, char *argv[])
-{
-    int i, j;
-    char outfile[256], template[256];
-
-    if (argc < 2)
-        return -1;
-
-    read_custom_category(argv[1], &test);
-
-    for (i = 0; i < test.num_matches; i++) {
-        match_bare_t *m = &test.matches[i];
-        fprintf(stderr, "M%d: ", i+1);
-        if (m->c1.type == COMP_TYPE_COMPETITOR) 
-            fprintf(stderr, "c%d", m->c1.num);
-        else if (m->c1.type == COMP_TYPE_MATCH) {
-            fprintf(stderr, "M%d.%d", m->c1.num, m->c1.pos);
-            for (j = 0; j < 8 && m->c1.prev[j]; j++)
-                fprintf(stderr, ".p.%d", m->c1.prev[j]);
-        }
-        fprintf(stderr, " - ");
-        if (m->c2.type == COMP_TYPE_COMPETITOR) 
-            fprintf(stderr, "c%d", m->c2.num);
-        else if (m->c2.type == COMP_TYPE_MATCH) {
-            fprintf(stderr, "M%d.%d", m->c2.num, m->c2.pos);
-            for (j = 0; j < 8 && m->c2.prev[j]; j++)
-                fprintf(stderr, ".p.%d", m->c2.prev[j]);
-        }
-        fprintf(stderr, "\n");
-    }
-    return;
-
-    for (i = 0; i < NUM_CUSTOM_MATCHES; i++)
-        match_list[i] = i;
-
-    for (i = 0; i < NUM_PAGES; i++) {
-        page_data[i].current_y = 60.0;
-    }
-
-    strcpy(template, argv[1]);
-    char *p = strrchr(template, '.');
-    if (p) *p = 0;
-
-    // delete old files
-    for (i = 1; i <= NUM_PAGES; i++) {
-        snprintf(outfile, sizeof(outfile), "%s-%d.svg", template, i);
-        strncpy(page_data[i-1].name, outfile, 127);
-        FILE *tmp = fopen(outfile, "r");
-        if (tmp) {
-            fclose(tmp);
-            unlink(outfile);
-        }
-    }
-
-    f = fopen(argv[1], "r");
-    if (!f)
-        return 1;
-
-    program();
-
-#if 0
-    for (i = 0; i < num_symbols; i++) {
-        fprintf(stderr, "Symbol %s\n", symbols[i].name);
-    }
-    for (i = 0; i < num_matches; i++) {
-        fprintf(stderr, "Match %s comp1=%d/%s/%d comp2=%d/%s/%d ord=%d\n", matches[i].name->name,
-                matches[i].c1.comp, matches[i].c1.match ? matches[i].c1.match->name : "", matches[i].c1.pos,
-                matches[i].c2.comp, matches[i].c2.match ? matches[i].c2.match->name : "", matches[i].c2.pos,
-                matches[i].ordernum);
-    }
-    for (i = 0; i < num_ord; i++) {
-        fprintf(stderr, "Order c%d-c%d\n", match_order[i].first.comp, match_order[i].second.comp);
-    }
-    for (i = 0; i < NUM_CUST_POS; i++) {
-        if (positions[i].match)
-            fprintf(stderr, "Position %d match=%s pos=%d page=%d\n", 
-                    i, positions[i].match->name, positions[i].pos, positions[i].page);
-    }
-#endif
-
-    for (i = 1; i < NUM_CUST_POS ; i++) {
-        if (!positions[i].match)
-            continue;
-        
-        solve(positions[i].match, 1, i);
-    }
-
-    sort_matches();
-
-#if 1
-    fprintf(stderr, "MATCHES:\n");
-    for (j = 0; j < num_matches; j++) {
-        match_t *m = &matches[match_list[j]];
-
-        //printf("type=%d level=%d pos=%d -- ", m->type, m->level, m->pos);
-
-        if (m->type == rr)
-            fprintf(stderr, "%s: Round robin virtual\n", m->name->name);
-        else
-            fprintf(stderr, "M%d (%s): %s %s\n", j+1, m->name->name, 
-                    print_comp(&m->c1), print_comp(&m->c2));
-    }
-#endif
-
-    FILE *out = NULL;
-    double y = 0.0;
-
-    for (j = 0; j < num_matches; j++) {
-        match_t *m = &matches[j];
-        out = open_file(m->page, &y);
-        if (!out) return 1;
-
-        if (m->reference) {
-            match_t *m1 = get_match(m->reference->name);
-            if (m1) {
-                m->x += m1->x;
-                m->y += m1->y;
-            }
-        } else {
-            m->x = x_init;
-            y += y_shift;
-            m->y = y;
-        }
-        if (m->y > y) y = m->y;
-        //TEXT(m->x, m->y, buf);
-        draw_match(out, j+1, m);
-    }
-
-    for (j = 0; j < NUM_CUST_POS; j++) {
-        if (!positions[j].page || !positions[j].match) 
-            continue;
-
-        out = open_file(positions[j].page, &y);
-        if (!out) return 1;
-
-        if (!(page_data[current_page-1].flags & PAGE_FLAG_POS_HDR)) {
-            page_data[current_page-1].flags |= PAGE_FLAG_POS_HDR;
-            y += 40.0;
-            page_data[current_page-1].res_start_y = y;
-            fprintf(out, "<text x='%.2f' y='%.2f' style='%s;font-weight:bold;"
-                    "text-anchor:middle;text-align:center'>%%t18</text>\n",
-                    res_x + res_w*0.5, y + res_line - 4.0, competitor_style);
-            fprintf(out, "<text x='%.2f' y='%.2f' "
-                    "style='%s;font-weight:bold;text-anchor:middle;text-align:center'>%%t22</text>\n",
-                    res_x + 12.0, y + res_line - 4.0, competitor_style);
-        }
-
-        y += res_line;
-        fprintf(out, "<text x='%.2f' y='%.2f' style='%s'>%%r%dhm2-first-s-last-s-club</text>\n",
-                res_x + 30.0, y + res_line - 4.0, competitor_style, j+1);
-        fprintf(out, "<text x='%.2f' y='%.2f' style='%s;text-anchor:middle;text-align:center'>%d</text>\n",
-                res_x + 12.0, y + res_line - 4.0, competitor_style, j+1);
-        page_data[current_page-1].num_res++;
-    }
-
-    // draw result boxes
-    for (i = 0; i < NUM_PAGES; i++) {
-        if (!page_data[i].num_res) continue;
-
-        out = open_file(i+1, &y);
-        if (!out) return 1;
-
-        fprintf(out, "<path "
-                "d='M %.2f,%.2f "
-                "l %.2f,0 l 0,%.2f l -%.2f,0 l 0,-%.2f' "
-                "style='fill:none;stroke:black;stroke-width:2' />\n",
-                res_x, page_data[i].res_start_y,
-                res_w, (page_data[i].num_res + 1)*res_line,
-                res_w, (page_data[i].num_res + 1)*res_line);
-
-        fprintf(out, "<path "
-                "d='M %.2f,%.2f l 0,%.2f' "
-                "style='fill:none;stroke:black;stroke-width:1' />\n",
-                res_x + 24.0, page_data[i].res_start_y + res_line, page_data[i].num_res*res_line);
-
-        for (j = 1; j <= page_data[i].num_res; j++) {
-            fprintf(out, "<path "
-                    "d='M %.2f,%.2f "
-                    "l %.2f,0' "
-                    "style='fill:none;stroke:black;stroke-width:1' />\n",
-                    res_x, page_data[i].res_start_y + j*res_line,
-                    res_w);
-            
-        }
-
-    }
-
-    // close svg files
-    for (i = 0; i < NUM_PAGES; i++) {
-        if (page_data[i].fd) {
-            fprintf(page_data[i].fd, "%s", svg_end);
-            fclose(page_data[i].fd);
-        }
-    }
-
-    fclose(f);
-    return 0;
-}
-
-#endif
-

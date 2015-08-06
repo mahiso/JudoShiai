@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -32,7 +32,7 @@ gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)
     int rc;
     guint64 start, stop;
 
-    start = rdtsc();
+    RDTSC(start);
     if (db_name == dbn)
 	G_LOCK(db);
 
@@ -47,6 +47,7 @@ gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)
     }
 
     db_changes = 0;
+#ifdef FAST_DB
     rc = sqlite3_exec(db, "PRAGMA synchronous=OFF", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
 	g_print("SQL PRAGMA sync error: %s\n", zErrMsg);
@@ -55,7 +56,7 @@ gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
 	g_print("SQL PRAGMA cache error: %s\n", zErrMsg);
     }
-
+#endif
     //g_print("\nSQL: %s:\n  %s\n", db_name, cmd);
     rc = sqlite3_exec(db, cmd, dbcb, data, &zErrMsg);
 
@@ -73,7 +74,7 @@ gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)
     if (db_name == dbn)
 	G_UNLOCK(db);
 
-    stop = rdtsc();
+    RDTSC(stop);
     cumul_db_time += stop - start;
     cumul_db_count++;
 
@@ -135,7 +136,7 @@ gint db_open(void)
 	maindb = NULL;
 	G_UNLOCK(db);
     }
-
+#ifdef FAST_DB
     rc = sqlite3_exec(maindb, "PRAGMA synchronous=OFF", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
 	g_print("SQL PRAGMA sync error: %s\n", zErrMsg);
@@ -144,6 +145,7 @@ gint db_open(void)
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {
 	g_print("SQL PRAGMA cache error: %s\n", zErrMsg);
     }
+#endif
 #if 0
     rc = sqlite3_exec(maindb, "BEGIN TRANSACTION", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {

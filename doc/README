@@ -18,6 +18,11 @@ JudoShiai
 + Customized competition systems.
 + Team events.
 + New double pool system for Finnish team events.
++ Database backup is made after each remote weight setting.
++ JudoInfo texts get update if competitor's name is changed.
++ Pool letters added to knock-out systems.
++ Page numbering added to sheets.
++ Category parameter change is updated to JudoTimers immediatelly.
 
 JudoTimer
 ----------
@@ -25,6 +30,7 @@ JudoTimer
 + Judogi control display.
 + Country flags, first name, and control added to competitor advertisement.
 + Master mode removed. Now normal mode works like master mode.
++ Most of the mouse and keyboard input is disabled in slave mode.
 
 JudoInfo
 ---------

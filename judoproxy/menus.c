@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,7 +27,7 @@ static GtkWidget *menubar, *preferences, *help, *preferencesmenu, *helpmenu;
 static GtkWidget *quit, *manual;
 static GtkWidget *node_ip, *my_ip, *about;
 static GtkWidget *light, *menu_light;
-static GtkWidget *writefile, *lang_menu_item;
+static GtkWidget *writefile, *lang_menu_item, *advertise;
 
 gboolean show_tatami[NUM_TATAMIS];
 
@@ -41,10 +41,10 @@ extern void set_write_file(GtkWidget *menu_item, gpointer data);
 static void about_judoproxy( GtkWidget *w,
                              gpointer   data )
 {
-    gtk_show_about_dialog (NULL, 
+    gtk_show_about_dialog (NULL,
                            "name", "JudoProxy",
                            "title", _("About JudoProxy"),
-                           "copyright", "Copyright 2006-2013 Hannu Jokinen",
+                           "copyright", "Copyright 2006-2015 Hannu Jokinen",
                            "version", SHIAI_VERSION,
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
@@ -53,7 +53,7 @@ static void about_judoproxy( GtkWidget *w,
 static void change_menu_label(GtkWidget *item, const gchar *new_text)
 {
     GtkWidget *menu_label = gtk_bin_get_child(GTK_BIN(item));
-    gtk_label_set_text(GTK_LABEL(menu_label), new_text); 
+    gtk_label_set_text(GTK_LABEL(menu_label), new_text);
 }
 
 static GtkWidget *get_picture(const gchar *name)
@@ -75,10 +75,11 @@ static void set_menu_item_picture(GtkImageMenuItem *menu_item, gchar *name)
 static gint light_callback(gpointer data)
 {
     extern gboolean connection_ok;
-    extern time_t traffic_last_rec_time;
     static gboolean last_ok = FALSE;
+#if 0
+    extern time_t traffic_last_rec_time;
     static gboolean yellow_set = FALSE;
-        
+
     if (yellow_set == FALSE && connection_ok && time(NULL) > traffic_last_rec_time + 6) {
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "yellowlight.png");
         yellow_set = TRUE;
@@ -87,22 +88,16 @@ static gint light_callback(gpointer data)
         yellow_set = FALSE;
         last_ok = !connection_ok;
     }
+#endif
 
     if (connection_ok == last_ok)
         return TRUE;
 
     last_ok = connection_ok;
 
-    if (connection_ok) {
-        struct message msg;
-        extern gint my_address;
-
-        msg.type = MSG_ALL_REQ;
-        msg.sender = my_address;
-        send_packet(&msg);
-
+    if (connection_ok)
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "greenlight.png");
-    } else		
+    else
         set_menu_item_picture(GTK_IMAGE_MENU_ITEM(menu_light), "redlight.png");
 
     return TRUE;
@@ -140,29 +135,34 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     preferencesmenu  = gtk_menu_new ();
     helpmenu         = gtk_menu_new ();
-        
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (preferences), preferencesmenu); 
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (help), helpmenu);
-  
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), preferences); 
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), help);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), lang_menu_item); 
 
-    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menu_light); 
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (preferences), preferencesmenu);
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (help), helpmenu);
+
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), preferences);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), help);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), lang_menu_item);
+
+    gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menu_light);
     gtk_menu_item_set_right_justified(GTK_MENU_ITEM(menu_light), TRUE);
     g_signal_connect(G_OBJECT(menu_light), "button_press_event",
                      G_CALLBACK(ask_node_ip_address), (gpointer)NULL);
 
-  
+
     /* Create the Preferences menu content. */
     node_ip = create_menu_item(preferencesmenu, ask_node_ip_address, 0);
     my_ip   = create_menu_item(preferencesmenu, show_my_ip_addresses, 0);
     create_separator(preferencesmenu);
 
+    advertise = gtk_check_menu_item_new_with_label("Advertise addresses");
+    gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), advertise);
+    g_signal_connect(G_OBJECT(advertise), "activate",
+		     G_CALLBACK(toggle_advertise), NULL);
+
     //create_separator(preferencesmenu);
     writefile = gtk_menu_item_new_with_label("");
     //gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), writefile);
-    g_signal_connect(G_OBJECT(writefile), "activate", 
+    g_signal_connect(G_OBJECT(writefile), "activate",
                      G_CALLBACK(set_write_file), 0);
 
     create_separator(preferencesmenu);
@@ -173,7 +173,7 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     about  = create_menu_item(helpmenu, about_judoproxy, 0);
 
     /* Attach the new accelerator group to the window. */
-    gtk_widget_add_accelerator(quit, "activate", group, GDK_Q, GDK_CONTROL_MASK, 
+    gtk_widget_add_accelerator(quit, "activate", group, GDK_Q, GDK_CONTROL_MASK,
                                GTK_ACCEL_VISIBLE);
     gtk_window_add_accel_group (GTK_WINDOW (window), group);
 
@@ -204,6 +204,11 @@ void set_preferences(void)
         language = i;
     else
         language = LANG_FI;
+
+    error = NULL;
+    if (g_key_file_get_boolean(keyfile, "preferences", "advertise", &error) || error) {
+        gtk_menu_item_activate(GTK_MENU_ITEM(advertise));
+    }
 }
 
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
@@ -218,6 +223,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
 
     change_menu_label(node_ip,      _("Communication node"));
     change_menu_label(my_ip,        _("Own IP addresses"));
+
+    change_menu_label(advertise,    "Advertise addresses");
 
     change_menu_label(manual,       _("Manual"));
     change_menu_label(about,        _("About"));

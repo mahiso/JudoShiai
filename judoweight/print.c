@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -28,8 +28,17 @@ static void draw_page(GtkPrintOperation *operation,
     gchar **texts = user_data;
     GtkPageSetup *setup = gtk_print_context_get_page_setup(context);
     cairo_t *c = gtk_print_context_get_cairo_context(context);
+    /*
+    gtk_page_setup_set_top_margin(setup, 0.0, GTK_UNIT_POINTS);
+    gtk_page_setup_set_bottom_margin(setup, 0.0, GTK_UNIT_POINTS);
+    gtk_page_setup_set_left_margin(setup, 0.0, GTK_UNIT_POINTS);
+    gtk_page_setup_set_right_margin(setup, 0.0, GTK_UNIT_POINTS);
+    */
     gdouble top = gtk_page_setup_get_top_margin(setup, GTK_UNIT_POINTS);
     gdouble left = gtk_page_setup_get_left_margin(setup, GTK_UNIT_POINTS);
+    //gdouble bot = gtk_page_setup_get_bottom_margin(setup, GTK_UNIT_POINTS);
+    //gdouble right = gtk_page_setup_get_right_margin(setup, GTK_UNIT_POINTS);
+
     /*
     gdouble paper_width = gtk_print_context_get_width(context);
     gdouble paper_height = gtk_print_context_get_height(context);
@@ -65,9 +74,27 @@ static void draw_page_svg(GtkPrintOperation *operation,
                           gpointer           user_data)
 {
     struct paint_data *pd = user_data;
+    GtkPageSetup *setup = gtk_print_context_get_page_setup(context);
+    
+    if (nomarg) {
+        gtk_page_setup_set_top_margin(setup, 0.0, GTK_UNIT_POINTS);
+        gtk_page_setup_set_bottom_margin(setup, 0.0, GTK_UNIT_POINTS);
+        gtk_page_setup_set_left_margin(setup, 0.0, GTK_UNIT_POINTS);
+        gtk_page_setup_set_right_margin(setup, 0.0, GTK_UNIT_POINTS);
+    }
+#if 0
+    gdouble top = gtk_page_setup_get_top_margin(setup, GTK_UNIT_POINTS);
+    gdouble left = gtk_page_setup_get_left_margin(setup, GTK_UNIT_POINTS);
+    gdouble bot = gtk_page_setup_get_bottom_margin(setup, GTK_UNIT_POINTS);
+    gdouble right = gtk_page_setup_get_right_margin(setup, GTK_UNIT_POINTS);
+#endif
     pd->c = gtk_print_context_get_cairo_context(context);
     pd->paper_width = gtk_print_context_get_width(context);
     pd->paper_height = gtk_print_context_get_height(context);
+#if 0
+    g_print("SVG DRAW nomarg=%d scale=%d page=%fx%f Margins=%f-%f/%f-%f\n", 
+            nomarg, scale, pd->paper_width, pd->paper_height, top,bot, left,right);
+#endif
     paint_svg(pd);
 }
 

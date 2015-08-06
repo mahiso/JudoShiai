@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2011 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <string.h>
 #include <gtk/gtk.h>
@@ -31,6 +31,7 @@
 gint encode_msg(struct message *m, guchar *buf, gint buflen)
 {
     guchar *p = buf, *end = buf + buflen;
+    gint i;
 
     put8(COMM_VERSION);
     put8(m->type);
@@ -108,6 +109,18 @@ gint encode_msg(struct message *m, guchar *buf, gint buflen)
 	put32(m->u.match_info.flags);
 	put32(m->u.match_info.rest_time);
 	break;
+    case MSG_11_MATCH_INFO:
+	for (i = 0; i < 11; i++) {
+	    put32(m->u.match_info_11.info[i].tatami);
+	    put32(m->u.match_info_11.info[i].position);
+	    put32(m->u.match_info_11.info[i].category);
+	    put32(m->u.match_info_11.info[i].number);
+	    put32(m->u.match_info_11.info[i].blue);
+	    put32(m->u.match_info_11.info[i].white);
+	    put32(m->u.match_info_11.info[i].flags);
+	    put32(m->u.match_info_11.info[i].rest_time);
+	}
+	break;
     case MSG_NAME_INFO:
 	put32(m->u.name_info.index);
 	putstr(m->u.name_info.last);
@@ -184,10 +197,10 @@ gint encode_msg(struct message *m, guchar *buf, gint buflen)
 gint decode_msg(struct message *m, guchar *buf, gint buflen)
 {
     guchar *p = buf, *end = buf + buflen;
-    gint len, ver;
+    gint len, ver, i;
 
     get8(ver);
-    
+
     if (ver != COMM_VERSION) {
 	g_print("%s:%d: Wrong message version %d (%d expected)\n",
 		__FUNCTION__, __LINE__, ver, COMM_VERSION);
@@ -275,6 +288,18 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
 	get32(m->u.match_info.flags);
 	get32(m->u.match_info.rest_time);
 	break;
+    case MSG_11_MATCH_INFO:
+	for (i = 0; i < 11; i++) {
+	    get32(m->u.match_info_11.info[i].tatami);
+	    get32(m->u.match_info_11.info[i].position);
+	    get32(m->u.match_info_11.info[i].category);
+	    get32(m->u.match_info_11.info[i].number);
+	    get32(m->u.match_info_11.info[i].blue);
+	    get32(m->u.match_info_11.info[i].white);
+	    get32(m->u.match_info_11.info[i].flags);
+	    get32(m->u.match_info_11.info[i].rest_time);
+	}
+	break;
     case MSG_NAME_INFO:
 	get32(m->u.name_info.index);
 	getstr(m->u.name_info.last);
@@ -349,4 +374,3 @@ gint decode_msg(struct message *m, guchar *buf, gint buflen)
 	    __FUNCTION__, __LINE__, buflen, len, m->type, buf, p, end);
     return -1;
 }
-

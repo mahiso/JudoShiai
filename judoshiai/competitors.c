@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -373,6 +373,25 @@ static void judoka_edited_callback(GtkWidget *widget,
         if (event_id == RESPONSE_PRINT)
             print_doc(NULL, gint_to_ptr(edited.index | PRINT_SHEET | PRINT_TO_PRINTER));
     }
+
+    // Update JudoInfo
+    struct message output_msg;
+    memset(&output_msg, 0, sizeof(output_msg));
+    output_msg.type = MSG_NAME_INFO;
+    output_msg.u.name_info.index = edited.index;
+    if (edited.last)
+        strncpy(output_msg.u.name_info.last, edited.last, sizeof(output_msg.u.name_info.last)-1);
+
+    if (edited.visible) {
+        if (edited.first)
+            strncpy(output_msg.u.name_info.first, edited.first, sizeof(output_msg.u.name_info.first)-1);
+        gchar *ct = get_club_text(&edited, CLUB_TEXT_ABBREVIATION);
+        if (ct)
+            strncpy(output_msg.u.name_info.club, ct,
+                    sizeof(output_msg.u.name_info.club)-1);
+    }
+    send_packet(&output_msg);
+    make_backup();
 
 out:
     g_free((gpointer)edited.category);
@@ -1798,7 +1817,7 @@ void set_judokas_page(GtkWidget *notebook)
     /****/
 #endif
     /* pack the table into the scrolled window */
-#if (GTKVER == 3) && GTK_CHECK_VERSION(3,8,0)
+#if (GTKVER == 3) // && GTK_CHECK_VERSION(3,8,0)
     gtk_container_add(GTK_CONTAINER(judokas_scrolled_window), view);
 #else
     gtk_scrolled_window_add_with_viewport (

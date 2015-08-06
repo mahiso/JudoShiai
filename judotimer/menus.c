@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -31,7 +31,7 @@ static void about_judotimer( GtkWidget *w,
     gtk_show_about_dialog (NULL,
                            "name", "Judotimer",
                            "title", _("About Judotimer"),
-                           "copyright", "Copyright 2006-2013 Hannu Jokinen",
+                           "copyright", "Copyright 2006-2015 Hannu Jokinen",
                            "version", SHIAI_VERSION,
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);
@@ -94,6 +94,7 @@ static void mode_selection(GtkWidget *w,
 {
     mode = ptr_to_gint(data);
     set_ssdp_id();
+    set_menu_active();
 }
 
 static void display_competitors(GtkWidget *w,
@@ -255,8 +256,9 @@ static void set_menu_item_picture(GtkImageMenuItem *menu_item, gchar *name)
 static gint light_callback(gpointer data)
 {
     extern gboolean connection_ok;
-    extern time_t traffic_last_rec_time;
     static gboolean last_ok = FALSE;
+#if 0
+    extern time_t traffic_last_rec_time;
     static gboolean yellow_set = FALSE;
 
     if (yellow_set == FALSE && connection_ok && time(NULL) > traffic_last_rec_time + 6) {
@@ -267,6 +269,7 @@ static gint light_callback(gpointer data)
         yellow_set = FALSE;
         last_ok = !connection_ok;
     }
+#endif
 
     if (connection_ok == last_ok)
         return TRUE;
@@ -481,14 +484,14 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), red_background);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), full_screen);
-    gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_no_koka);
+    //gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_no_koka);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_leave_points);
     //gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_no_free_shido);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_eq_score_less_shido_wins);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_short_pin_times);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), rules_stop_ippon);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), confirm_match);
-    gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), whitefirst);
+    //gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), whitefirst);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), showcomp);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), judogi_control);
     gtk_menu_shell_append (GTK_MENU_SHELL (preferencesmenu), gtk_separator_menu_item_new());
@@ -885,6 +888,24 @@ void set_preferences(void)
     set_ssdp_id();
 }
 
+extern void set_menu_white_first(gboolean flag)
+{
+    if (flag) {
+        change_menu_label(blue_wins,         _("Hantei: white wins"));
+        change_menu_label(white_wins,        _("Hantei: blue wins"));
+    } else {
+        change_menu_label(blue_wins,         _("Hantei: blue wins"));
+        change_menu_label(white_wins,        _("Hantei: white wins"));
+    }
+    if (flag) {
+        change_menu_label(hansokumake_blue,  _("Hansoku-make to white"));
+        change_menu_label(hansokumake_white, _("Hansoku-make to blue"));
+    } else {
+        change_menu_label(hansokumake_blue,  _("Hansoku-make to blue"));
+        change_menu_label(hansokumake_white, _("Hansoku-make to white"));
+    }
+}
+
 extern gchar *menu_text_with_dots(gchar *text);
 gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param)
 {
@@ -904,20 +925,8 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(match5, _("Contest duration: 5 min"));
     change_menu_label(gs,     menu_text_with_dots(_("Golden Score")));
 
-    if (white_first) {
-        change_menu_label(blue_wins,         _("Hantei: white wins"));
-        change_menu_label(white_wins,        _("Hantei: blue wins"));
-    } else {
-        change_menu_label(blue_wins,         _("Hantei: blue wins"));
-        change_menu_label(white_wins,        _("Hantei: white wins"));
-    }
-    if (white_first) {
-        change_menu_label(hansokumake_blue,  _("Hansoku-make to white"));
-        change_menu_label(hansokumake_white, _("Hansoku-make to blue"));
-    } else {
-        change_menu_label(hansokumake_blue,  _("Hansoku-make to blue"));
-        change_menu_label(hansokumake_white, _("Hansoku-make to white"));
-    }
+    set_menu_white_first( white_first );
+
     change_menu_label(hikiwake,          _("Hikiwake"));
     change_menu_label(clear_selection,   _("Clear selection"));
     change_menu_label(switch_sides,      _("Switch sides"));
@@ -1204,4 +1213,60 @@ void start_log_view(GtkWidget *w, gpointer data)
     gtk_adjustment_set_value(adj, gtk_adjustment_get_upper(adj) - gtk_adjustment_get_lower(adj));
     //gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(scrolled_window), adj);
     //gtk_adjustment_value_changed(adj);
+}
+
+#define SET_SENSITIVE(_menu, _yes) gtk_widget_set_sensitive(GTK_WIDGET(_menu), _yes)
+
+void set_menu_active(void)
+{
+    gint i;
+
+    SET_SENSITIVE(match0, ACTIVE);
+    SET_SENSITIVE(match1, ACTIVE);
+    SET_SENSITIVE(match2, ACTIVE);
+    SET_SENSITIVE(match3, ACTIVE);
+    SET_SENSITIVE(match4, ACTIVE);
+    SET_SENSITIVE(match5, ACTIVE);
+    SET_SENSITIVE(gs,     ACTIVE);
+
+    SET_SENSITIVE(blue_wins,         ACTIVE);
+    SET_SENSITIVE(white_wins,        ACTIVE);
+    SET_SENSITIVE(hansokumake_blue,  ACTIVE);
+    SET_SENSITIVE(hansokumake_white, ACTIVE);
+    SET_SENSITIVE(hikiwake,          ACTIVE);
+    SET_SENSITIVE(clear_selection,   ACTIVE);
+    SET_SENSITIVE(switch_sides,      ACTIVE);
+
+    SET_SENSITIVE(red_background,     ACTIVE);
+    SET_SENSITIVE(rules_no_koka,      ACTIVE);
+    SET_SENSITIVE(rules_leave_points, ACTIVE);
+    SET_SENSITIVE(rules_stop_ippon,   ACTIVE);
+
+    SET_SENSITIVE(rules_eq_score_less_shido_wins, ACTIVE);
+    SET_SENSITIVE(rules_short_pin_times, ACTIVE);
+
+    SET_SENSITIVE(confirm_match, ACTIVE);
+    SET_SENSITIVE(clock_only,    ACTIVE);
+    SET_SENSITIVE(whitefirst,    ACTIVE);
+    SET_SENSITIVE(judogi_control, ACTIVE);
+
+    SET_SENSITIVE(name_layout,   ACTIVE);
+    SET_SENSITIVE(name_layouts[0], ACTIVE);
+    SET_SENSITIVE(name_layouts[1], ACTIVE);
+    SET_SENSITIVE(name_layouts[2], ACTIVE);
+    SET_SENSITIVE(name_layouts[3], ACTIVE);
+    SET_SENSITIVE(name_layouts[4], ACTIVE);
+    SET_SENSITIVE(name_layouts[5], ACTIVE);
+    SET_SENSITIVE(name_layouts[6], ACTIVE);
+    SET_SENSITIVE(name_layouts[7], ACTIVE);
+    SET_SENSITIVE(name_layouts[8], ACTIVE);
+    SET_SENSITIVE(name_layouts[9], ACTIVE);
+    SET_SENSITIVE(name_layouts[10], ACTIVE);
+
+    SET_SENSITIVE(timeset,      ACTIVE);
+    SET_SENSITIVE(inc_time,     ACTIVE);
+    SET_SENSITIVE(dec_time,     ACTIVE);
+    SET_SENSITIVE(inc_osaekomi, ACTIVE);
+    SET_SENSITIVE(dec_osaekomi, ACTIVE);
+    SET_SENSITIVE(set_time,     ACTIVE);
 }

@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -60,15 +60,16 @@ static gboolean big_dialog = FALSE;
 static gchar big_text[40];
 static time_t big_end;
 
-gboolean rules_no_koka_dsp = FALSE;
+gboolean rules_no_koka_dsp = TRUE;
 gboolean rules_leave_score = FALSE;
 gboolean rules_stop_ippon_2 = FALSE;
 gboolean rules_confirm_match = FALSE;
 GdkCursor *cursor = NULL;
 gboolean sides_switched = FALSE;
-gboolean white_first = FALSE;
+gboolean white_first = TRUE;
 gboolean fullscreen = FALSE;
 gboolean menu_hidden = FALSE;
+gboolean supports_alpha = FALSE;
 //gboolean rule_no_free_shido = FALSE;
 gboolean rule_eq_score_less_shido_wins = FALSE;
 gboolean rule_short_pin_times = FALSE;
@@ -991,28 +992,28 @@ void voting_result(GtkWidget *w,
             set_text(MY_LABEL(comment), _("White won the voting"));
         else
             set_text(MY_LABEL(comment), _("Blue won the voting"));
-        blue_wins_voting = TRUE;
+	blue_wins_voting = TRUE;
         break;
     case HANTEI_WHITE:
         if (white_first)
             set_text(MY_LABEL(comment), _("Blue won the voting"));
         else
             set_text(MY_LABEL(comment), _("White won the voting"));
-        white_wins_voting = TRUE;
+	white_wins_voting = TRUE;
         break;
     case HANSOKUMAKE_BLUE:
         if (white_first)
             set_text(MY_LABEL(comment), _("Hansokumake to white"));
         else
             set_text(MY_LABEL(comment), _("Hansokumake to blue"));
-        hansokumake_to_blue = TRUE;
+	hansokumake_to_blue = TRUE;
         break;
     case HANSOKUMAKE_WHITE:
         if (white_first)
             set_text(MY_LABEL(comment), _("Hansokumake to blue"));
         else
             set_text(MY_LABEL(comment), _("Hansokumake to white"));
-        hansokumake_to_white = TRUE;
+	hansokumake_to_white = TRUE;
         break;
     case HIKIWAKE:
         set_text(MY_LABEL(comment), _("Hikiwake"));
@@ -1311,6 +1312,9 @@ static gboolean button_pressed(GtkWidget *widget,
 			       GdkEventButton *event,
 			       gpointer userdata)
 {
+    if (!ACTIVE) // timer in slave mode
+        return FALSE;
+
         /* single click with the right mouse button? */
         if (event->type == GDK_BUTTON_PRESS  &&
             (event->button == 1 || event->button == 3)) {
@@ -1340,18 +1344,22 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
     if (event->keyval == GDK_m && ctl) {
         if (menu_hidden) {
             gtk_widget_show(menubar);
+	    gtk_window_set_decorated((GtkWindow*)main_window, TRUE);
+	    gtk_window_set_keep_above(GTK_WINDOW(main_window), FALSE);
             menu_hidden = FALSE;
         } else {
             gtk_widget_hide(menubar);
+	    gtk_window_set_decorated((GtkWindow*)main_window, FALSE);
+	    gtk_window_set_keep_above(GTK_WINDOW(main_window), TRUE);
             menu_hidden = TRUE;
         }
         return FALSE;
     }
-    if (event->keyval == GDK_n && ctl) {
+    if (event->keyval == GDK_n && ctl && ACTIVE) {
     	clock_key(GDK_0, FALSE);
         return FALSE;
     }
-    if (event->keyval == GDK_g && ctl) {
+    if (event->keyval == GDK_g && ctl && ACTIVE) {
     	clock_key(GDK_9, FALSE);
         return FALSE;
     }
@@ -1376,15 +1384,18 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
     if (event->keyval == GDK_v) // V is a menu accelerator
         return FALSE;
 
-    if (event->keyval == GDK_D && (event->state & 5) == 5)
+    if (event->keyval == GDK_D && (event->state & 5) == 5 && ACTIVE)
         demo = 1;
-    else if (event->keyval == GDK_F && (event->state & 5) == 5)
+    else if (event->keyval == GDK_F && (event->state & 5) == 5 && ACTIVE)
         demo = 2;
     else
         demo = 0;
 
     //g_print("key=%x stat=%x\n", event->keyval, event->state);
-    if (event->keyval < GDK_0 || event->keyval > GDK_9 || event->keyval == GDK_6 || ctl)
+    if (menu_hidden && ACTIVE)
+	clock_key(event->keyval, event->state);
+    else if ((event->keyval < GDK_0 || event->keyval > GDK_9 || event->keyval == GDK_6 || ctl) &&
+        ACTIVE)
         clock_key(event->keyval, event->state);
 
     return FALSE;
@@ -1645,7 +1656,8 @@ int main( int   argc,
 
     main_window = window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(main_window), "JudoTimer");
-    gtk_widget_set_size_request(window, FRAME_WIDTH, FRAME_HEIGHT);
+    //gtk_widget_set_size_request(window, FRAME_WIDTH, FRAME_HEIGHT);
+    gtk_window_resize(GTK_WINDOW(main_window), FRAME_WIDTH, FRAME_HEIGHT);  //w7 bug.
 
     gchar *iconfile = g_build_filename(installation_dir, "etc", "judotimer.png", NULL);
     gtk_window_set_default_icon_from_file(iconfile, NULL);
@@ -2062,9 +2074,9 @@ void toggle_full_screen(GtkWidget *menu_item, gpointer data)
 void toggle_rules_no_koka(GtkWidget *menu_item, gpointer data)
 {
 #if (GTKVER == 3)
-    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
+    if (TRUE || gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item))) {
 #else
-    if (GTK_CHECK_MENU_ITEM(menu_item)->active) {
+    if (TRUE || GTK_CHECK_MENU_ITEM(menu_item)->active) {
 #endif
         rules_no_koka_dsp = TRUE;
         set_text(MY_LABEL(wazaari), "I");
@@ -2151,12 +2163,17 @@ void toggle_confirm_match(GtkWidget *menu_item, gpointer data)
 
 void toggle_whitefirst(GtkWidget *menu_item, gpointer data)
 {
+#if 0
 #if (GTKVER == 3)
     white_first = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
 #else
     white_first = GTK_CHECK_MENU_ITEM(menu_item)->active;
 #endif
+#endif
+    white_first = TRUE;
     g_key_file_set_boolean(keyfile, "preferences", "whitefirst", white_first);
+
+    set_menu_white_first( white_first );
     set_colors();
     init_display();
 }

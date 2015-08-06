@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 13:12+0200\n"
+"POT-Creation-Date: 2015-02-12 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,7 +99,7 @@ msgid "Red background"
 msgstr "Röd bakgrund"
 
 msgid "Contest area not chosen"
-msgstr "Mattan inte valde"
+msgstr "Ingen vald matta"
 
 msgid "Contest area 1"
 msgstr "Matta 1"
@@ -144,7 +144,7 @@ msgid "Contest duration automatically from JudoShiai program"
 msgstr "Matchtid automatiskt från JudoShiai-programmet"
 
 msgid "View clocks only"
-msgstr "Visa bara clockor"
+msgstr "Visa bara klockor"
 
 msgid "Increment pin time"
 msgstr "Öka fasthållnings-tid"
@@ -255,10 +255,10 @@ msgid "Choose a directory"
 msgstr "Välj en katalog"
 
 msgid "No koka"
-msgstr "Koka inte in bruk"
+msgstr "Koka används inte"
 
 msgid "Leave points for GS"
-msgstr "Lämna påäng för GS"
+msgstr "Lämna poäng för GS"
 
 msgid "View Log"
 msgstr "Visa logg"
@@ -285,7 +285,7 @@ msgid "All Files"
 msgstr "Alla filer"
 
 msgid "Stop clock on Ippon"
-msgstr "Ippon stoppar clockan"
+msgstr "Ippon stoppar klockan"
 
 msgid "Switch sides"
 msgstr "Byta sidor"
@@ -306,10 +306,10 @@ msgid "Contest area 10"
 msgstr "Mattan 10"
 
 msgid "White has a judogi problem."
-msgstr "Vit har en judogi problem."
+msgstr "Vit har ett judogi problem."
 
 msgid "Blue has a judogi problem."
-msgstr "Blå har en judogi problem"
+msgstr "Blå har ett judogi problem"
 
 msgid "Show Competitors"
 msgstr "Visa tävlande"
@@ -396,7 +396,7 @@ msgid "No Limit"
 msgstr "Ingen tidsbegränsning"
 
 msgid "If equal score less shido wins"
-msgstr "Om lika påängen minst antal Shido vinner"
+msgstr "Om lika poängen minst antal Shido vinner"
 
 msgid "VLC control"
 msgstr "VLC kontroll"
@@ -459,10 +459,10 @@ msgid "Cannot move"
 msgstr "Kan inte flytta"
 
 msgid "Category drawn"
-msgstr "Katogori lottade ut"
+msgstr "Kategorin lottades ut"
 
 msgid "All the categories located to the tatamis"
-msgstr "Alla kategorier placerat på tatamier"
+msgstr "Alla kategorier är utplacerade på tatamier"
 
 msgid "Unlocated"
 msgstr "Inte placerat"
@@ -561,16 +561,16 @@ msgid "Club Seeding"
 msgstr "Klubb seedning"
 
 msgid "Empty categories removed"
-msgstr "Tomma kategorier tog bort"
+msgstr "Tog bort tomma kategorier"
 
 msgid "Unweighted competitors removed"
-msgstr "Oviktat tävlande tog bort"
+msgstr "Tävlande utan vikt togs bort"
 
 msgid "Matches exist. Undo the drawing first."
 msgstr "Matcherna finns. Ta bort lottningen först."
 
 msgid "Competitors removed"
-msgstr "Tävlande tog bort."
+msgstr "Tävlande togs bort"
 
 msgid "Bar code search"
 msgstr "Sök på streckkod"
@@ -582,7 +582,7 @@ msgid "Cannot handle: Database created with newer JudoShiai version."
 msgstr "Kan inte hantera: Databas skapad med nyare JudoShiai version."
 
 msgid "Database tables updated."
-msgstr "Databastabeller uppdateras."
+msgstr "Databastabeller uppdaterades."
 
 msgid "Weights do not match"
 msgstr "Vikterna stämmer inte"
@@ -591,7 +591,7 @@ msgid "Database Validation"
 msgstr "Databas validering"
 
 msgid "Duplicate seedings:\n"
-msgstr "Dubbelt seedningar:\n"
+msgstr "Duplicerade seedningar:\n"
 
 msgid "seeding"
 msgstr "seedning"
@@ -603,10 +603,10 @@ msgid "times"
 msgstr "gånger"
 
 msgid "Duplicate club seedings:\n"
-msgstr "Dubbelt klubb seedningar:\n"
+msgstr "Duplicerade klubb seedningar:\n"
 
 msgid "Missing category definitions:\n"
-msgstr "Saknande kategoridefinitioner:\n"
+msgstr "Avsaknad av kategoridefinitioner:\n"
 
 msgid "is not"
 msgstr "är inte"
@@ -621,7 +621,7 @@ msgid "Extra spaces"
 msgstr "Extra blanktecken"
 
 msgid "Possible duplicate competitors:\n"
-msgstr "Möjliga dubbla tävlingar:\n"
+msgstr "Möjligt dubbelt tävlande:\n"
 
 msgid "Possible duplicate club names:\n"
 msgstr "Möjliga dubbla klubb namn:\n"
@@ -633,7 +633,7 @@ msgid "Corrupted competitor data:\n"
 msgstr "Skadad tävlingsdata:\n"
 
 msgid "Corrupted category data:\n"
-msgstr "Skadad lategoridata:\n"
+msgstr "Skadad kategoridata:\n"
 
 msgid "warnings"
 msgstr "varningar"
@@ -642,13 +642,13 @@ msgid "Drawing not finished!"
 msgstr "Lottning inte färdig!"
 
 msgid "Matches matched in category"
-msgstr "Matchar matchas i kategorin"
+msgstr "Matcher matchas i kategorin"
 
 msgid "Clear the results first"
 msgstr "Töm resultaten först"
 
 msgid "Move the competitors"
-msgstr "Flytta tävlingar"
+msgstr "Flytta de tävlande"
 
 msgid "Next"
 msgstr "Nästa"
@@ -690,7 +690,7 @@ msgid "Cancel the match"
 msgstr "Avbryt matchen"
 
 msgid "Select a tatami"
-msgstr "Välj ett matchområd"
+msgstr "Välj ett matchområde"
 
 msgid "Password accepted.<br>"
 msgstr "Lösedord accepteras.<br>"
@@ -717,13 +717,13 @@ msgid "New Competitor"
 msgstr "Ny tävlande"
 
 msgid "Logout"
-msgstr "Loggan ut"
+msgstr "Logga ut"
 
 msgid "Login"
 msgstr "Logga in"
 
 msgid "No rights to give results"
-msgstr "Inga rättigheter ge resultat"
+msgstr "Inga rättigheter att ge resultat"
 
 msgid "No competitor found!"
 msgstr "Inga tävlande hittas!"
@@ -762,7 +762,7 @@ msgid "Column Separator:"
 msgstr "Kolumn separator:"
 
 msgid "competitors added"
-msgstr "Tävlande lagt till"
+msgstr "Tävlande har lagts till"
 
 msgid "errors"
 msgstr "fel"
@@ -792,16 +792,16 @@ msgid "Cannot open"
 msgstr "Kan inte öppna"
 
 msgid "Is there another JudoShiai program running?"
-msgstr "Finns det en annan JudoShiai program körs?"
+msgstr "Körs ett annat JudoShiai program redan?"
 
 msgid "Yes, another JudoShiai program is running"
-msgstr "Ja, en annan JudoShiai program som körs"
+msgstr "Ja, ett annat JudoShiai program körs"
 
 msgid ""
 "No, this the only JudoShiai program. \n"
 "Purge erroneous lock file."
 msgstr ""
-"Nej, detta är den enda JudoShiai programmet.\n"
+"Nej, detta är det enda JudoShiai programmet.\n"
 "Rensa felaktig låsfil."
 
 msgid ""
@@ -821,7 +821,7 @@ msgid "Pool"
 msgstr "Pool"
 
 msgid "Double Pool"
-msgstr "Dubbelt pool"
+msgstr "Dubbel pool"
 
 msgid "Quad Pool"
 msgstr "Quad pool"
@@ -923,10 +923,10 @@ msgid "EST Double Elim One Bronze"
 msgstr ""
 
 msgid "Next match"
-msgstr "Nästa matchen"
+msgstr "Nästa match"
 
 msgid "Preparing"
-msgstr "Förbereda"
+msgstr "Förbered"
 
 msgid "Delay the match"
 msgstr "Försena matchen"
@@ -971,7 +971,7 @@ msgid "Remove comment"
 msgstr "Ta bort kommentar"
 
 msgid "Set score"
-msgstr "Ställ påäng"
+msgstr "Ställ poäng"
 
 msgid "White"
 msgstr "Vit"
@@ -980,7 +980,7 @@ msgid "Blue"
 msgstr "Blå"
 
 msgid "Points"
-msgstr "Påäng"
+msgstr "Poäng"
 
 msgid "Comment"
 msgstr "Kommentär"
@@ -995,7 +995,7 @@ msgid "Remove delay"
 msgstr "Ta bort försening"
 
 msgid "Freeze match order"
-msgstr "Frysa match ordning"
+msgstr "Frys match ordning"
 
 msgid "Unfreeze exported"
 msgstr "Avbryt frysning för exporterade"
@@ -1004,7 +1004,7 @@ msgid "Unfreeze imported"
 msgstr "Avbryt frysning för importerade"
 
 msgid "Unfreeze this"
-msgstr "Avbryt frysning för detta"
+msgstr "Avbryt frysning för den här"
 
 msgid "Move Medal Matches"
 msgstr "Flytta medalmatcher"
@@ -1055,25 +1055,25 @@ msgid "Clean up duplicates and update reg. categories"
 msgstr "Städa upp dubbletter och uppdatera reg. kategorierna"
 
 msgid "Weighed only"
-msgstr "Endast vägde"
+msgstr "Endast vägda"
 
 msgid "With weights"
 msgstr "Med vikter"
 
 msgid "competitors added and updated"
-msgstr "tävlingar lagt till och uppdateras"
+msgstr "tävlande har lagts till och uppdaterats"
 
 msgid "competitors already existed"
-msgstr "tävlingar fanns redand"
+msgstr "tävlande fanns redan"
 
 msgid "competitors added unchanged"
-msgstr "tävlingar lagt till oförändrad"
+msgstr "tävlande har lagts till oförändrade"
 
 msgid "Copy Weights"
 msgstr "Kopiera vikter"
 
 msgid "weights updated"
-msgstr "vikter uppdaterad"
+msgstr "vikter uppdaterade"
 
 msgid "Do Backup"
 msgstr "Gör säkerhetskopia"
@@ -1118,7 +1118,7 @@ msgid "Select From Another Shiai"
 msgstr "Välj från en annan Shiai"
 
 msgid "Add From a Text File"
-msgstr "Lägg til från en textfil"
+msgstr "Lägg till från en textfil"
 
 msgid "Add All From Another Shiai"
 msgstr "Lägg till alla från en annan Shiai"
@@ -1127,22 +1127,22 @@ msgid "Update Weights From Another Shiai"
 msgstr "Uppdatera vikter från en annan Shiai"
 
 msgid "Remove Unweighted"
-msgstr "Ta bort uviktat"
+msgstr "Ta bort alla utan vikt"
 
 msgid "Restore Removed"
 msgstr "Återställa borttagen"
 
 msgid "Bar Code Search"
-msgstr "Streckkodsök"
+msgstr "Sök på streckkod"
 
 msgid "Print Weight Notes"
 msgstr "Skriv viktlappar"
 
 msgid "New Category"
-msgstr "Ny kategorin"
+msgstr "Ny kategori"
 
 msgid "Remove Empty"
-msgstr "Ta bor den tömma"
+msgstr "Ta bort tomma"
 
 msgid "Create Categories"
 msgstr "Skapa kategorier"
@@ -1175,7 +1175,7 @@ msgid "Print Schedule to PDF"
 msgstr "Skriv ut tidtabell som PDF"
 
 msgid "Control Tatami"
-msgstr "Kontroll matchområdet"
+msgstr "Kontroll av matchområdet"
 
 msgid "Communication Node"
 msgstr "Kommunikation node"
@@ -1223,7 +1223,7 @@ msgid "Communication"
 msgstr "Kommunikation"
 
 msgid "Club Text Selection"
-msgstr "Klubbtext valning"
+msgstr "Klubbtextsval"
 
 msgid "Sheet Layout"
 msgstr "Blad layout"
@@ -1259,7 +1259,7 @@ msgid "Print Logo"
 msgstr "Skriv ut logo"
 
 msgid "Scale Serial Interface..."
-msgstr "Vikt vågs anslutning"
+msgstr "Vikt vågs-anslutning"
 
 msgid "Medal Matches..."
 msgstr "Medaljmatcher"
@@ -1274,7 +1274,7 @@ msgid "Move Competitors to Category..."
 msgstr "Flytta tävlande till kategori..."
 
 msgid "Move Competitors Here"
-msgstr "Flytta tävlande här"
+msgstr "Flytta tävlande hit"
 
 msgid "Compose Unofficial Category"
 msgstr "Bilda inofficiel kategorier"
@@ -1346,16 +1346,16 @@ msgid "Match File"
 msgstr "Matchfil"
 
 msgid "Print Not Started Categories"
-msgstr "Skriv ut inte börjat kategorier"
+msgstr "Skriv ut ej startade kategorier"
 
 msgid "Print Started Categories"
-msgstr "Skriv ut börjat kategorier"
+msgstr "Skriv ut påbörjade kategorier"
 
 msgid "Print Finished Categories"
 msgstr "Skriv ut färdiga kategorier"
 
 msgid "Print Unmatched"
-msgstr "Skriv ut inte matchat"
+msgstr "Skriv ut ej matchade"
 
 msgid "Print Result"
 msgstr "Skriv ut resultat"
@@ -1424,7 +1424,7 @@ msgid "White first:"
 msgstr "Vit först:"
 
 msgid "Best two out of three matches:"
-msgstr "Bästa två av tre matcher:"
+msgstr "Bäst av tre matcher:"
 
 msgid ""
 "Medal will be awarded \n"
@@ -1437,16 +1437,16 @@ msgid "Seeded to fixed places:"
 msgstr "Seedning till fasta platser:"
 
 msgid "Win in Golden Score gives 1 point"
-msgstr "Vinn i Golden Score ger 1 poäng"
+msgstr "Vinst i Golden Score ger 1 poäng"
 
 msgid "Double Pool 2 with carried forward points:"
-msgstr "Dubbel pool 2 med överförts påäng:"
+msgstr "Dubbel pool 2 med överförda poäng:"
 
 msgid "Two pool bronzes:"
 msgstr "Två pool brons:"
 
 msgid "Resolve 3-way ties by weights:"
-msgstr "Lösa lika påängtal med vikter:"
+msgstr "Skilj lika poängtal med vikter:"
 
 msgid "Tournament properties"
 msgstr "Tävlingsegenskaper"
@@ -1461,7 +1461,7 @@ msgid "Competitors:"
 msgstr "Tävlande:"
 
 msgid "Weighted:"
-msgstr "Invägde:"
+msgstr "Invägda:"
 
 msgid "Statistics"
 msgstr "Statistik"
@@ -1584,7 +1584,7 @@ msgid "is not a valid ASCII string!"
 msgstr "är inte en giltig ASCII-sträng!"
 
 msgid "Automatic Web Page Update"
-msgstr "Automatisk websida uppdatering"
+msgstr "Automatisk uppdatering av websida"
 
 msgid "Create Statistics"
 msgstr "Skapa statistik"
@@ -1605,10 +1605,10 @@ msgid "Small display"
 msgstr "Liten display"
 
 msgid "Horizontal display"
-msgstr "Horisontell visning"
+msgstr "Horisontell display"
 
 msgid "Mirror tatami order"
-msgstr "Spegla matchområdordning"
+msgstr "Spegla matchområdsordning"
 
 msgid "Write to file"
 msgstr "Skriv till fil"
@@ -1687,3 +1687,111 @@ msgstr "Slovakiska systemet"
 
 msgid "Tatami"
 msgstr "Matchområde"
+
+msgid "Hikiwake"
+msgstr ""
+
+msgid "Require judogi control"
+msgstr ""
+
+msgid "CTL"
+msgstr ""
+
+msgid "Show Flags"
+msgstr ""
+
+msgid "Show Initial of Name"
+msgstr ""
+
+msgid "Flag size:"
+msgstr ""
+
+msgid "Name size:"
+msgstr ""
+
+msgid "CONTROL"
+msgstr ""
+
+msgid "THIS APPLICATION"
+msgstr ""
+
+msgid "NOT CONNECTED"
+msgstr ""
+
+msgid "Team:"
+msgstr ""
+
+msgid "Tatami:"
+msgstr ""
+
+msgid "Create default members:"
+msgstr ""
+
+msgid "Team"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Double Pool 3"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "UKR Dbl Repchg"
+msgstr ""
+
+msgid "UKR Double Repechage"
+msgstr ""
+
+msgid "Customized"
+msgstr ""
+
+msgid "Load Custom Systems"
+msgstr ""
+
+msgid "New Team"
+msgstr ""
+
+msgid "New Team Category"
+msgstr ""
+
+msgid "Print Selected Accreditation Cards To Default Printer"
+msgstr ""
+
+msgid "Results in German"
+msgstr ""
+
+msgid "Results in Russian"
+msgstr ""
+
+msgid "Ukrainian System"
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+msgid "New Password:"
+msgstr ""
+
+msgid "Old Password:"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "No manual edit"
+msgstr ""
+
+msgid "Automatic send"
+msgstr ""
+
+msgid "Print label"
+msgstr ""
+
+msgid "No margins"
+msgstr ""
+
+msgid "Fit page"
+msgstr ""

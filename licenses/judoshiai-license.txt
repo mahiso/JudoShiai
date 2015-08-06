@@ -1,14 +1,14 @@
-Copyright (c) 2006-2012 Hannu Jokinen
+Copyright (c) 2006-2015 Hannu Jokinen
 
-Permission to use and copy this software free of charge is hereby granted, 
-provided that the above copyright notice, this permission notice, 
+Permission to use and copy this software free of charge is hereby granted,
+provided that the above copyright notice, this permission notice,
 and the disclaimer of warranty appear in all copies.
 
 
 NO WARRANTY
 
-BECAUSE THE SOFTWARE IS LICENSED FREE OF CHARGE, IT IS PROVIDED "AS IS", 
-WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+BECAUSE THE SOFTWARE IS LICENSED FREE OF CHARGE, IT IS PROVIDED "AS IS",
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
 LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
@@ -19,12 +19,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 Shiai uses the following external libraries, programs, and other copyrighted material:
 
-- GTK+ library (http://www.gtk.org), that is included under 
+- GTK+ library (http://www.gtk.org), that is included under
   the terms of the LGPL license.
 
 - SQLite3 database software (http://www.sqlite.org) is public domain.
 
-- Inno Setup Compiler (http://www.innosetup.com) is an install builder provided 
+- Inno Setup Compiler (http://www.innosetup.com) is an install builder provided
   for free use. It is used to build the Shiai
   software package. Inno Setup license is included in the distribution.
 

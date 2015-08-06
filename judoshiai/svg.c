@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -10,6 +10,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <assert.h>
 
 #include <cairo.h>
 #include <cairo-pdf.h>
@@ -35,11 +36,12 @@
 
 static gboolean debug = FALSE;
 
-#define WRITE2(_s, _l)                                                     \
-    do { if (dfile) fwrite(_s, 1, _l, dfile);                            \
-        if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {        \
-            g_print("\nERROR %s: %s %d\n",                              \
-                    err->message, __FUNCTION__, __LINE__); err = NULL;  \
+#define WRITE2(_s, _l)                                                  \
+    do { if (dfile) fwrite(_s, 1, _l, dfile);                           \
+        if (!rsvg_handle_write(handle, (guchar *)_s, _l, &err)) {       \
+            g_print("\nERROR in func %s:%d: %s\n",                      \
+                    __FUNCTION__, __LINE__, err->message);              \
+            g_error_free(err); err = NULL;                              \
             fwrite(_s, 1, _l, stdout);                                  \
             return TRUE; } } while (0)
 
@@ -188,7 +190,7 @@ gint get_num_svg_pages(struct compsys systm)
     key = make_key(systm, 0);
 
     for (i = 0; i < num_svg; i++) {
-        if ((svg_data[i].key & 0xffffff00) == key)
+        if ((svg_data[i].key & 0xffffff00) == (key & 0xffffff00))
             pages++;
     }
 
@@ -273,6 +275,7 @@ gint paint_svg(struct paint_data *pd)
     struct pool_matches pm, pm2;
     struct match fm[NUM_MATCHES];
     struct match *m;
+    struct custom_matches *cm = NULL;
     gchar buf[64];
     GError *err = NULL;
     gint i;
@@ -291,22 +294,25 @@ gint paint_svg(struct paint_data *pd)
     gint c_a[21], c_b[21];
     gint key, svgwidth;
     FILE *dfile = NULL;
-    gchar *svgdata = NULL;
+    gchar *svgdata = NULL, *datamax = NULL;
 
     key = make_key(systm, pagenum);
 
     for (i = 0; i < num_svg; i++) {
         if (svg_data[i].key == key) {
             svgdata = svg_data[i].data;
-            //svgdatalen = svg_data[i].datalen;
+            datamax = svgdata + svg_data[i].datalen;
             svgwidth = svg_data[i].width;
             //svgheight = svg_data[i].height;
             break;
         } 
     }
 
-    if (!svgdata)
+    if (!svgdata) {
+        if (systm.system == SYSTEM_CUSTOM)
+            g_print("ERROR: No svg data. key=0x%x\n", key);
         return FALSE;
+    }
 
     if (pd->c) {
         cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
@@ -397,10 +403,16 @@ gint paint_svg(struct paint_data *pd)
     case SYSTEM_FRENCH_32:
     case SYSTEM_FRENCH_64:
     case SYSTEM_FRENCH_128:
-    case SYSTEM_CUSTOM:
         memset(fm, 0, sizeof(fm));
         db_read_category_matches(category, fm);
         m = fm;
+        break;
+
+    case SYSTEM_CUSTOM:
+        cm = g_malloc(sizeof(*cm));
+        if (!cm) return FALSE;
+        fill_custom_struct(category, cm);
+        m = cm->m;
         break;
     }
 
@@ -412,7 +424,8 @@ gint paint_svg(struct paint_data *pd)
         dfile = fopen("debug.svg", "w");
 
     guchar *p = (guchar *)svgdata;
-    while(*p) {
+
+    while (p < (guchar *)datamax && *p) {
         gboolean delayed = FALSE;
 #if 0
         if (*p == '>' && *(p+1) == '%') { // dont send '>' yet
@@ -566,10 +579,71 @@ gint paint_svg(struct paint_data *pd)
                 reset_last_country();
                 gboolean dp2 = attr[0].code[0] == 'C';
                 gint comp = attr[0].value;
+                guchar *attr2_code = attr[1].code;
                 struct judoka *j = NULL;
                 struct pool_matches *pmp = dp2 ? &pm2 : &pm;
+                struct pool *pool = NULL;
+                struct bestof3 *pair = NULL;
+                gint pcomp = 0;
 
-                if (systm.system == SYSTEM_POOL || 
+                if (systm.system == SYSTEM_CUSTOM) { // find competitor from match list
+                    if (comp == 0) {
+                        gint k;
+                        attr2_code = attr[2].code;
+                        // competitors come from other matches
+                        pcomp = attr[1].value - 1;
+                        // find pool
+                        for (k = 0; k < cm->cd->num_round_robin_pools; k++) {
+                            if (strcmp(cm->cd->round_robin_pools[k].name, (char *)attr[1].code) == 0) {
+                                pool = &cm->pm[k];
+                                break;
+                            }
+                        }
+                        if (pool == NULL) {
+                            // find best of 3 pair
+                            for (k = 0; k < cm->cd->num_best_of_three_pairs; k++) {
+                                if (strcmp(cm->cd->best_of_three_pairs[k].name, (char *)attr[1].code) == 0) {
+                                    pair = &cm->best_of_three[k];
+                                    break;
+                                }
+                            }
+                        }
+                        // find competitor
+                        if (pool) {
+                            //g_print("find pcomp %d index=%d\n", pcomp, pool->competitors[pcomp].index);
+                            for (k = 1; k <= cm->num_competitors; k++) {
+                                if (cm->j[k] && cm->j[k]->index == pool->competitors[pcomp].index) {
+                                    j = cm->j[k];
+                                    //g_print("FOUND competitor=%d=%s\n", k, j->last);
+                                    break;
+                                }
+                            }
+                        } else if (pair) {
+                            for (k = 1; k <= cm->num_competitors; k++) {
+                                if (cm->j[k] && cm->j[k]->index == pair->competitors[pcomp].index) {
+                                    j = cm->j[k];
+                                    //g_print("FOUND PAIR competitor=%d=%s\n", k, j->last);
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        // competitor known
+                        j = cm->j[comp];
+                        // find relevant pool
+                        for (i = 0; j && !pool && i < cm->num_round_robin_pools; i++) {
+                            gint k, numpc = cm->pm[i].num_competitors;
+                            for (k = 0; k < numpc; k++) {
+                                struct poolcomp *pc = &cm->pm[i].competitors[k];
+                                if (pc->index == j->index) {
+                                    pool = &cm->pm[i];
+                                    pcomp = k;
+                                    break;
+                                }
+                            }
+                        } // for i
+                    } 
+               } else if (systm.system == SYSTEM_POOL || 
                     systm.system == SYSTEM_QPOOL ||
                     systm.system == SYSTEM_DPOOL ||
                     systm.system == SYSTEM_DPOOL2 ||
@@ -578,27 +652,63 @@ gint paint_svg(struct paint_data *pd)
                     j = pmp->j[comp];
 
                 if (!j || j->index >= 10000) {
+                    /*
                     gchar b[32];
                     sprintf(b,"COMP %d j=%p", comp, j);
                     WRITE(b);
+                    */
                     continue;
                 }
 
                 set_competitor_position(j->index, COMP_POS_DRAWN);
 
-                if (attr[1].code[0] && attr[1].code[1] == 0) { // one letter codes
-                    if (attr[1].code[0] == 'w') { // number of wins
-                        if (pmp->wins[comp] || pmp->finished) {
-                            snprintf(buf, sizeof(buf), "%d", pmp->wins[comp]);
-                            WRITE(buf);
+                if (attr2_code[0] && attr2_code[1] == 0) { // one letter codes
+                    if (attr2_code[0] == 'w') { // number of wins
+                        if (systm.system == SYSTEM_CUSTOM) {
+                            if (pool && (pool->competitors[pcomp].wins || pool->finished)) {
+                                snprintf(buf, sizeof(buf), "%d", pool->competitors[pcomp].wins);
+                                WRITE(buf);
+                            } else if (pair && (pair->competitors[pcomp].wins || pair->finished)) {
+                                snprintf(buf, sizeof(buf), "%d", pair->competitors[pcomp].wins);
+                                WRITE(buf);
+                            }
+                        } else {
+                            if (pmp->wins[comp] || pmp->finished) {
+                                snprintf(buf, sizeof(buf), "%d", pmp->wins[comp]);
+                                WRITE(buf);
+                            }
                         }
-                    } else if (attr[1].code[0] == 'p') { // number of points
-                        if (pmp->pts[comp] || pmp->finished) {
+                    } else if (attr2_code[0] == 'p') { // number of points
+                        if (systm.system == SYSTEM_CUSTOM) {
+                            if (pool && (pool->competitors[pcomp].pts || pool->finished)) {
+                                snprintf(buf, sizeof(buf), "%d", pool->competitors[pcomp].pts);
+                                WRITE(buf);
+                            } else if (pair && (pair->competitors[pcomp].pts || pair->finished)) {
+                                snprintf(buf, sizeof(buf), "%d", pair->competitors[pcomp].pts);
+                                WRITE(buf);
+                            }
+                        } else if (pmp->pts[comp] || pmp->finished) {
                             snprintf(buf, sizeof(buf), "%d", pmp->pts[comp]);
                             WRITE(buf);
                         }
-                    } else if (attr[1].code[0] == 'r') { // pool result
-                        if (systm.system == SYSTEM_POOL || systm.system == SYSTEM_BEST_OF_3 || dp2) {
+                    } else if (attr2_code[0] == 'r') { // pool result
+                        if (systm.system == SYSTEM_CUSTOM) {
+                            if (pool && pool->finished && j) {
+                                gint k;
+                                for (k = 0; k < pool->num_competitors; k++) {
+                                    if (pool->competitors[k].position == pcomp) {
+                                        snprintf(buf, sizeof(buf), "%d", k+1);
+                                        WRITE(buf);
+                                        break;
+                                    }
+                                }
+                            } else if (pair && pair->finished && j) {
+                                if (pair->winner == pair->competitors[pcomp].index)
+                                    WRITE("1");
+                                else
+                                    WRITE("2");
+                            }
+                        } else if (systm.system == SYSTEM_POOL || systm.system == SYSTEM_BEST_OF_3 || dp2) {
                             if (pmp->finished) {
                                 gint k;
                                 for (k = 1; k <= dp2 ? 4 : num_judokas; k++) { 
@@ -657,7 +767,7 @@ gint paint_svg(struct paint_data *pd)
             } else if (attr[0].code[0] == 'r') { // results
                 reset_last_country();
                 gint res = attr[0].value;
-
+                //g_print("*** RES=%d sys=%d\n",res, systm.system);
                 if (systm.system == SYSTEM_POOL || systm.system == SYSTEM_BEST_OF_3) {
                     struct judoka *j = pm.j[pm.c[res]];
                     if (j) {
@@ -704,14 +814,14 @@ gint paint_svg(struct paint_data *pd)
                     }
                 } else if (systm.system == SYSTEM_CUSTOM) {
                     gint real_res = res;
-                    gint ix = get_custom_pos(m, systm.table, res, &real_res);
+                    gint ix = get_custom_pos(cm, systm.table, res, &real_res);
                     if (ix) {
                         struct judoka *j = get_data(ix);
                         if (j) {
                             write_judoka(handle, 1, j, dfile);
                             set_competitor_position(j->index, COMP_POS_DRAWN | real_res);
                             free_judoka(j);
-                            g_print("pos=%d real=%d\n", res, real_res);
+                            //g_print("pos=%d real=%d\n", res, real_res);
                         }
                     }
                 } else {
@@ -926,9 +1036,18 @@ gint paint_svg(struct paint_data *pd)
     case SYSTEM_FRENCH_64:
     case SYSTEM_FRENCH_128:
         break;
+
+    case SYSTEM_CUSTOM:
+        empty_custom_struct(cm);
+        g_free(cm);
+        break;
     }
 
-    rsvg_handle_close(handle, NULL);
+    if (!rsvg_handle_close(handle, &err)) {
+        g_print("ERROR: rsvg_handle_close: %s\n", err->message);
+        g_error_free(err);
+        err = NULL;
+    }
 
     gdouble  paper_width_saved;
     gdouble  paper_height_saved;
@@ -950,7 +1069,9 @@ gint paint_svg(struct paint_data *pd)
     if (pd->c) {
         cairo_save(pd->c);
         cairo_scale(pd->c, pd->paper_width/svgwidth, pd->paper_width/svgwidth);
-        rsvg_handle_render_cairo(handle, pd->c);
+        if (!rsvg_handle_render_cairo(handle, pd->c)) {
+            g_print("ERROR: rsvg_handle_render_cairo failed\n");
+        }
     }
 
     // Legends
@@ -995,7 +1116,6 @@ gint paint_svg(struct paint_data *pd)
         cairo_restore(pd->c);
 
     g_object_unref(handle);
-    //rsvg_handle_free(handle);
 
     return TRUE;
 }
@@ -1163,25 +1283,37 @@ void add_custom_svg(gchar *data, gsize len, gint table, gint page)
     systm.numcomp = 0;
     systm.table = table;
     systm.wishsys = 0;
-    gint key = make_key(systm, page-1);
+    gint i, n = num_svg, key = make_key(systm, page-1);
+    gboolean update = FALSE;
 
-    svg_data[num_svg].key = key;
-    svg_data[num_svg].data = data;
-    svg_data[num_svg].datalen = len;
+    for (i = 0; i < num_svg; i++) {
+        if (svg_data[i].key == key) {
+            // update
+            update = TRUE;
+            n = i;
+            g_free(svg_data[n].data);
+            g_print("Update i=%d\n", i);
+        }
+    }
 
-    RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data[num_svg].data, 
-                                              svg_data[num_svg].datalen, NULL);
+    svg_data[n].key = key;
+    svg_data[n].data = data;
+    svg_data[n].datalen = len;
+
+    RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data[n].data, 
+                                              svg_data[n].datalen, NULL);
     if (h) {
         RsvgDimensionData dim;
         rsvg_handle_get_dimensions(h, &dim);
-        svg_data[num_svg].width = dim.width;
-        svg_data[num_svg].height = dim.height;
+        svg_data[n].width = dim.width;
+        svg_data[n].height = dim.height;
         g_object_unref(h);
         //rsvg_handle_free(h);
 
-        g_print("custom read key=0x%x pos=%d w=%d h=%d\n", 
-                key, num_svg, svg_data[num_svg].width, svg_data[num_svg].height);
-        num_svg++;
+        g_print("custom read key=0x%x pos=%d w=%d h=%d, update=%d\n", 
+                key, n, svg_data[n].width, svg_data[n].height, update);
+        if (!update)
+            num_svg++;
 
         struct svg_props *info = find_svg_info(key);
         if (!info) {
@@ -1190,6 +1322,7 @@ void add_custom_svg(gchar *data, gsize len, gint table, gint page)
                 num_svg_info++;
             info->key = key;
         }
-        info->pages++;
+        if (page > info->pages)
+            info->pages = page;
     }
 }

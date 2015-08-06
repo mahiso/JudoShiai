@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -117,12 +117,12 @@ static void name_cell_data_func (GtkTreeViewColumn *col,
     gint category;
     struct judoka *j;
 
-    gtk_tree_model_get(model, iter, 
-                       ptr_to_gint(user_data), &index, 
+    gtk_tree_model_get(model, iter,
+                       ptr_to_gint(user_data), &index,
                        COL_MATCH_CAT, &category,
-                       COL_MATCH_VIS, &visible, 
+                       COL_MATCH_VIS, &visible,
                        -1);
-  
+
     if (visible == FALSE) {
         if (ptr_to_gint(user_data) != COL_MATCH_BLUE)
             return;
@@ -135,12 +135,12 @@ static void name_cell_data_func (GtkTreeViewColumn *col,
         }
 
         sys = get_system_description(category, data->system.numcomp);
-        g_object_set(renderer, 
-                     "cell-background-set", FALSE, 
+        g_object_set(renderer,
+                     "cell-background-set", FALSE,
                      NULL);
         g_snprintf(buf, sizeof(buf), "%s [%d]", sys, data->system.numcomp);
         g_object_set(renderer, "text", buf, NULL);
-		
+
         return;
     }
 
@@ -178,19 +178,19 @@ static void category_cell_data_func (GtkTreeViewColumn *col,
     gint category;
     struct judoka *j;
 
-    gtk_tree_model_get(model, iter, 
-                       ptr_to_gint(user_data), &index, 
+    gtk_tree_model_get(model, iter,
+                       ptr_to_gint(user_data), &index,
                        COL_MATCH_CAT, &category,
-                       COL_MATCH_VIS, &visible, 
+                       COL_MATCH_VIS, &visible,
                        -1);
-  
+
     if (visible || category == 0) {
         g_object_set(renderer, "text", "", NULL);
         return;
     }
 
     j = get_data(index);
-    if (j) {  
+    if (j) {
         g_snprintf(buf, sizeof(buf), "%s", j->last);
         g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
         free_judoka(j);
@@ -215,7 +215,7 @@ static void number_cell_data_func (GtkTreeViewColumn *col,
     gtk_tree_model_get(model, iter,
                        COL_MATCH_CAT,    &cat,
                        COL_MATCH_NUMBER, &number,
-                       COL_MATCH_VIS,    &visible, 
+                       COL_MATCH_VIS,    &visible,
                        -1);
 
     if (visible) {
@@ -226,18 +226,18 @@ static void number_cell_data_func (GtkTreeViewColumn *col,
                            number >> MATCH_CATEGORY_SUB_SHIFT,
                            wcname);
             else
-                g_snprintf(buf, sizeof(buf), "%d/%d", 
+                g_snprintf(buf, sizeof(buf), "%d/%d",
                            number >> MATCH_CATEGORY_SUB_SHIFT,
                            number & MATCH_CATEGORY_MASK);
         } else
-            g_snprintf(buf, sizeof(buf), "%d", number); 
+            g_snprintf(buf, sizeof(buf), "%d", number);
 
         g_object_set(renderer, "text", buf, NULL);
     } else {
         g_object_set(renderer, "text", "", NULL);
     }
 
-}  
+}
 
 
 static void group_cell_data_func (GtkTreeViewColumn *col,
@@ -254,7 +254,7 @@ static void group_cell_data_func (GtkTreeViewColumn *col,
     gtk_tree_model_get(model, iter,
                        COL_MATCH_GROUP, &group,
                        COL_MATCH_CAT, &category,
-                       COL_MATCH_VIS, &visible, 
+                       COL_MATCH_VIS, &visible,
                        -1);
 
     if (category == 0) {
@@ -265,7 +265,7 @@ static void group_cell_data_func (GtkTreeViewColumn *col,
         g_object_set(renderer, "text", "", NULL);
     }
 
-}  
+}
 
 static void score_cell_data_func (GtkTreeViewColumn *col,
                                   GtkCellRenderer   *renderer,
@@ -279,12 +279,12 @@ static void score_cell_data_func (GtkTreeViewColumn *col,
 
     gtk_tree_model_get(model, iter,
                        ptr_to_gint(user_data), &score,
-                       COL_MATCH_VIS, &visible, 
+                       COL_MATCH_VIS, &visible,
                        -1);
 
     if (visible) {
-        g_snprintf(buf, sizeof(buf), "%d%d%d/%d%s", 
-                   (score>>16)&15, (score>>12)&15, (score>>8)&15, 
+        g_snprintf(buf, sizeof(buf), "%d%d%d/%d%s",
+                   (score>>16)&15, (score>>12)&15, (score>>8)&15,
                    score&7, score&8?"H":"");
         g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
         g_object_set(renderer, "text", buf, NULL);
@@ -292,7 +292,7 @@ static void score_cell_data_func (GtkTreeViewColumn *col,
         g_object_set(renderer, "text", "", NULL);
     }
 
-}  
+}
 
 static void time_cell_data_func (GtkTreeViewColumn *col,
                                  GtkCellRenderer   *renderer,
@@ -306,18 +306,18 @@ static void time_cell_data_func (GtkTreeViewColumn *col,
 
     gtk_tree_model_get(model, iter,
                        ptr_to_gint(user_data), &tm,
-                       COL_MATCH_VIS, &visible, 
+                       COL_MATCH_VIS, &visible,
                        -1);
 
     if (visible) {
-        g_snprintf(buf, sizeof(buf), "%d:%02d", 
+        g_snprintf(buf, sizeof(buf), "%d:%02d",
                    tm / 60, tm % 60);
         g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
         g_object_set(renderer, "text", buf, NULL);
     } else {
         g_object_set(renderer, "text", "", NULL);
     }
-}  
+}
 
 static void comment_cell_data_func (GtkTreeViewColumn *col,
                                     GtkCellRenderer   *renderer,
@@ -331,7 +331,7 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
     gchar buf[128];
 
     gtk_tree_model_get(model, iter,
-                       COL_MATCH_VIS, &visible, 
+                       COL_MATCH_VIS, &visible,
                        COL_MATCH_COMMENT, &comment,
                        COL_MATCH_BLUE_POINTS, &bpts,
                        COL_MATCH_WHITE_POINTS, &wpts,
@@ -343,20 +343,20 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
     if (visible) {
         g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
 
-        if (bpts || wpts || b == GHOST || w == GHOST || 
+        if (bpts || wpts || b == GHOST || w == GHOST ||
             db_has_hansokumake(b) || db_has_hansokumake(w))
-            g_object_set(renderer, 
-                         "cell-background", "Green", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Green",
+                         "cell-background-set", TRUE,
                          NULL);
         else if (status & MATCH_STATUS_TATAMI_MASK)
-            g_object_set(renderer, 
-                         "cell-background", "Yellow", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Yellow",
+                         "cell-background-set", TRUE,
                          NULL);
         else
-            g_object_set(renderer, 
-                         "cell-background-set", FALSE, 
+            g_object_set(renderer,
+                         "cell-background-set", FALSE,
                          NULL);
 
         switch (comment) {
@@ -383,7 +383,7 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
     } else {
         g_object_set(renderer, "text", "", NULL);
     }
-}  
+}
 
 #define IGNORE_MATCHES(_i) ((ju[c[_i]]->deleted & HANSOKUMAKE) && all[c[_i]] == FALSE)
 #define APPROVE_MATCHES(_i) (((ju[c[_i]]->deleted & HANSOKUMAKE) == 0) || all[c[_i]])
@@ -481,12 +481,12 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
         set_match(&m[_to]); db_set_match(&m[_to]); } while (0)
 
 
-void get_pool_winner(gint num, gint c[21], gboolean yes[21], 
-                     gint wins[21], gint pts[21], 
+void get_pool_winner(gint num, gint c[21], gboolean yes[21],
+                     gint wins[21], gint pts[21],
                      gboolean mw[21][21], struct judoka *ju[21], gboolean all[21], gboolean tie[21])
 {
     gint i, j;
-        
+
     for (i = 0; i <= 20; i++) {
         c[i] = i;
         tie[i] = FALSE;
@@ -496,12 +496,12 @@ void get_pool_winner(gint num, gint c[21], gboolean yes[21],
     for (i = 1; i <= num; i++)
         if (ju[i] == NULL)
             return;
-        
+
     for (i = 1; i < 20; i++) {
         for (j = i+1; j <= 20; j++) {
-            if ((yes[c[i]] && yes[c[j]] && 
+            if ((yes[c[i]] && yes[c[j]] &&
                  (ju[c[i]]->deleted & HANSOKUMAKE) &&
-                 all[c[i]] == FALSE) ||                 /* hansoku-make */ 
+                 all[c[i]] == FALSE) ||                 /* hansoku-make */
 
                 (yes[c[i]] == FALSE && CAN_WIN) ||      /* competitor not active */
 
@@ -569,7 +569,7 @@ void get_pool_winner(gint num, gint c[21], gboolean yes[21],
 #if 0
     for (i = 1; i < 8; i++)
         if (ju[c[i]])
-            g_print("Kilpailija %s: %d voittoa ja %d pistettä, paino %d, del %d\n", 
+            g_print("Kilpailija %s: %d voittoa ja %d pistettä, paino %d, del %d\n",
                     ju[c[i]]->last, wins[c[i]], pts[c[i]], ju[c[i]]->weight, ju[c[i]]->deleted);
     g_print("\n");
 #endif
@@ -587,15 +587,15 @@ gint num_matches(gint sys, gint num_judokas)
     else if (sys == SYSTEM_BEST_OF_3)
         return 3;
     else if (sys == SYSTEM_DPOOL)
-        return num_matches_table_d[num_judokas]; 
+        return num_matches_table_d[num_judokas];
     else if (sys == SYSTEM_DPOOL2)
-        return num_matches_table_d[num_judokas]; 
+        return num_matches_table_d[num_judokas];
     else if (sys == SYSTEM_DPOOL3)
-        return num_matches_table_d[num_judokas]; 
+        return num_matches_table_d[num_judokas];
     else if (sys == SYSTEM_QPOOL)
-        return num_matches_table_q[num_judokas]; 
+        return num_matches_table_q[num_judokas];
     else
-        return num_matches_table[num_judokas]; 
+        return num_matches_table[num_judokas];
 }
 
 void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean final_pool)
@@ -744,7 +744,7 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
          (COMP_2_PTS_WIN(pm->m[1]) && COMP_2_PTS_WIN(pm->m[2])))) {
         pm->finished = TRUE;
 
-        db_set_comment(category, 3, COMMENT_WAIT);        
+        db_set_comment(category, 3, COMMENT_WAIT);
     }
 }
 
@@ -754,6 +754,241 @@ void empty_pool_struct(struct pool_matches *pm)
 
     for (i = 0; i < 21; i++)
         free_judoka(pm->j[i]);
+}
+
+static gint find_comp_num(struct custom_matches *cm, gint index)
+{
+    gint i;
+    for (i = 1; i <= cm->num_competitors; i++) {
+        if (cm->j[i] && index == cm->j[i]->index)
+            return i;
+    }
+    return 0;
+}
+
+static gint find_comp_num_in_pool(struct pool *p, gint index)
+{
+    gint i;
+    for (i = 0; i < p->num_competitors; i++) {
+        if (p->competitors[i].index == index) return i;
+    }
+    return -1;
+}
+
+void fill_custom_struct(gint category, struct custom_matches *cm)
+{
+    gint i, j, k, poolnum, mnum, b3num;
+    gboolean all_done;
+    struct compsys sys;
+    struct custom_data *cd;
+
+    sys = get_cat_system(category);
+    cd = get_custom_table(sys.table);
+    if (!cd)
+        return;
+
+    memset(cm, 0, sizeof(*cm));
+    cm->cd = cd;
+
+    // read matches
+    db_read_category_matches(category, cm->m);
+
+    cm->num_matches = cd->num_matches;
+    cm->num_round_robin_pools = cd->num_round_robin_pools;
+    cm->num_best_of_three = cd->num_best_of_three_pairs;
+
+    // find competitors
+    cm->num_competitors = 0;
+    for (mnum = 0; mnum < cd->num_matches; mnum++) {
+        if (cd->matches[mnum].c1.type == COMP_TYPE_COMPETITOR) {
+            if (cm->j[cd->matches[mnum].c1.num] == NULL) {
+                cm->j[cd->matches[mnum].c1.num] = get_data(cm->m[mnum+1].blue);
+                if (cd->matches[mnum].c1.num > cm->num_competitors)
+                    cm->num_competitors = cd->matches[mnum].c1.num;
+            }
+        }
+        if (cd->matches[mnum].c2.type == COMP_TYPE_COMPETITOR) {
+            if (cm->j[cd->matches[mnum].c2.num] == NULL) {
+                cm->j[cd->matches[mnum].c2.num] = get_data(cm->m[mnum+1].white);
+                if (cd->matches[mnum].c2.num > cm->num_competitors)
+                    cm->num_competitors = cd->matches[mnum].c2.num;
+            }
+        }
+    }
+    if (sys.numcomp != cm->num_competitors)
+        g_print("ERROR: Conflicting comp num sys=%d counted=%d\n", sys.numcomp, cm->num_competitors);
+
+    // set best of 3 pairs
+    for (b3num = 0; b3num < cm->num_best_of_three; b3num++) {
+        gint c1 = 0, c2 = 0, mn, no_match = 2;
+
+        mn = cd->best_of_three_pairs[b3num].matches[0];
+        if (cm->m[mn].blue >= 10)
+            cm->best_of_three[b3num].competitors[0].index = cm->m[mn].blue;
+        if (cm->m[mn].white >= 10)
+            cm->best_of_three[b3num].competitors[1].index = cm->m[mn].white;
+
+        for (j = 0; j < 3; j++) {
+            mn = cd->best_of_three_pairs[b3num].matches[j];
+            if (COMP_1_PTS_WIN(cm->m[mn])) c1++;
+            else if (COMP_2_PTS_WIN(cm->m[mn])) c2++;
+            else no_match = j;
+        }
+
+        if (c1 >= 2 || c2 >= 2) {
+            mn = cd->best_of_three_pairs[b3num].matches[0];
+            cm->best_of_three[b3num].finished = TRUE;
+            cm->best_of_three[b3num].winner = c1 >= 2 ? cm->m[mn].blue : cm->m[mn].white;
+            cm->best_of_three[b3num].loser = c1 >= 2 ? cm->m[mn].white : cm->m[mn].blue;
+            db_set_comment(category, cd->best_of_three_pairs[b3num].matches[no_match], COMMENT_WAIT);
+        }
+    }
+
+    // set pools
+    for (poolnum = 0; poolnum < cm->num_round_robin_pools; poolnum++) {
+        struct pool *p = &(cm->pm[poolnum]);
+        round_robin_bare_t *cdpool = &(cd->round_robin_pools[poolnum]);
+
+        p->finished = TRUE;
+        p->num_competitors = cdpool->num_competitors;
+
+        // find competitors' index
+        for (k = 0; k < cdpool->num_competitors; k++) {
+            if (cdpool->competitors[k].type == COMP_TYPE_COMPETITOR) {
+                gint compnum = cdpool->competitors[k].num;
+                struct judoka *ju = cm->j[compnum];
+                if (ju)
+                    p->competitors[k].index = ju->index;
+            } else {
+                gint n;
+                for (n = 0; n < cdpool->num_rr_matches; n++) {
+                    match_bare_t *cdm = &cd->matches[cdpool->rr_matches[n]-1];
+                    if (memcmp(&cdm->c1, &cdpool->competitors[k], sizeof(competitor_bare_t)) == 0) {
+                        struct match *m = &cm->m[cdpool->rr_matches[n]];
+                        if (m->blue >= 10)
+                            p->competitors[k].index = m->blue;
+                        break;
+                    } else if (memcmp(&cdm->c2, &cdpool->competitors[k], sizeof(competitor_bare_t)) == 0) {
+                        struct match *m = &cm->m[cdpool->rr_matches[n]];
+                        if (m->white >= 10)
+                            p->competitors[k].index = m->white;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /* check for hansoku-makes */
+        for (k = 0; k < p->num_competitors; k++) {
+            gint comp = p->competitors[k].index;
+            gint compnum = find_comp_num(cm, comp);
+            if (cm->j[compnum] == NULL || (cm->j[compnum]->deleted & HANSOKUMAKE) == 0)
+                continue; /* competitor ok */
+
+            // was penalty during the last fight?
+            all_done = TRUE;
+            for (j = 0; j < cdpool->num_rr_matches; j++) {
+                gint comp1 = cm->m[cdpool->rr_matches[j]].blue;
+                gint comp2 = cm->m[cdpool->rr_matches[j]].white;
+
+                if ((comp1 == comp || comp2 == comp) &&
+                    cm->m[cdpool->rr_matches[j]].blue_points == 0 &&
+                    cm->m[cdpool->rr_matches[j]].white_points == 0) {
+                    all_done = FALSE; /* undone match */
+                    break;
+                }
+            }
+
+            p->competitors[k].all_matched = all_done;
+
+            if (all_done)
+                continue; /* all matched, points are valid */
+
+            for (i = 0; i < cdpool->num_rr_matches; i++) {
+                gint comp1 = cm->m[cdpool->rr_matches[i]].blue;
+                gint comp2 = cm->m[cdpool->rr_matches[i]].white;
+
+                if (comp1 == comp || comp2 == comp)
+                    cm->m[cdpool->rr_matches[i]].ignore = TRUE; /* hansoku-make matches are void */
+            }
+        } // for k
+
+        // calculate points
+        for (mnum = 0; mnum < cdpool->num_rr_matches; mnum++) {
+            gint n = cdpool->rr_matches[mnum];
+            gint comp1 = cm->m[n].blue;
+            gint comp2 = cm->m[n].white;
+            gint c1 = find_comp_num_in_pool(p, comp1);
+            gint c2 = find_comp_num_in_pool(p, comp2);
+
+            if (cm->m[n].ignore)
+                continue;
+
+            if (c1 >= 0 && c2 >= 0) {
+                if (COMP_1_PTS_WIN(cm->m[n])) {
+                    p->competitors[c1].wins++;
+                    p->competitors[c1].pts += cm->m[n].blue_points;
+                    p->competitors[c2].pts += cm->m[n].white_points; // team event points
+                    p->competitors[c1].mw[c2] = TRUE;
+                    p->competitors[c2].mw[c1] = FALSE;
+                } else if (COMP_2_PTS_WIN(cm->m[n])) {
+                    p->competitors[c2].wins++;
+                    p->competitors[c2].pts += cm->m[n].white_points;
+                    p->competitors[c1].pts += cm->m[n].blue_points; // team event points
+                    p->competitors[c2].mw[c1] = FALSE;
+                    p->competitors[c1].mw[c2] = TRUE;
+                } else
+                    p->finished = FALSE;
+            }
+        }
+
+        // calculate positions
+        if (!p->finished)
+            return;
+
+        for (i = 0; i < 21; i++) {
+            p->competitors[i].position = i;
+            p->competitors[i].tie = FALSE;
+        }
+
+#if 0
+        // check for not defined competitors
+        for (i = 0; i < p->num_competitors; i++)
+            if (p->competitors[i].index == 0)
+                return;
+#endif
+        for (i = 0; i < p->num_competitors; i++) {
+            for (j = 0; j < p->num_competitors - 1; j++) {
+                gint pos1 = p->competitors[j].position;
+                gint pos2 = p->competitors[j+1].position;
+                struct judoka *ju = cm->j[find_comp_num(cm, p->competitors[pos1].index)];
+                if ((ju && (ju->deleted & HANSOKUMAKE) &&
+                     p->competitors[pos1].all_matched == FALSE) ||                 /* hansoku-make */
+
+                    p->competitors[pos1].index == 0 ||
+
+                    (p->competitors[pos1].wins < p->competitors[pos2].wins) || /* more wins  */
+
+                    (p->competitors[pos1].wins == p->competitors[pos2].wins &&            /* same wins, more points  */
+                     p->competitors[pos1].pts < p->competitors[pos2].pts) ||
+
+                    (p->competitors[pos1].wins == p->competitors[pos2].wins &&            /* wins same, points same */
+                     p->competitors[pos1].pts  == p->competitors[pos2].pts  &&
+                     p->competitors[pos2].mw[pos1])) {
+                    p->competitors[j].position = pos2;
+                    p->competitors[j+1].position = pos1;
+                }
+            } // for j
+        } // for i
+    } // for pools
+}
+
+void empty_custom_struct(struct custom_matches *cm)
+{
+    gint i;
+
+    for (i = 1; i <= cm->num_competitors; i++)
+        free_judoka(cm->j[i]);
 }
 
 gboolean pool_finished(gint numcomp, gint nummatches, gint sys, gboolean yes[], struct pool_matches *pm)
@@ -821,7 +1056,7 @@ static void update_pool_matches(gint category, gint num)
                 catdata->tie = pm.tie[0];
         }
         goto out;
-    } 
+    }
 
     gboolean yes[4][21];
     gboolean pool_done[4];
@@ -858,7 +1093,7 @@ static void update_pool_matches(gint category, gint num)
             }
         }
     }
-    
+
     for (i = 0; i < num_pools; i++) {
         get_pool_winner(pool_size[i], c[i], yes[i], pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
         pool_done[i] = pool_finished(num, last_match, sys.system, yes[i], &pm);
@@ -885,7 +1120,7 @@ static void update_pool_matches(gint category, gint num)
             memset(&ma, 0, sizeof(ma));
             ma.category = category;
             ma.number = last_match+i+1;
-            if (pool_done[0] == FALSE || pool_done[1] == FALSE || 
+            if (pool_done[0] == FALSE || pool_done[1] == FALSE ||
                 (catdata && catdata->tie && prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS) == FALSE)) {
                 ma.blue = 0;
                 ma.white = 0;
@@ -972,7 +1207,7 @@ static void update_pool_matches(gint category, gint num)
                     ma.blue = (pm.j[c[i][1]]->deleted & HANSOKUMAKE) ? GHOST : pm.j[c[i][1]]->index;
 
                 if (pool_done[num_pools-i-1])
-                    ma.white = (pm.j[c[num_pools-i-1][2]]->deleted & HANSOKUMAKE) ? 
+                    ma.white = (pm.j[c[num_pools-i-1][2]]->deleted & HANSOKUMAKE) ?
                         GHOST : pm.j[c[num_pools-i-1][2]]->index;
             }
 
@@ -989,11 +1224,11 @@ static void update_pool_matches(gint category, gint num)
             gint m1 = (i == last_match + 5) ? last_match + 1 : last_match + 3;
             gint m2 = m1 + 1;
             struct match ma;
-                
+
             memset(&ma, 0, sizeof(ma));
             ma.category = category;
             ma.number = i;
-            
+
             if (MATCHED_POOL(m1)) {
                 if (COMP_1_PTS_WIN(pm.m[m1]) || pm.m[m1].white == GHOST)
                     ma.blue = pm.m[m1].blue;
@@ -1015,27 +1250,27 @@ static void update_pool_matches(gint category, gint num)
 
     if (!MATCHED_POOL_P(last_match+num_knockouts)) {
         struct match ma;
-                
+
         memset(&ma, 0, sizeof(ma));
         ma.category = category;
         ma.number = last_match+num_knockouts;
 
         if (MATCHED_POOL(last_match+num_knockouts-2)) {
-            if (COMP_1_PTS_WIN(pm.m[last_match+num_knockouts-2]) || 
+            if (COMP_1_PTS_WIN(pm.m[last_match+num_knockouts-2]) ||
                 pm.m[last_match+num_knockouts-2].white == GHOST)
                 ma.blue = pm.m[last_match+num_knockouts-2].blue;
             else
                 ma.blue = pm.m[last_match+num_knockouts-2].white;
         }
-        
+
         if (MATCHED_POOL(last_match+num_knockouts-1)) {
-            if (COMP_1_PTS_WIN(pm.m[last_match+num_knockouts-1]) || 
+            if (COMP_1_PTS_WIN(pm.m[last_match+num_knockouts-1]) ||
                 pm.m[last_match+num_knockouts-1].white == GHOST)
                 ma.white = pm.m[last_match+num_knockouts-1].blue;
             else
                 ma.white = pm.m[last_match+num_knockouts-1].white;
         }
-        
+
         set_match(&ma);
         db_set_match(&ma);
     }
@@ -1048,7 +1283,7 @@ static void set_repechage_16(struct match m[], gint table, gint i)
 {
     gint p;
     gint sys = FRENCH_16;
-    
+
     if (table == TABLE_SWE_ENKELT_AATERKVAL) {
 	if (!MATCHED_FRENCH(13+i))
 	    return;
@@ -1115,7 +1350,7 @@ static void set_repechage_32(struct match m[], gint table, gint i)
 	p = GET_PREV(25+i);
 	COPY_PLAYER((29+i), blue, LOSER(p));
 	set_match(&m[29+i]); db_set_match(&m[29+i]);
-        } */ 
+        } */
     else if (table == TABLE_ESP_REPESCA_SIMPLE) {
 	if (!MATCHED_FRENCH(29+i))
 	    return;
@@ -1140,7 +1375,7 @@ static void set_repechage_32(struct match m[], gint table, gint i)
 	set_match(&m[o1+8]); db_set_match(&m[o1+8]);
 	COPY_PLAYER(o2+8+1, white, LOSER(pl));
 	set_match(&m[o2+8+1]); db_set_match(&m[o2+8+1]);
-        
+
 	COPY_PLAYER(o1, blue, LOSER(pww));
 	set_match(&m[o1]); db_set_match(&m[o1]);
 	COPY_PLAYER((o2), white, LOSER(pwl));
@@ -1220,7 +1455,7 @@ static void set_repechage_64(struct match m[], gint table, gint i)
 
         COPY_AND_SET(o3, white, LOSER(pw));
         COPY_AND_SET(o4+1, white, LOSER(pl));
-        
+
         COPY_AND_SET(o1+16, white, LOSER(pww));
         COPY_AND_SET(o2+16+1, white, LOSER(pwl));
         COPY_AND_SET(o2+16+3, white, LOSER(plw));
@@ -1289,8 +1524,8 @@ static void update_french_matches(gint category, struct compsys systm)
 
     memset(m, 0, sizeof(m));
     db_read_category_matches(category, m);
-        
-    if (table == TABLE_DOUBLE_REPECHAGE || 
+
+    if (table == TABLE_DOUBLE_REPECHAGE ||
 	table == TABLE_SWE_DUBBELT_AATERKVAL ||
 	table == TABLE_SWE_ENKELT_AATERKVAL ||
         /*table == TABLE_ESP_REPESCA_DOBLE_INICIO ||*/
@@ -1346,7 +1581,7 @@ static void update_french_matches(gint category, struct compsys systm)
                 struct judoka *g = get_data(category);
 
                 if (MATCHED_FRENCH(prev_match_blue)) {
-                    if (m[i].blue && 
+                    if (m[i].blue &&
                         m[i].blue != WINNER_OR_LOSER(prev_match_blue) &&
                         (m[i].blue_points || m[i].white_points)) {
                         SHOW_MESSAGE("%s %s:%d (%d-%d) %s!", _("Match"),
@@ -1383,12 +1618,12 @@ static void update_french_matches(gint category, struct compsys systm)
 		    m[i].white_points = 10;
                 */
 	    }
-                                
+
             if (prev_match_white != 0) {
                 struct judoka *g = get_data(category);
 
                 if (MATCHED_FRENCH(prev_match_white)) {
-                    if (m[i].white && 
+                    if (m[i].white &&
                         m[i].white != WINNER_OR_LOSER(prev_match_white) &&
                         (m[i].blue_points || m[i].white_points)) {
                         SHOW_MESSAGE("%s %s:%d (%d-%d) %s!", _("Match"),
@@ -1410,7 +1645,7 @@ static void update_french_matches(gint category, struct compsys systm)
                                      i, m[i].blue_points, m[i].white_points,
                                      _("canceled"));
                     else
-                        SHOW_MESSAGE("%s %s:%d %s!", _("Match"), 
+                        SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
                                      g && g->last ? g->last : "?", i,
                                      _("changed"));
                     m[i].white = 0;
@@ -1436,17 +1671,21 @@ static void update_french_matches(gint category, struct compsys systm)
 static void update_custom_matches(gint category, struct compsys systm)
 {
     gint i;
-    struct match m[NUM_MATCHES];
+    struct match *m;
     struct custom_data *cd = get_custom_table(systm.table);
     match_bare_t *t = cd->matches;
     gint n = cd->num_matches;
+    struct custom_matches *cm = NULL;
+
 #define T(_n) t[_n-1]
 
     if (automatic_sheet_update || automatic_web_page_update)
         current_category = category;
 
-    memset(m, 0, sizeof(m));
-    db_read_category_matches(category, m);
+    cm = g_malloc(sizeof(*cm));
+    if (!cm) return;
+    fill_custom_struct(category, cm);
+    m = cm->m;
 
     for (i = 1; i <= n; i++) {
         m[i].category = category;
@@ -1461,8 +1700,8 @@ static void update_custom_matches(gint category, struct compsys systm)
             if (MATCHED_FRENCH(prevm)) {
                 gint prevnum;
 
-                for (prevnum = 0; 
-                     prevnum < 8 && T(i).c1.prev[prevnum] && MATCHED_FRENCH(prevm); 
+                for (prevnum = 0;
+                     prevnum < 8 && T(i).c1.prev[prevnum] && MATCHED_FRENCH(prevm);
                      prevnum++) {
                     gint winner = WINNER(prevm);
                     if (comp == 1) {
@@ -1477,7 +1716,7 @@ static void update_custom_matches(gint category, struct compsys systm)
 
                 if (comp == 2) prevm = -prevm; // loser is negative
 
-                if (m[i].blue && 
+                if (m[i].blue &&
                     m[i].blue != WINNER_OR_LOSER(prevm) &&
                     (m[i].blue_points || m[i].white_points)) {
                     SHOW_MESSAGE("%s %s:%d (%d-%d) %s!", _("Match"),
@@ -1500,12 +1739,34 @@ static void update_custom_matches(gint category, struct compsys systm)
                 else
                     SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
                                  g && g->last ? g->last : "?", i, _("changed"));
-                
+
                 m[i].blue = 0;
             }
 
             free_judoka(g);
         } // if (T(i).c1.type == COMP_TYPE_MATCH)
+        else if (T(i).c1.type == COMP_TYPE_ROUND_ROBIN) {
+            gint poolnum = T(i).c1.num - 1;
+            gint pos = T(i).c1.pos;
+            //g_print("1: poolnum=%d pos=%d fin=%d\n", poolnum, pos, cm->pm[poolnum].finished);
+           if (cm->pm[poolnum].finished) {
+               gint posix = cm->pm[poolnum].competitors[pos-1].position;
+               gint ix = cm->pm[poolnum].competitors[posix].index;
+               m[i].blue = ix;
+               //g_print("1: posix=%d white=%d\n", posix, ix);
+            } else
+               m[i].blue = 0;
+        } // if (T(i).c1.type == COMP_TYPE_ROUND_ROBIN)
+        else if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
+            gint pairnum = T(i).c1.num - 1;
+            gint pos = T(i).c1.pos;
+            g_print("1: pairnum=%d pos=%d fin=%d\n", pairnum, pos, cm->best_of_three[pairnum].finished);
+            if (cm->best_of_three[pairnum].finished) {
+               m[i].blue = pos == 1 ? cm->best_of_three[pairnum].winner : cm->best_of_three[pairnum].loser;
+               g_print("1: white=%d\n", m[i].blue);
+            } else
+               m[i].blue = 0;
+        } // if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
 
         if (T(i).c2.type == COMP_TYPE_MATCH) {
             struct judoka *g = get_data(category);
@@ -1515,8 +1776,8 @@ static void update_custom_matches(gint category, struct compsys systm)
             if (MATCHED_FRENCH(prevm)) {
                 gint prevnum;
 
-                for (prevnum = 0; 
-                     prevnum < 8 && T(i).c2.prev[prevnum] && MATCHED_FRENCH(prevm); 
+                for (prevnum = 0;
+                     prevnum < 8 && T(i).c2.prev[prevnum] && MATCHED_FRENCH(prevm);
                      prevnum++) {
                     gint winner = WINNER(prevm);
                     if (comp == 1) {
@@ -1531,7 +1792,7 @@ static void update_custom_matches(gint category, struct compsys systm)
 
                 if (comp == 2) prevm = -prevm; // loser is negative
 
-                if (m[i].white && 
+                if (m[i].white &&
                     m[i].white != WINNER_OR_LOSER(prevm) &&
                     (m[i].white_points || m[i].white_points)) {
                     SHOW_MESSAGE("%s %s:%d (%d-%d) %s!", _("Match"),
@@ -1554,16 +1815,41 @@ static void update_custom_matches(gint category, struct compsys systm)
                 else
                     SHOW_MESSAGE("%s %s:%d %s!", _("Match"),
                                  g && g->last ? g->last : "?", i, _("changed"));
-                
+
                 m[i].white = 0;
             }
 
             free_judoka(g);
         } // if (T(i).c1.type == COMP_TYPE_MATCH)
-        
+        else if (T(i).c2.type == COMP_TYPE_ROUND_ROBIN) {
+            gint poolnum = T(i).c2.num - 1;
+            gint pos = T(i).c2.pos;
+            //g_print("2: poolnum=%d pos=%d fin=%d\n", poolnum, pos, cm->pm[poolnum].finished);
+           if (cm->pm[poolnum].finished) {
+               gint posix = cm->pm[poolnum].competitors[pos-1].position;
+               gint ix = cm->pm[poolnum].competitors[posix].index;
+               m[i].white = ix;
+               //g_print("2: posix=%d blue=%d\n", posix, ix);
+            } else
+               m[i].white = 0;
+        } // if (T(i).c1.type == COMP_TYPE_ROUND_ROBIN)
+        else if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
+            gint pairnum = T(i).c2.num - 1;
+            gint pos = T(i).c2.pos;
+            g_print("2: pairnum=%d pos=%d fin=%d\n", pairnum, pos, cm->best_of_three[pairnum].finished);
+            if (cm->best_of_three[pairnum].finished) {
+               m[i].white = pos == 1 ? cm->best_of_three[pairnum].winner : cm->best_of_three[pairnum].loser;
+               g_print("2: blue=%d\n", m[i].white);
+            } else
+               m[i].white = 0;
+        } // if (T(i).c1.type == COMP_TYPE_BEST_OF_3) {
+
         set_match(&m[i]);
         db_set_match(&m[i]);
-    }
+    } // for through matches
+
+    empty_custom_struct(cm);
+    g_free(cm);
 }
 
 gint find_match_time(const gchar *cat)
@@ -1666,6 +1952,77 @@ gchar *get_match_number_text(gint category, gint number)
     return NULL;
 }
 
+#if 0
+static struct message info_cache[NUM_TATAMIS][INFO_MATCH_NUM+1];
+static gboolean info_cache_changed[NUM_TATAMIS][INFO_MATCH_NUM+1];
+extern gint send_msg(gint fd, struct message *msg);
+extern void send_info_packet(struct message *msg);
+
+gboolean send_info_bg(gpointer user_data)
+{
+    static gint t = 0;
+    gint j;
+
+    for (j = 0; j <= INFO_MATCH_NUM; j++) {
+	if (info_cache_changed[t][j]) {
+	    send_info_packet(&info_cache[t][j]);
+	    info_cache_changed[t][j] = FALSE;
+	    return TRUE;
+	}
+    }
+
+    if (++t >= NUM_TATAMIS)
+	t = 0;
+
+    return TRUE;
+}
+
+void send_packet_cache(struct message *msg)
+{
+    gint i = msg->u.match_info.tatami - 1;
+    gint j = msg->u.match_info.position;
+
+    info_cache[i][j] = *msg;
+    info_cache_changed[i][j] = TRUE;
+}
+#endif
+
+void fill_match_info(struct message *msg, gint tatami, gint pos, struct match *m)
+{
+    msg->u.match_info_11.info[pos].tatami   = tatami;
+    msg->u.match_info_11.info[pos].position = pos;
+    msg->u.match_info_11.info[pos].category = m->category;
+    msg->u.match_info_11.info[pos].number   = m->number;
+    msg->u.match_info_11.info[pos].blue     = m->blue;
+    msg->u.match_info_11.info[pos].white    = m->white;
+
+    struct category_data *cat = avl_get_category(m->category);
+    if (cat) {
+        msg->u.match_info_11.info[pos].flags = get_match_number_flag(m->category, m->number);
+
+        time_t last_time1 = avl_get_competitor_last_match_time(m->blue);
+        time_t last_time2 = avl_get_competitor_last_match_time(m->white);
+        time_t last_time = last_time1 > last_time2 ? last_time1 : last_time2;
+        gint rest_time = cat->rest_time;
+        time_t now = time(NULL);
+
+        if (now < last_time + rest_time) {
+            msg->u.match_info_11.info[pos].rest_time = last_time + rest_time - now;
+            if (last_time1 > last_time2)
+                msg->u.match_info_11.info[pos].flags |= MATCH_FLAG_BLUE_REST | MATCH_FLAG_BLUE_DELAYED;
+            else
+                msg->u.match_info_11.info[pos].flags |= MATCH_FLAG_WHITE_REST | MATCH_FLAG_WHITE_DELAYED;
+        } else
+            msg->u.match_info_11.info[pos].rest_time = 0;
+    }
+    msg->u.match_info_11.info[pos].flags |= MATCH_FLAG_JUDOGI_MASK & m->deleted;
+
+    if (avl_get_competitor_status(m->blue) & JUDOGI_OK)
+        msg->u.match_info_11.info[pos].flags |= MATCH_FLAG_JUDOGI1_OK;
+    if (avl_get_competitor_status(m->white) & JUDOGI_OK)
+        msg->u.match_info_11.info[pos].flags |= MATCH_FLAG_JUDOGI2_OK;
+}
+
 void send_match(gint tatami, gint pos, struct match *m)
 {
     struct message msg;
@@ -1688,7 +2045,7 @@ void send_match(gint tatami, gint pos, struct match *m)
         time_t last_time = last_time1 > last_time2 ? last_time1 : last_time2;
         gint rest_time = cat->rest_time;
         time_t now = time(NULL);
-			
+
         if (now < last_time + rest_time) {
             msg.u.match_info.rest_time = last_time + rest_time - now;
             if (last_time1 > last_time2)
@@ -1721,20 +2078,20 @@ void send_matches(gint tatami)
     draw_gategory_graph();
 
     memset(&msg, 0, sizeof(msg));
-    msg.type = MSG_MATCH_INFO;
-    msg.u.match_info.tatami   = tatami;
-    msg.u.match_info.position = 0;
-    msg.u.match_info.category = next_matches_info[t][0].won_catnum;
-    msg.u.match_info.number   = next_matches_info[t][0].won_matchnum;
-    msg.u.match_info.blue     = next_matches_info[t][0].won_ix;
-    msg.u.match_info.white    = 0;
-    msg.u.match_info.flags    = get_match_number_flag(next_matches_info[t][0].won_catnum,
+    msg.type = MSG_11_MATCH_INFO;
+    msg.u.match_info_11.info[0].tatami   = tatami;
+    msg.u.match_info_11.info[0].position = 0;
+    msg.u.match_info_11.info[0].category = next_matches_info[t][0].won_catnum;
+    msg.u.match_info_11.info[0].number   = next_matches_info[t][0].won_matchnum;
+    msg.u.match_info_11.info[0].blue     = next_matches_info[t][0].won_ix;
+    msg.u.match_info_11.info[0].white    = 0;
+    msg.u.match_info_11.info[0].flags    = get_match_number_flag(next_matches_info[t][0].won_catnum,
                                                       next_matches_info[t][0].won_matchnum);
-    send_packet(&msg);
-
     for (k = 0; k < INFO_MATCH_NUM; k++) {
-        send_match(tatami, k+1, &(m[k]));
+        fill_match_info(&msg, tatami, k+1, &(m[k]));
     }
+
+    send_packet(&msg);
 }
 
 void update_matches_small(guint category, struct compsys sys_or_tatami)
@@ -1821,35 +2178,35 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
             if (nm[0].category & MATCH_CATEGORY_SUB_MASK) {
                 gint ix = find_age_index(g->last);
                 if (ix >= 0 && nm[0].number > 0 && nm[0].number < NUM_CAT_DEF_WEIGHTS) {
-                    snprintf(msg.u.next_match.cat_1, 
+                    snprintf(msg.u.next_match.cat_1,
                              sizeof(msg.u.next_match.cat_1),
                              "%s", category_definitions[ix].weights[nm[0].number-1].weighttext);
                 }
             } else
-                snprintf(msg.u.next_match.cat_1, 
+                snprintf(msg.u.next_match.cat_1,
                          sizeof(msg.u.next_match.cat_1),
                          "%s", g->last);
 
-            snprintf(msg.u.next_match.blue_1, 
+            snprintf(msg.u.next_match.blue_1,
                      sizeof(msg.u.next_match.blue_1),
                      "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club);
             snprintf(msg.u.next_match.white_1, sizeof(msg.u.next_match.white_1),
                      "%s\t%s\t%s\t%s", j2->last, j2->first, j2->country, j2->club);
 
-            snprintf(buf, sizeof(buf), "%s: %s: %s %s, %s - %s %s, %s", _("Match"), 
-                     g->last, 
+            snprintf(buf, sizeof(buf), "%s: %s: %s %s, %s - %s %s, %s", _("Match"),
+                     g->last,
                      j1->first, j1->last, get_club_text(j1, 0),
                      j2->first, j2->last, get_club_text(j2, 0));
 
             if (tatami > 0 && tatami <= NUM_TATAMIS) {
-                gtk_label_set_text(GTK_LABEL(next_match[tatami-1][0]), buf); 
-                COPY_MATCH_INFO(category, tatami, 0, g->last); 
-                COPY_MATCH_INFO(blue_first, tatami, 0, j1->first); 
-                COPY_MATCH_INFO(blue_last, tatami, 0, j1->last); 
-                COPY_MATCH_INFO(blue_club, tatami, 0, get_club_text(j1, 0)); 
-                COPY_MATCH_INFO(white_first, tatami, 0, j2->first); 
-                COPY_MATCH_INFO(white_last, tatami, 0, j2->last); 
-                COPY_MATCH_INFO(white_club, tatami, 0, get_club_text(j2, 0)); 
+                gtk_label_set_text(GTK_LABEL(next_match[tatami-1][0]), buf);
+                COPY_MATCH_INFO(category, tatami, 0, g->last);
+                COPY_MATCH_INFO(blue_first, tatami, 0, j1->first);
+                COPY_MATCH_INFO(blue_last, tatami, 0, j1->last);
+                COPY_MATCH_INFO(blue_club, tatami, 0, get_club_text(j1, 0));
+                COPY_MATCH_INFO(white_first, tatami, 0, j2->first);
+                COPY_MATCH_INFO(white_last, tatami, 0, j2->last);
+                COPY_MATCH_INFO(white_club, tatami, 0, get_club_text(j2, 0));
                 next_matches_info[tatami-1][0].catnum = nm[0].category;
                 next_matches_info[tatami-1][0].matchnum = nm[0].number;
                 next_matches_info[tatami-1][0].blue = nm[0].blue;
@@ -1858,7 +2215,7 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
         } else if (g) {
             msg.u.next_match.tatami = tatami;
             gtk_label_set_text(GTK_LABEL(next_match[tatami-1][0]), _("Match:"));
-            snprintf(msg.u.next_match.cat_1, 
+            snprintf(msg.u.next_match.cat_1,
                      sizeof(msg.u.next_match.cat_1),
                      "%s", g->last);
             snprintf(msg.u.next_match.blue_1, sizeof(msg.u.next_match.blue_1), "\t\t\t");
@@ -1879,15 +2236,15 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
         if (tatami > 0 && tatami <= NUM_TATAMIS) {
             msg.u.next_match.tatami = tatami;
             gtk_label_set_text(GTK_LABEL(next_match[tatami-1][0]), _("Match:"));
-            NULL_MATCH_INFO(category, tatami, 0); 
-            NULL_MATCH_INFO(blue_first, tatami, 0); 
-            NULL_MATCH_INFO(blue_last, tatami, 0); 
-            NULL_MATCH_INFO(blue_club, tatami, 0); 
-            NULL_MATCH_INFO(white_first, tatami, 0); 
-            NULL_MATCH_INFO(white_last, tatami, 0); 
-            NULL_MATCH_INFO(white_club, tatami, 0); 
+            NULL_MATCH_INFO(category, tatami, 0);
+            NULL_MATCH_INFO(blue_first, tatami, 0);
+            NULL_MATCH_INFO(blue_last, tatami, 0);
+            NULL_MATCH_INFO(blue_club, tatami, 0);
+            NULL_MATCH_INFO(white_first, tatami, 0);
+            NULL_MATCH_INFO(white_last, tatami, 0);
+            NULL_MATCH_INFO(white_club, tatami, 0);
             next_matches_info[tatami-1][0].catnum = 0;
-        } 
+        }
     }
 
     if (nm[1].number < 1000) {
@@ -1903,7 +2260,7 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
             if (nm[1].category & MATCH_CATEGORY_SUB_MASK) {
                 gint ix = find_age_index(g->last);
                 if (ix >= 0 && nm[1].number > 0 && nm[1].number < NUM_CAT_DEF_WEIGHTS) {
-                    snprintf(msg.u.next_match.cat_2, 
+                    snprintf(msg.u.next_match.cat_2,
                              sizeof(msg.u.next_match.cat_2),
                              "%s", category_definitions[ix].weights[nm[1].number-1].weighttext);
                 }
@@ -1912,7 +2269,7 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
                          "%s", g->last);
             if (j1)
                 snprintf(msg.u.next_match.blue_2, sizeof(msg.u.next_match.blue_2),
-                         "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club); 
+                         "%s\t%s\t%s\t%s", j1->last, j1->first, j1->country, j1->club);
             else
                 snprintf(msg.u.next_match.blue_2, sizeof(msg.u.next_match.blue_2), "?");
 
@@ -1923,22 +2280,22 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
                 snprintf(msg.u.next_match.white_2, sizeof(msg.u.next_match.white_2), "?");
 
             if (j1 && j2)
-                snprintf(buf, sizeof(buf), "%s: %s: %s %s, %s - %s %s, %s", _("Preparing"), 
-                         g->last, 
-                         j1->first, j1->last, get_club_text(j1, 0), 
+                snprintf(buf, sizeof(buf), "%s: %s: %s %s, %s - %s %s, %s", _("Preparing"),
+                         g->last,
+                         j1->first, j1->last, get_club_text(j1, 0),
                          j2->first, j2->last, get_club_text(j2, 0));
             else
-                snprintf(buf, sizeof(buf), "%s: %s: ? - ?", _("Preparing"), g->last); 
+                snprintf(buf, sizeof(buf), "%s: %s: ? - ?", _("Preparing"), g->last);
 
             if (tatami > 0 && tatami <= NUM_TATAMIS) {
                 gtk_label_set_text(GTK_LABEL(next_match[tatami-1][1]), buf);
-                COPY_MATCH_INFO(category, tatami, 1, g->last); 
-                COPY_MATCH_INFO(blue_first, tatami, 1, j1 ? j1->first : "?"); 
-                COPY_MATCH_INFO(blue_last, tatami, 1, j1 ? j1->last : "?"); 
-                COPY_MATCH_INFO(blue_club, tatami, 1, j1 ? get_club_text(j1, 0) : "?"); 
-                COPY_MATCH_INFO(white_first, tatami, 1, j2 ? j2->first : "?"); 
-                COPY_MATCH_INFO(white_last, tatami, 1, j2 ? j2->last : "?"); 
-                COPY_MATCH_INFO(white_club, tatami, 1, j2 ? get_club_text(j2, 0) : "?"); 
+                COPY_MATCH_INFO(category, tatami, 1, g->last);
+                COPY_MATCH_INFO(blue_first, tatami, 1, j1 ? j1->first : "?");
+                COPY_MATCH_INFO(blue_last, tatami, 1, j1 ? j1->last : "?");
+                COPY_MATCH_INFO(blue_club, tatami, 1, j1 ? get_club_text(j1, 0) : "?");
+                COPY_MATCH_INFO(white_first, tatami, 1, j2 ? j2->first : "?");
+                COPY_MATCH_INFO(white_last, tatami, 1, j2 ? j2->last : "?");
+                COPY_MATCH_INFO(white_club, tatami, 1, j2 ? get_club_text(j2, 0) : "?");
                 next_matches_info[tatami-1][1].catnum = nm[1].category;
                 next_matches_info[tatami-1][1].matchnum = nm[1].number;
                 next_matches_info[tatami-1][1].blue = nm[1].blue;
@@ -1958,26 +2315,26 @@ void send_next_matches(gint category, gint tatami, struct match *nm)
         }
 
         if (tatami > 0 && tatami <= NUM_TATAMIS) {
-            gtk_label_set_text(GTK_LABEL(next_match[tatami-1][1]), 
+            gtk_label_set_text(GTK_LABEL(next_match[tatami-1][1]),
                                _("Preparing:"));
-            NULL_MATCH_INFO(category, tatami, 1); 
-            NULL_MATCH_INFO(blue_first, tatami, 1); 
-            NULL_MATCH_INFO(blue_last, tatami, 1); 
-            NULL_MATCH_INFO(blue_club, tatami, 1); 
-            NULL_MATCH_INFO(white_first, tatami, 1); 
-            NULL_MATCH_INFO(white_last, tatami, 1); 
-            NULL_MATCH_INFO(white_club, tatami, 1); 
+            NULL_MATCH_INFO(category, tatami, 1);
+            NULL_MATCH_INFO(blue_first, tatami, 1);
+            NULL_MATCH_INFO(blue_last, tatami, 1);
+            NULL_MATCH_INFO(blue_club, tatami, 1);
+            NULL_MATCH_INFO(white_first, tatami, 1);
+            NULL_MATCH_INFO(white_last, tatami, 1);
+            NULL_MATCH_INFO(white_club, tatami, 1);
             next_matches_info[tatami-1][1].catnum = 0;
         }
     }
-	
+
     send_packet(&msg);
 }
 
 void update_matches(guint category, struct compsys sys, gint tatami)
 {
     struct match *nm;
-
+    PROF_START;
     if (category) {
         struct category_data *catdata = avl_get_category(category);
         if (catdata && (catdata->deleted & TEAM_EVENT)) {
@@ -2010,13 +2367,14 @@ void update_matches(guint category, struct compsys sys, gint tatami)
             break;
         }
     }
-
+    PROF;
 #if (GTKVER == 3)
     G_LOCK(next_match_mutex);
 #else
     g_static_mutex_lock(&next_match_mutex);
 #endif
     nm = db_next_match(tatami ? 0 : category, tatami);
+    PROF;
     if (nm)
         send_next_matches(category, tatami, nm);
 #if (GTKVER == 3)
@@ -2027,10 +2385,15 @@ void update_matches(guint category, struct compsys sys, gint tatami)
     if (category)
         update_category_status_info(category);
 
+    PROF;
     refresh_sheet_display(FALSE);
+    PROF;
     refresh_window();
+    PROF;
 
     send_matches(tatami);
+    PROF;
+    PROF_END;
 }
 
 static void log_match(gint category, gint number, gint bluepts, gint whitepts)
@@ -2046,7 +2409,7 @@ static void log_match(gint category, gint number, gint bluepts, gint whitepts)
                                  category, number);
     gint numrows = db_get_table(cmd);
     g_free(cmd);
-        
+
     if (numrows <= 0)
         goto error;
 
@@ -2071,11 +2434,11 @@ static void log_match(gint category, gint number, gint bluepts, gint whitepts)
                   _("points"), bluepts, whitepts);
 
     if (tatami >= 1 && tatami <= NUM_TATAMIS) {
-        g_strlcpy(next_matches_info[tatami-1][0].won_last, 
+        g_strlcpy(next_matches_info[tatami-1][0].won_last,
                   winner->last, sizeof(next_matches_info[0][0].won_last));
-        g_strlcpy(next_matches_info[tatami-1][0].won_first, 
+        g_strlcpy(next_matches_info[tatami-1][0].won_first,
                   winner->first, sizeof(next_matches_info[0][0].won_first));
-        g_strlcpy(next_matches_info[tatami-1][0].won_cat, 
+        g_strlcpy(next_matches_info[tatami-1][0].won_cat,
                   cat->last, sizeof(next_matches_info[0][0].won_cat));
         next_matches_info[tatami-1][0].won_catnum = category;
         next_matches_info[tatami-1][0].won_matchnum = number;
@@ -2102,18 +2465,18 @@ void set_points(GtkWidget *menuitem, gpointer userdata)
     gboolean hikiwake = points == 11;
 
     if (hikiwake) {
-        db_set_points(category, number, 0, 1, 1, 0, 0, 0); 
+        db_set_points(category, number, 0, 1, 1, 0, 0, 0);
     } else {
-        db_set_points(category, number, 0, 
+        db_set_points(category, number, 0,
                       is_blue ? points : 0,
                       is_blue ? 0 : points, 0, 0, 0);
     }
 
     db_read_match(category, number);
-        
+
     if (hikiwake)
         log_match(category, number, 1, 1);
-    else 
+    else
         log_match(category, number, is_blue ? points : 0, is_blue ? 0 : points);
 
     update_matches(category, sys, db_find_match_tatami(category, number));
@@ -2138,19 +2501,19 @@ void set_points_from_net(struct message *msg)
 {
     struct compsys sys = db_get_system(msg->u.set_points.category);
 
-    db_set_points(msg->u.set_points.category, 
-                  msg->u.set_points.number, 
-                  0, 
+    db_set_points(msg->u.set_points.category,
+                  msg->u.set_points.number,
+                  0,
                   msg->u.set_points.blue_points,
                   msg->u.set_points.white_points,
                   0, 0, 0);
 
     db_read_match(msg->u.set_points.category, msg->u.set_points.number);
-        
-    log_match(msg->u.set_points.category, msg->u.set_points.number, 
+
+    log_match(msg->u.set_points.category, msg->u.set_points.number,
               msg->u.set_points.blue_points, msg->u.set_points.white_points);
 
-    update_matches(msg->u.set_points.category, sys, 
+    update_matches(msg->u.set_points.category, sys,
                    db_find_match_tatami(msg->u.set_points.category, msg->u.set_points.number));
 
     db_force_match_number(msg->u.set_points.category);
@@ -2207,7 +2570,7 @@ void set_points_and_score(struct message *msg)
         else if ((winscore & 0xf00) > (losescore & 0xf00)) points = 5;
         else if ((winscore & 0xf0) > (losescore & 0xf0)) points = 3;
         else points = 2; //XXXXXXXXXXXXXXX This should never happen
-                
+
         // After golden score only one point to winner if hantei bits set (Slovakia).
         if (prop_get_int_val(PROP_GS_WIN_GIVES_1_POINT) && (msg->u.result.legend & 0x100))
             points = 1;
@@ -2232,21 +2595,20 @@ void set_points_and_score(struct message *msg)
             white_pts = 1;
     }
 
-
     /*** Timer cannot disqualify competitors from the tournament
     if (msg->u.result.blue_hansokumake || msg->u.result.white_hansokumake) {
-        db_set_match_hansokumake(category, number, 
-                                 msg->u.result.blue_hansokumake, 
+        db_set_match_hansokumake(category, number,
+                                 msg->u.result.blue_hansokumake,
                                  msg->u.result.white_hansokumake);
     }
     ***/
 
     db_set_points(category, number, minutes,
-                  blue_pts, white_pts, msg->u.result.blue_score, msg->u.result.white_score, 
+                  blue_pts, white_pts, msg->u.result.blue_score, msg->u.result.white_score,
                   msg->u.result.legend); // bits 0-7 are legend, bit #8 = golden score
 
     db_read_match(category, number);
-        
+
     log_match(category, number, blue_pts, white_pts);
 
     update_matches(category, sys, db_find_match_tatami(category, number));
@@ -2289,8 +2651,8 @@ static void collapse_all(GtkWidget *widget, gpointer userdata)
     gtk_tree_view_collapse_all(GTK_TREE_VIEW(treeview));
 }
 
-static void view_match_popup_menu(GtkWidget *treeview, 
-                                  GdkEventButton *event, 
+static void view_match_popup_menu(GtkWidget *treeview,
+                                  GdkEventButton *event,
                                   guint category,
                                   guint number,
                                   gboolean visible)
@@ -2303,7 +2665,7 @@ static void view_match_popup_menu(GtkWidget *treeview,
     g_signal_connect(menuitem, "activate",
                      (GCallback) expand_all, treeview);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-	
+
     menuitem = gtk_menu_item_new_with_label(_("Collapse All"));
     g_signal_connect(menuitem, "activate",
                      (GCallback) collapse_all, treeview);
@@ -2330,7 +2692,7 @@ static void set_comment(GtkWidget *menuitem, gpointer userdata)
     sys = db_get_system(category);
     //gint tatami = db_get_tatami(category);
 
-    db_set_comment(category, number, cmd);        
+    db_set_comment(category, number, cmd);
     //db_read_matches(); too heavy and unnecessary
     update_matches(category, sys, db_find_match_tatami(category, number));
     //matches_refresh_1(tatami);
@@ -2353,15 +2715,15 @@ void set_comment_from_net(struct message *msg)
     sys = db_get_system(msg->u.set_comment.category);
     //gint tatami = db_get_tatami(category);
 
-    db_set_comment(msg->u.set_comment.category, msg->u.set_comment.number, msg->u.set_comment.cmd);        
+    db_set_comment(msg->u.set_comment.category, msg->u.set_comment.number, msg->u.set_comment.cmd);
     //db_read_matches(); too heavy operation
-    update_matches(msg->u.set_comment.category, sys, 
+    update_matches(msg->u.set_comment.category, sys,
                    db_find_match_tatami(msg->u.set_comment.category, msg->u.set_comment.number));
     //matches_refresh_1(tatami);
 }
 
-static void view_next_match_popup_menu(GtkWidget *treeview, 
-                                       GdkEventButton *event, 
+static void view_next_match_popup_menu(GtkWidget *treeview,
+                                       GdkEventButton *event,
                                        guint category,
                                        guint number,
                                        gboolean visible)
@@ -2426,8 +2788,8 @@ static void change_competitor(gint index, gpointer data)
     send_matches(tatami);
 }
 
-static void view_match_competitor_popup_menu(GtkWidget *treeview, 
-                                         GdkEventButton *event, 
+static void view_match_competitor_popup_menu(GtkWidget *treeview,
+                                         GdkEventButton *event,
                                          guint category,
                                          guint number,
                                          gboolean is_blue)
@@ -2439,8 +2801,8 @@ static void view_match_competitor_popup_menu(GtkWidget *treeview,
     search_competitor_args(NULL, change_competitor, &popupdata);
 }
 
-static void view_match_points_popup_menu(GtkWidget *treeview, 
-                                         GdkEventButton *event, 
+static void view_match_points_popup_menu(GtkWidget *treeview,
+                                         GdkEventButton *event,
                                          guint category,
                                          guint number,
                                          gboolean is_blue)
@@ -2498,7 +2860,7 @@ struct score {
     guint category, number;
     gboolean is_blue;
     GtkWidget *ippon, *wazaari, *yuko, *shido;
-};    
+};
 
 static void set_score(GtkWidget *widget,
                       GdkEvent *event,
@@ -2507,11 +2869,11 @@ static void set_score(GtkWidget *widget,
     struct score *s = data;
 
     if (ptr_to_gint(event) == GTK_RESPONSE_OK) {
-        db_set_score(s->category, s->number, 
-                     (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->ippon))<<16) | 
-                     (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->wazaari))<<12) | 
-                     (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->yuko))<<8) | 
-                     gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->shido)), 
+        db_set_score(s->category, s->number,
+                     (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->ippon))<<16) |
+                     (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->wazaari))<<12) |
+                     (gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->yuko))<<8) |
+                     gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->shido)),
                      s->is_blue);
 
         db_read_match(s->category, s->number);
@@ -2524,8 +2886,8 @@ static void set_score(GtkWidget *widget,
     gtk_widget_destroy(widget);
 }
 
-static void view_match_score_popup_menu(GtkWidget *treeview, 
-                                        GdkEventButton *event, 
+static void view_match_score_popup_menu(GtkWidget *treeview,
+                                        GdkEventButton *event,
                                         guint category,
                                         guint number,
                                         guint score,
@@ -2581,7 +2943,7 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->shido), score&15);
 
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        table, FALSE, FALSE, 0);
 #else
     gtk_box_pack_start_defaults(GTK_BOX(GTK_DIALOG(dialog)->vbox), table);
@@ -2592,8 +2954,8 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
 }
 
 
-static gboolean view_onButtonPressed(GtkWidget *treeview, 
-                                     GdkEventButton *event, 
+static gboolean view_onButtonPressed(GtkWidget *treeview,
+                                     GdkEventButton *event,
                                      gpointer userdata)
 {
     /* single click with the right mouse button? */
@@ -2608,7 +2970,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
         guint category1, number1;
 
         if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(treeview),
-                                          (gint) event->x, 
+                                          (gint) event->x,
                                           (gint) event->y,
                                           &path, &col, NULL, NULL)) {
             model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
@@ -2630,7 +2992,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
 
             if (category == 0) {
                 if (event->button == 3) {
-                    view_match_popup_menu(treeview, event, 
+                    view_match_popup_menu(treeview, event,
                                           category,
                                           number,
                                           visible);
@@ -2649,55 +3011,55 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
             white_col = gtk_tree_view_get_column (GTK_TREE_VIEW(treeview), COL_MATCH_WHITE);
 
             if (!visible && event->button == 3) {
-                view_match_popup_menu(treeview, event, 
+                view_match_popup_menu(treeview, event,
                                       category1,
                                       number1,
                                       visible);
                 handled = TRUE;
-            } else if (visible && event->button == 3 && col == blue_col && (number & MATCH_CATEGORY_SUB_MASK)) { 
-                view_match_competitor_popup_menu(treeview, event, 
+            } else if (visible && event->button == 3 && col == blue_col && (number & MATCH_CATEGORY_SUB_MASK)) {
+                view_match_competitor_popup_menu(treeview, event,
                                                  category1,
                                                  number1,
                                                  TRUE);
                 handled = TRUE;
-            } else if (visible && event->button == 3 && col == white_col && (number & MATCH_CATEGORY_SUB_MASK)) { 
-                view_match_competitor_popup_menu(treeview, event, 
+            } else if (visible && event->button == 3 && col == white_col && (number & MATCH_CATEGORY_SUB_MASK)) {
+                view_match_competitor_popup_menu(treeview, event,
                                                  category1,
                                                  number1,
                                                  FALSE);
                 handled = TRUE;
-            } else if (visible && event->button == 3 && col == blue_pts_col 
+            } else if (visible && event->button == 3 && col == blue_pts_col
                        /*&&
                          b != GHOST && w != GHOST*/) {
-                view_match_points_popup_menu(treeview, event, 
+                view_match_points_popup_menu(treeview, event,
                                              category1,
                                              number1,
                                              TRUE);
                 handled = TRUE;
-            } else if (visible && event->button == 3 && col == white_pts_col 
+            } else if (visible && event->button == 3 && col == white_pts_col
                        /*&&
                          b != GHOST && w != GHOST*/) {
-                view_match_points_popup_menu(treeview, event, 
+                view_match_points_popup_menu(treeview, event,
                                              category1,
                                              number1,
                                              FALSE);
                 handled = TRUE;
             } else if (visible && event->button == 3 && col == blue_score_col) {
-                view_match_score_popup_menu(treeview, event, 
+                view_match_score_popup_menu(treeview, event,
                                             category1,
                                             number1,
                                             blue_score,
                                             TRUE);
                 handled = TRUE;
             } else if (visible && event->button == 3 && col == white_score_col) {
-                view_match_score_popup_menu(treeview, event, 
+                view_match_score_popup_menu(treeview, event,
                                             category1,
                                             number1,
                                             white_score,
                                             FALSE);
                 handled = TRUE;
             } else if (visible && event->button == 3 && b != GHOST && w != GHOST) {
-                view_next_match_popup_menu(treeview, event, 
+                view_next_match_popup_menu(treeview, event,
                                            category1,
                                            number1,
                                            visible);
@@ -2728,7 +3090,7 @@ static void view_onRowActivated (GtkTreeView        *treeview,
 
         if (cat < 10000)
             return;
-		
+
         category_window(cat);
     }
 }
@@ -2777,8 +3139,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_GROUP,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            group_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            group_cell_data_func,
                                             (gpointer)COL_MATCH_GROUP, NULL);
 
     /* --- Column category --- */
@@ -2795,11 +3157,11 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_CAT,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            category_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            category_cell_data_func,
                                             (gpointer)COL_MATCH_CAT, NULL);
     gtk_tree_view_column_set_sort_column_id(GTK_TREE_VIEW_COLUMN(col), COL_MATCH_CAT);
- 
+
     /* --- Column number --- */
 
     renderer = gtk_cell_renderer_text_new();
@@ -2812,8 +3174,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_VIS,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            number_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            number_cell_data_func,
                                             NULL, NULL);
 
     /* --- Column blue --- */
@@ -2828,8 +3190,8 @@ static GtkWidget *create_view_and_model(void)
                                                                COL_MATCH_VIS,*/
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            name_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            name_cell_data_func,
                                             (gpointer)COL_MATCH_BLUE, NULL);
 
     /* --- Column blue score --- */
@@ -2845,8 +3207,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_VIS,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            score_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            score_cell_data_func,
                                             (gpointer)COL_MATCH_BLUE_SCORE, NULL);
 
     /* --- Column blue points --- */
@@ -2888,8 +3250,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_VIS,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            score_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            score_cell_data_func,
                                             (gpointer)COL_MATCH_WHITE_SCORE, NULL);
 
     /* --- Column white --- */
@@ -2904,8 +3266,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_VIS,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            name_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            name_cell_data_func,
                                             (gpointer)COL_MATCH_WHITE, NULL);
 
     /* --- Column time --- */
@@ -2920,8 +3282,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_VIS,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            time_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            time_cell_data_func,
                                             (gpointer)COL_MATCH_TIME, NULL);
 
     /* --- Column comment --- */
@@ -2936,8 +3298,8 @@ static GtkWidget *create_view_and_model(void)
                                                              COL_MATCH_VIS,
                                                              NULL);
     col = gtk_tree_view_get_column (GTK_TREE_VIEW (view), col_offset - 1);
-    gtk_tree_view_column_set_cell_data_func(col, renderer, 
-                                            comment_cell_data_func, 
+    gtk_tree_view_column_set_cell_data_func(col, renderer,
+                                            comment_cell_data_func,
                                             (gpointer)COL_MATCH_COMMENT, NULL);
 
     /*****/
@@ -2946,7 +3308,7 @@ static GtkWidget *create_view_and_model(void)
 
     gtk_tree_view_set_model(GTK_TREE_VIEW(view), model);
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
-				    
+
     g_object_unref(model); /* destroy model automatically with view */
 
     g_signal_connect(view, "row-activated", (GCallback) view_onRowActivated, NULL);
@@ -3062,7 +3424,7 @@ void set_match_pages(GtkWidget *notebook)
                 update_french_matches(catdata->index, sys);
                 break;
             }
-            
+
             catdata = catdata->next;
         }
 
@@ -3097,7 +3459,7 @@ static gboolean traverse_rows(GtkTreeModel *model,
                        COL_MATCH_CAT,    &category,
                        COL_MATCH_NUMBER, &number,
                        -1);
-    if (id->category == category && 
+    if (id->category == category &&
         id->number == number &&
         (id->group == group || id->group == 0)) {
         iter_found = TRUE;
@@ -3107,10 +3469,10 @@ static gboolean traverse_rows(GtkTreeModel *model,
     return FALSE;
 }
 
-static gboolean find_match_iter(GtkTreeModel *model, 
-                                GtkTreeIter *iter, 
+static gboolean find_match_iter(GtkTreeModel *model,
+                                GtkTreeIter *iter,
                                 gint group,
-                                gint category, 
+                                gint category,
                                 gint number)
 {
     struct matchid id;
@@ -3128,7 +3490,7 @@ static gboolean find_match_iter(GtkTreeModel *model,
 }
 
 static gboolean find_group_iter(GtkTreeModel *model,
-                                GtkTreeIter *iter, 
+                                GtkTreeIter *iter,
                                 gint group)
 {
     gboolean ok;
@@ -3165,7 +3527,7 @@ void set_match(struct match *m)
 
     set_competitor_position_drawn(m->blue);
     set_competitor_position_drawn(m->white);
-    
+
 #if (GTKVER == 3)
     G_LOCK(set_match_mutex);
 #else
@@ -3199,7 +3561,7 @@ void set_match(struct match *m)
         //assert(0);
         return; /* error */
     }
-        
+
     /* Match found. Look for tatami number. */
     gtk_tree_model_get(current_model, &cat,
                        COL_BELT, &tatami,
@@ -3209,10 +3571,10 @@ void set_match(struct match *m)
     for (i = 0; i < NUM_TATAMIS; i++) {
         model = gtk_tree_view_get_model(GTK_TREE_VIEW(match_view[i]));
 
-        if (find_match_iter(model, 
+        if (find_match_iter(model,
                             &iter,
                             0,
-                            m->category, 
+                            m->category,
                             m->number)) {
             guint old_group;
 
@@ -3274,7 +3636,7 @@ void set_match(struct match *m)
             ok = gtk_tree_model_iter_next(model, &gi);
         }
         if (iter_set == FALSE)
-            gtk_tree_store_append((GtkTreeStore *)model, 
+            gtk_tree_store_append((GtkTreeStore *)model,
                                   &grp_iter, NULL);
 
         gtk_tree_store_set((GtkTreeStore *)model, &grp_iter,
@@ -3314,7 +3676,7 @@ void set_match(struct match *m)
             ok = gtk_tree_model_iter_next(model, &ic);
         }
         if (iter_set == FALSE)
-            gtk_tree_store_append((GtkTreeStore *)model, 
+            gtk_tree_store_append((GtkTreeStore *)model,
                                   &cat, &grp_iter);
 
         gtk_tree_store_set((GtkTreeStore *)model, &cat,
@@ -3351,7 +3713,7 @@ void set_match(struct match *m)
         ok = gtk_tree_model_iter_next(model, &tmp_iter);
     }
     if (iter_set == FALSE)
-        gtk_tree_store_append((GtkTreeStore *)model, 
+        gtk_tree_store_append((GtkTreeStore *)model,
                               &iter, &cat);
 update:
     gtk_tree_store_set((GtkTreeStore *)model, &iter,
@@ -3403,15 +3765,15 @@ static gint remove_category_from_matches(gint category)
                         gtk_tree_store_remove(GTK_TREE_STORE(model), &grp_iter);
                     return i+1; /* return tatami number */
                 }
-					
+
                 ok_cat = gtk_tree_model_iter_next(model, &cat_iter);
             }
 
             ok_grp = gtk_tree_model_iter_next(model, &grp_iter);
         }
-		
+
     }
-	
+
     //g_print("Error: %s %d (cannot remove %d)\n", __FUNCTION__, __LINE__, category);
     return 0;
 }
@@ -3438,7 +3800,7 @@ void category_refresh(gint category)
         g_print("Error: %s %d (cat %d)\n", __FUNCTION__, __LINE__, category);
         return; /* error */
     }
-        
+
     /* Match found. Look for tatami number. */
     gtk_tree_model_get(current_model, &cat_iter,
                        COL_BELT, &tatami,
@@ -3470,6 +3832,9 @@ void category_refresh(gint category)
                    }
         *************/
     }
+
+    draw_gategory_graph();
+    draw_match_graph();
 }
 
 void gategories_refresh(void)
@@ -3483,14 +3848,14 @@ void gategories_refresh(void)
         gboolean visible;
         gint     index;
 
-        gtk_tree_model_get(current_model, &cat_iter, 
+        gtk_tree_model_get(current_model, &cat_iter,
                            COL_MATCH_INDEX,   &index,
-                           COL_MATCH_VIS, &visible, 
+                           COL_MATCH_VIS, &visible,
                            -1);
-		
+
         if (!visible) {
             g_print("refresh cat %d\n", index);
-            category_refresh(index);			
+            category_refresh(index);
         }
 
         ok_cat = gtk_tree_model_iter_next(current_model, &cat_iter);
@@ -3523,21 +3888,21 @@ void matches_refresh(void)
 			struct message msg;
 			gint tatami = i+1;
 
-			NULL_MATCH_INFO(category, tatami, 0); 
-			NULL_MATCH_INFO(blue_first, tatami, 0); 
-			NULL_MATCH_INFO(blue_last, tatami, 0); 
-			NULL_MATCH_INFO(blue_club, tatami, 0); 
-			NULL_MATCH_INFO(white_first, tatami, 0); 
-			NULL_MATCH_INFO(white_last, tatami, 0); 
-			NULL_MATCH_INFO(white_club, tatami, 0); 
+			NULL_MATCH_INFO(category, tatami, 0);
+			NULL_MATCH_INFO(blue_first, tatami, 0);
+			NULL_MATCH_INFO(blue_last, tatami, 0);
+			NULL_MATCH_INFO(blue_club, tatami, 0);
+			NULL_MATCH_INFO(white_first, tatami, 0);
+			NULL_MATCH_INFO(white_last, tatami, 0);
+			NULL_MATCH_INFO(white_club, tatami, 0);
 			next_matches_info[tatami-1][0].catnum = 0;
-			NULL_MATCH_INFO(category, tatami, 1); 
-			NULL_MATCH_INFO(blue_first, tatami, 1); 
-			NULL_MATCH_INFO(blue_last, tatami, 1); 
-			NULL_MATCH_INFO(blue_club, tatami, 1); 
-			NULL_MATCH_INFO(white_first, tatami, 1); 
-			NULL_MATCH_INFO(white_last, tatami, 1); 
-			NULL_MATCH_INFO(white_club, tatami, 1); 
+			NULL_MATCH_INFO(category, tatami, 1);
+			NULL_MATCH_INFO(blue_first, tatami, 1);
+			NULL_MATCH_INFO(blue_last, tatami, 1);
+			NULL_MATCH_INFO(blue_club, tatami, 1);
+			NULL_MATCH_INFO(white_first, tatami, 1);
+			NULL_MATCH_INFO(white_last, tatami, 1);
+			NULL_MATCH_INFO(white_club, tatami, 1);
 			next_matches_info[tatami-1][1].catnum = 0;
 
 			memset(&msg, 0, sizeof(msg));
@@ -3560,7 +3925,7 @@ void matches_refresh_1(gint category, struct compsys sys)
 
 void matches_clear(void)
 {
-        
+
 }
 
 void get_match_data(GtkTreeModel *model, GtkTreeIter *iter, gint *group, gint *category, gint *number)
@@ -3609,4 +3974,3 @@ void set_match_col_titles(void)
         gtk_tree_view_column_set_title(col, _("Comment"));
     }
 }
-

@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -51,6 +51,9 @@ static FILE *dfile = NULL;
 void read_svg_file(void);
 
 gchar *svg_file = NULL;
+gboolean nomarg = FALSE;
+gboolean shrink = FALSE;
+gboolean scale = FALSE;
 
 static gchar *svg_data = NULL;
 static gsize  svg_datalen = 0;
@@ -134,6 +137,12 @@ void read_svg_file(void)
             g_print("Cannot open SVG file %s\n", svg_file);
         }
     }
+
+    /*
+    nomarg = strstr(svg_file, "nomarg") != NULL;
+    shrink = strstr(svg_file, "shrink") != NULL;
+    scale = strstr(svg_file, "scale") != NULL;
+    */
 }
 
 gint write_judoka(RsvgHandle *handle, gint start, struct msg_edit_competitor *j)
@@ -171,13 +180,13 @@ gint paint_svg(struct paint_data *pd)
 
     if (svg_ok == FALSE)
         return FALSE;
-    
-    if (pd->c) {
-        cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
-        cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
-        cairo_fill(pd->c);
-    }
- 
+    /*
+      if (pd->c) {
+      cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
+      cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
+      cairo_fill(pd->c);
+      }
+    */
     RsvgHandle *handle = rsvg_handle_new();
     
     guchar *p = (guchar *)svg_data;
@@ -252,18 +261,17 @@ gint paint_svg(struct paint_data *pd)
             p++;
         }
     } // while
-
+    
     rsvg_handle_close(handle, NULL);
-#if 0
-    if (pd->c) {
+    
+    if (scale && pd->c) {
         cairo_save(pd->c);
         cairo_scale(pd->c, pd->paper_width/svg_width, pd->paper_height/svg_height);
         rsvg_handle_render_cairo(handle, pd->c);
         cairo_restore(pd->c);
+    } else if (pd->c) {
+        rsvg_handle_render_cairo(handle, pd->c);
     }
-#else
-    rsvg_handle_render_cairo(handle, pd->c);
-#endif
 
     g_object_unref(handle);
 

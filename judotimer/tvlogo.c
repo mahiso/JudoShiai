@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2013 by Hannu Jokinen
+ * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -93,6 +93,8 @@ gpointer tvlogo_thread(gpointer args)
     glong vlc_addr = 0;
     gint waittime = 1000000;
 
+    g_print("User data dir = %s\n", g_get_user_data_dir());
+
     strcpy(vlc_host, "localhost");
 
     for (i = 0; i < NUM_LOGO_FILES; i++)
@@ -159,16 +161,17 @@ gpointer tvlogo_thread(gpointer args)
                 last_update = tvlogo_update;
                 G_UNLOCK(logofile);
                 waittime = 5000000; // don't send again before reply
-                gint n = snprintf(buffer, sizeof(buffer), "@logo logo-file %s\n", 
+                gint n = snprintf(buffer, sizeof(buffer), "@name logo-file %s\n", 
                                   tvlogofile[last_update]);
                 send(comm_fd, buffer, n, 0);
+                //g_print("TX: %s\n", buffer);
             } else 
                 G_UNLOCK(logofile);
     
             if (r == 0 && (lastx != tvlogo_x || lasty != tvlogo_y)) {
-                n = snprintf(buffer, sizeof(buffer), "@logo logo-x %d\n", tvlogo_x);
+                n = snprintf(buffer, sizeof(buffer), "@name logo-x %d\n", tvlogo_x);
                 send(comm_fd, buffer, n, 0);
-                n = snprintf(buffer, sizeof(buffer), "@logo logo-y %d\n", tvlogo_y);
+                n = snprintf(buffer, sizeof(buffer), "@name logo-y %d\n", tvlogo_y);
                 send(comm_fd, buffer, n, 0);
                 lastx = tvlogo_x; lasty = tvlogo_y;
             }
