@@ -27,6 +27,17 @@ Next some libraries:
 
 $ sudo apt-get install librsvg2-dev libao-dev libmpg123-dev libcurl4-openssl-dev
 
+Libraries on CentOS:
+
+$ sudo yum install ffmpeg-devel libxml2-devel
+
+Create some missing links on CentOS:
+
+$ cd /usr/lib64
+$ sudo ln -s libmp3lame.so.0.0.0 libmp3lame.so
+$ sudo ln -s libx264.so.142 libx264.so
+$ sudo ln -s libfaac.so.0.0.0 libfaac.so
+
 JudoShiai is under GIT in Sourceforge:
 
 $ sudo apt-get install git
