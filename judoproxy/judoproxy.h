@@ -95,6 +95,8 @@ extern struct message *get_rec_msg(void);
 extern void destroy( GtkWidget *widget, gpointer   data );
 extern void set_preferences(void);
 extern gulong host2net(gulong a);
+extern uint32_t camera_addr;
+extern gboolean show_video;
 
 extern GtkWidget *get_menubar_menu(GtkWidget  *window);
 extern gpointer client_thread(gpointer args);
@@ -120,5 +122,6 @@ extern void set_html_url(struct in_addr addr);
 extern void send_mask(gint x1, gint y1, gint x2, gint y2);
 
 extern void toggle_advertise(GtkWidget *menu_item, gpointer data);
+extern void toggle_video(GtkWidget *menu_item, gpointer data);
 
 #endif

@@ -44,7 +44,7 @@ Name: "{group}\JudoTimer"; Filename: "{app}\bin\judotimer.exe"
 Name: "{group}\JudoInfo"; Filename: "{app}\bin\judoinfo.exe"
 Name: "{group}\JudoWeight"; Filename: "{app}\bin\judoweight.exe"
 Name: "{group}\JudoJudogi"; Filename: "{app}\bin\judojudogi.exe"
-Name: "{group}\Poista asennus"; Filename: "{app}\unins000.exe"
+Name: "{group}\Remove installation"; Filename: "{app}\unins000.exe"
 Name: "{commondesktop}\JudoShiai"; Filename: "{app}\bin\judoshiai.exe"; Tasks: desktopicon
 Name: "{commondesktop}\JudoTimer"; Filename: "{app}\bin\judotimer.exe"; Tasks: desktopicon
 Name: "{commondesktop}\JudoInfo"; Filename: "{app}\bin\judoinfo.exe"; Tasks: desktopicon

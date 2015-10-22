@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <string.h>
 #include <time.h>
@@ -31,8 +31,8 @@
 #include "language.h"
 #include "binreloc.h"
 
-static gboolean button_pressed(GtkWidget *sheet_page, 
-			       GdkEventButton *event, 
+static gboolean button_pressed(GtkWidget *sheet_page,
+			       GdkEventButton *event,
 			       gpointer userdata);
 
 gchar         *program_path;
@@ -155,7 +155,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
 
     if (mirror_display && num_tatamis)
             left = (num_columns - 1)*colwidth;
-        
+
     num_rectangles = 0;
 
     cairo_set_font_size(c, 0.8*BOX_HEIGHT);
@@ -191,7 +191,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             struct match *m = &match_list[i][k];
             gchar buf[20];
             gdouble e = (k == 0) ? colwidth/2 : 0.0;
-			
+
             if (m->number >= 1000)
                 break;
 
@@ -210,7 +210,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
             cairo_rectangle(c, left, y_pos, colwidth, 4*BOX_HEIGHT);
             cairo_fill(c);
             cairo_restore(c);
-			
+
             cairo_save(c);
             if (k == 0) {
                 cairo_move_to(c, left+5, y_pos+extents.height);
@@ -251,7 +251,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                 cairo_restore(c);
             }
             cairo_select_font_face(c, MY_FONT, 0, CAIRO_FONT_WEIGHT_BOLD);
-            if (k == 0) 
+            if (k == 0)
                 cairo_move_to(c, left+5, y_pos+extents.height+BOX_HEIGHT);
             else
                 cairo_move_to(c, left+5, y_pos+extents.height);
@@ -284,8 +284,8 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                     cairo_set_source_rgb(c, 1.0, 1.0, 1.0);
 
                 if (k)
-                    cairo_rectangle(c, left, y_pos+BOX_HEIGHT, 
-                                    colwidth/2, 
+                    cairo_rectangle(c, left, y_pos+BOX_HEIGHT,
+                                    colwidth/2,
                                     3*BOX_HEIGHT);
                 cairo_fill(c);
 
@@ -317,14 +317,14 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
                         cairo_set_source_rgb(c, 0.7, 1.0, 0.7);
                     else
                         cairo_set_source_rgb(c, 1.0, 1.0, 0.0);
-                } 
+                }
 #if 0
                 else if (k == 1 && m->flags & MATCH_FLAG_WHITE_DELAYED) {
                     if (m->flags & MATCH_FLAG_WHITE_REST)
                         cairo_set_source_rgb(c, 0.5, 0.5, 1.0);
                     else
                         cairo_set_source_rgb(c, 1.0, 0.5, 0.5);
-                } 
+                }
 #else
                 else if (white_first) {
                     if (red_background)
@@ -422,7 +422,7 @@ static void paint(cairo_t *c, gdouble paper_width, gdouble paper_height, gpointe
         upper = !upper;
     } // tatamis
 
-	
+
     cairo_save(c);
     cairo_set_line_width(c, THICK_LINE);
 
@@ -477,7 +477,7 @@ static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userda
     cairo_t *c = gdk_cairo_create(widget->window);
 #endif
     struct paint_data pd;
-    
+
     pd.c = c;
 #if (GTKVER == 3)
     pd.paper_width = gtk_widget_get_allocated_width(widget);
@@ -489,7 +489,7 @@ static gboolean expose(GtkWidget *widget, GdkEventExpose *event, gpointer userda
 
     if (paint_svg(&pd) == FALSE)
 #if (GTKVER == 3)
-        paint(c, gtk_widget_get_allocated_width(widget), 
+        paint(c, gtk_widget_get_allocated_width(widget),
               gtk_widget_get_allocated_height(widget), userdata);
 #else
         paint(c, widget->allocation.width, widget->allocation.height, userdata);
@@ -722,7 +722,7 @@ int main( int   argc,
 #if (GTKVER != 3)
     g_thread_init(NULL);    /* Initialize GLIB thread support */
     gdk_threads_init();     /* Initialize GDK locks */
-    gdk_threads_enter();    /* Acquire GDK locks */ 
+    gdk_threads_enter();    /* Acquire GDK locks */
 #endif
 
     gtk_init (&argc, &argv);
@@ -747,13 +747,13 @@ int main( int   argc,
 
     g_signal_connect (G_OBJECT (window), "delete_event",
                       G_CALLBACK (delete_event), NULL);
-    
+
     g_signal_connect (G_OBJECT (window), "destroy",
                       G_CALLBACK (destroy), NULL);
 
     g_signal_connect(G_OBJECT(window),
                      "key-press-event", G_CALLBACK(key_press), NULL);
-   
+
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
 #if (GTKVER == 3)
@@ -794,17 +794,17 @@ int main( int   argc,
 #endif
 
 #if (GTKVER == 3)
-    g_signal_connect(G_OBJECT(darea), 
+    g_signal_connect(G_OBJECT(darea),
                      "draw", G_CALLBACK(expose), NULL);
 #else
-    g_signal_connect(G_OBJECT(darea), 
+    g_signal_connect(G_OBJECT(darea),
                      "expose-event", G_CALLBACK(expose), NULL);
 #endif
-    g_signal_connect(G_OBJECT(darea), 
+    g_signal_connect(G_OBJECT(darea),
                      "button-press-event", G_CALLBACK(button_pressed), NULL);
 
     /* timers */
-        
+
     timer = g_timer_new();
 
     /*g_timeout_add(100, timeout, NULL);*/
@@ -822,17 +822,17 @@ int main( int   argc,
 #if (GTKVER == 3)
     gth = g_thread_new("Client",
                        (GThreadFunc)client_thread,
-                       (gpointer)&run_flag); 
+                       (gpointer)&run_flag);
 
     extern gpointer ssdp_thread(gpointer args);
     g_snprintf(ssdp_id, sizeof(ssdp_id), "JudoInfo");
     gth = g_thread_new("SSDP",
                        (GThreadFunc)ssdp_thread,
                        (gpointer)&run_flag);
-#else	
+#else
     /* Create a bg thread using glib */
     gth = g_thread_create((GThreadFunc)client_thread,
-                          (gpointer)&run_flag, FALSE, NULL); 
+                          (gpointer)&run_flag, FALSE, NULL);
 
     extern gpointer ssdp_thread(gpointer args);
     g_snprintf(ssdp_id, sizeof(ssdp_id), "JudoInfo");
@@ -842,7 +842,7 @@ int main( int   argc,
     gth = gth; // make compiler happy
 
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER_ALWAYS);
-	
+
     cursor = gdk_cursor_new(GDK_HAND2);
     //gdk_window_set_cursor(GTK_WIDGET(main_window)->window, cursor);
 
@@ -852,11 +852,11 @@ int main( int   argc,
      * and waits for an event to occur (like a key press or
      * mouse event). */
     gtk_main();
-#if (GTKVER != 3)    
+#if (GTKVER != 3)
     gdk_threads_leave();  /* release GDK locks */
 #endif
     run_flag = FALSE;     /* flag threads to stop and exit */
-    //g_thread_join(gth);   /* wait for thread to exit */ 
+    //g_thread_join(gth);   /* wait for thread to exit */
 
     return 0;
 }
@@ -921,15 +921,15 @@ static gint find_box(gdouble x, gdouble y)
     return -1;
 }
 
-static gboolean button_pressed(GtkWidget *sheet_page, 
-			       GdkEventButton *event, 
+static gboolean button_pressed(GtkWidget *sheet_page,
+			       GdkEventButton *event,
 			       gpointer userdata)
 {
-    if (event->type == GDK_BUTTON_PRESS &&  
+    if (event->type == GDK_BUTTON_PRESS &&
         (event->button == 1)) {
-        gdouble x = event->x, y = event->y; 
+        gdouble x = event->x, y = event->y;
         gint t, tatami;
-		    
+
         t = find_box(x, y);
         if (t < 0)
             return FALSE;
@@ -941,8 +941,8 @@ static gboolean button_pressed(GtkWidget *sheet_page,
         refresh_window();
 
         return TRUE;
-		    
-    } else if (event->type == GDK_BUTTON_PRESS &&  
+
+    } else if (event->type == GDK_BUTTON_PRESS &&
                (event->button == 3)) {
         struct message msg;
         extern gint my_address;
@@ -997,7 +997,7 @@ void write_matches(void)
     for (t = 0; t < NUM_TATAMIS; t++)
         if (show_tatami[t])
             break;
-    
+
     if (t >= NUM_TATAMIS)
         return;
 
@@ -1028,3 +1028,9 @@ void write_matches(void)
 
     fclose(fout);
 }
+
+/*** profiling stuff ***/
+struct profiling_data prof_data[NUM_PROF];
+gint num_prof_data;
+guint64 prof_start;
+gboolean prof_started = FALSE;

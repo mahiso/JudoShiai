@@ -112,5 +112,70 @@ extern void write_matches(void);
 extern void read_svg_file(void);
 extern gint paint_svg(struct paint_data *pd);
 
+/* profiling stuff */
+//#define PROFILE
+//extern guint64 cumul_db_time;
+//extern gint    cumul_db_count;
+
+#define NUM_PROF 32
+
+struct profiling_data {
+        guint64 time_stamp;
+        const gchar *func;
+        gint line;
+};
+
+#ifdef PROFILE
+
+static __inline__ guint64 rdtsc(void) {
+    guint32 lo, hi;
+    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+    return (guint64)hi << 32 | lo;
+}
+
+extern struct profiling_data prof_data[NUM_PROF];
+extern gint num_prof_data;
+extern guint64 prof_start;
+extern gboolean prof_started;
+
+#define RDTSC(_a) do { _a = rdtsc(); } while(0)
+
+#define PROF_START do { memset(&prof_data, 0, sizeof(prof_data));       \
+        num_prof_data = 0; /*cumul_db_time = 0; cumul_db_count = 0;*/	\
+        prof_started = TRUE; prof_start = rdtsc(); } while (0)
+
+#define PROF do { if (prof_started && num_prof_data < NUM_PROF) { \
+            prof_data[num_prof_data].time_stamp = rdtsc();        \
+            prof_data[num_prof_data].func = __FUNCTION__;         \
+            prof_data[num_prof_data++].line = __LINE__; }} while (0)
+
+static inline void prof_end(void) {
+    gint i;
+    guint64 stop = rdtsc(), prev = prof_start;
+    g_print("PROF:\n");
+    for (i = 0; i < num_prof_data; i++) {
+        g_print("%s:%d: %ld\n", prof_data[i].func, prof_data[i].line, (prof_data[i].time_stamp - prev)/100);
+        prev = prof_data[i].time_stamp;
+    }
+
+    //guint64 tot_time_div = (stop - prof_start)/100;
+    //guint64 relative_time = cumul_db_time/tot_time_div;
+    //g_print("\nDB-writes=%d db-time=%ld\n", cumul_db_count, relative_time);
+
+}
+#define PROF_END prof_end()
+
+#else
+
+static __inline__ guint64 rdtsc(void) {
+    return 0;
+}
+
+#define RDTSC(_a) do {} while(0)
+#define PROF_START do {} while(0)
+#define PROF do {} while(0)
+#define PROF_END do {} while(0)
+
+#endif // profiling
 
 #endif

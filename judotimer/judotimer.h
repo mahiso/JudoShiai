@@ -54,14 +54,21 @@
 #define MODE_MASTER 1
 #define MODE_SLAVE  2
 
-#define START_BIG 128
-#define STOP_BIG  129
+#define START_BIG           128
+#define STOP_BIG            129
 #define START_ADVERTISEMENT 130
-#define START_COMPETITORS 131
-#define STOP_COMPETITORS 132
-#define START_WINNER 133
-#define STOP_WINNER 134
-#define SAVED_LAST_NAMES 135
+#define START_COMPETITORS   131
+#define STOP_COMPETITORS    132
+#define START_WINNER        133
+#define STOP_WINNER         134
+#define SAVED_LAST_NAMES    135
+#define SHOW_MESSAGE        136
+#define SET_SCORE           137
+#define SET_POINTS          138
+#define SET_OSAEKOMI_VALUE  139
+#define SET_TIMER_VALUE     140
+#define SET_TIMER_OSAEKOMI_COLOR 141
+#define SET_TIMER_RUN_COLOR 142
 
 extern GTimer *timer;
 
@@ -94,6 +101,7 @@ extern gboolean rest_time;
 extern gint current_category, current_match;
 extern gboolean sides_switched;
 extern gboolean white_first;
+extern gboolean no_big_text;
 extern gboolean show_competitor_names;
 extern gchar saved_first1[32], saved_first2[32], saved_last1[32], saved_last2[32], saved_cat[16];
 extern gchar saved_country1[8], saved_country2[8];
@@ -123,6 +131,7 @@ extern gboolean update_tvlogo;
 extern cairo_surface_t *tvcs;
 extern cairo_t *tvc;
 extern gboolean vlc_connection_ok;
+extern gchar *custom_layout_file;
 
 extern gboolean this_is_shiai(void);
 extern void copy_packet(struct message *msg); // not used
@@ -141,7 +150,7 @@ extern void reset(guint key, struct msg_next_match *msg);
 extern int get_match_time(void);
 
 extern void set_hantei_winner(gint cmd);
-extern void set_timer_run_color(gboolean running);
+extern void set_timer_run_color(gboolean running, gboolean resttime);
 extern void set_timer_osaekomi_color(gint osaekomi_state, gint points);
 extern void set_timer_value(guint min, guint tsec, guint sec);
 extern void set_osaekomi_value(guint tsec, guint sec);
@@ -161,9 +170,11 @@ extern void toggle_rules_eq_score_less_shido_wins(GtkWidget *menu_item, gpointer
 extern void toggle_rules_short_pin_times(GtkWidget *menu_item, gpointer data);
 extern void toggle_confirm_match(GtkWidget *menu_item, gpointer data);
 extern void toggle_whitefirst(GtkWidget *menu_item, gpointer data);
+extern void toggle_no_texts(GtkWidget *menu_item, gpointer data);
 extern void toggle_show_comp(GtkWidget *menu_item, gpointer data);
 extern void toggle_judogi_control(GtkWidget *menu_item, gpointer data);
 extern void select_display_layout(GtkWidget *menu_item, gpointer data);
+extern void set_custom_layout_file_name(GtkWidget *menu_item, gpointer data);
 extern void select_name_layout(GtkWidget *menu_item, gpointer data);
 extern gpointer client_thread(gpointer args);
 extern void voting_result(GtkWidget *w, gpointer data);
@@ -237,5 +248,6 @@ extern void tvlogo_send_new_frame(gchar *frame, gint length);
 extern void set_menu_active(void);
 
 extern void set_menu_white_first(gboolean flag);
+extern void activate_slave_mode(void);
 
 #endif

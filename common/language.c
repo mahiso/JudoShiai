@@ -198,7 +198,7 @@ static const gchar *help_file_names[NUM_LANGS] = {
     "judoshiai-en.pdf", // sk
     "judoshiai-nl.pdf", // nl
     "judoshiai-en.pdf", // cs
-    "judoshiai-en.pdf", // de
+    "judoshiai-de.pdf", // de
     "judoshiai-en.pdf"  // ru
 };
 

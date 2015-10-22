@@ -224,15 +224,35 @@ struct msg_cancel_rest_time {
 };
 
 struct msg_update_label {
-    gchar expose[64];
-    gchar text[64];
-    gchar text2[64];
-    gchar text3[16];
+    union {
+	struct {
+	    gchar expose[64]; // total 208 bytes
+	    gchar text[64];
+	    gchar text2[64];
+	    gchar text3[16];
+	};
+	struct {
+	    gchar cat_a[8];
+	    gchar comp1_a[48];
+	    gchar comp2_a[48];
+	    gchar cat_b[8];
+	    gchar comp1_b[48];
+	    gchar comp2_b[48];
+	};
+	struct {
+	    gint pts1[4];
+	    gint pts2[4];
+	};
+	struct {
+	    gint i1, i2, i3;
+	};
+    };
     gdouble x, y;
     gdouble w, h;
     gdouble fg_r, fg_g, fg_b;
     gdouble bg_r, bg_g, bg_b;
     gdouble size;
+    /* special label nums */
     gint label_num;
     gint xalign;
 };

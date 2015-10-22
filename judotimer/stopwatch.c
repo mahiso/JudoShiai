@@ -185,7 +185,7 @@ void update_display(void)
 
     if (st[0].running != last_m_run) {
         last_m_run = st[0].running;
-        set_timer_run_color(last_m_run);
+        set_timer_run_color(last_m_run, rest_time);
     }
 
     if (st[0].oRunning) {
@@ -634,7 +634,7 @@ static void destroy_ask( GtkWidget *widget, gpointer   data )
     memset(&msg, 0, sizeof(msg));
     msg.type = MSG_UPDATE_LABEL;
     msg.u.update_label.label_num = STOP_WINNER;
-    write_tv_logo(&(msg.u.update_label));
+    /*write_tv_logo(&(msg.u.update_label));*/
 
     if (mode != MODE_SLAVE)
         send_label_msg(&msg);
@@ -972,7 +972,7 @@ void reset(guint key, struct msg_next_match *msg)
         strncpy(msg.u.update_label.text2, saved_cat,
                 sizeof(msg.u.update_label.text2)-1);
         msg.u.update_label.text3[0] = winner;
-        write_tv_logo(&(msg.u.update_label));
+        /*write_tv_logo(&(msg.u.update_label));*/
 
         if (mode != MODE_SLAVE)
             send_label_msg(&msg);

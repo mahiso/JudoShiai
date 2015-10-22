@@ -1,0 +1,106 @@
+It is possible to run JudoShiai software in Raspberry Pi. Most probably you may
+want to use JudoInfo or JudoTimer in slave mode. Instructions:
+
+* Download Debian Wheezy image from http://downloads.raspberrypi.org/raspbian_latest
+
+* Copy image to a memory card. Instructions:
+   http://www.raspberrypi.org/documentation/installation/installing-images/linux.md
+
+   8 GB is a good choice for the card size. More info here:
+   http://www.raspberrypi.org/documentation/installation/sd-cards.md
+
+* First boot requires a TV set or monitor with an HDMI interface and a keyboard:
+   http://www.raspberrypi.org/documentation/configuration/raspi-config.md
+
+   Expand the file system and enable boot to desktop. From Advance options
+   check that SSH server is enabled.
+
+*  Connect Raspberry Pi to internet. Since you most probably have not configured
+   WiFi use an Ethernet cable. There is a Terminal program in the menus. Find it
+   and open a terminal window. Terminal uses text "pi@raspberrypi ~ $" as a prompt.
+   Everything after the prompt is typed by you.
+
+*  First it is best to update the software database:
+      pi@raspberrypi ~ $ sudo apt-get update
+   - sudo means you use root (admin) privileges.
+   - apt-get is a software package tool.
+   - Type 'man sudo' and 'man apt-get' (without quotes) to have more information.
+
+*  Next you have to upload the JudoShiai software package to the Raspberry Pi.
+   You can use the RPI's web browser and download the software from Sourceforge, but
+   here we use SSH. Find out your RPI's IP address:
+      pi@raspberrypi ~ $ ifconfig
+   You will see something like this:
+
+      eth0      Link encap:Ethernet  HWaddr 28:d2:44:1c:ee:3d
+                inet addr:192.168.1.101  Bcast:192.168.1.255  Mask:255.255.255.0
+
+   Your IP address is 192.168.1.101.
+   - In Linux the command would be:
+     LINUX> scp judoshiai_x.x-1_armhf.deb pi@192.168.1.101:.
+     (password is raspberry if you have not changed it)
+   - In Windows you can use software like Putty.
+
+*  Now you have the software package in your home directory. Install it:
+      pi@raspberrypi ~ $ sudo dpkg -i judoshiai_x.x-1_armhf.deb
+   (name depends on the version)
+   There will be complaint about missing dependencies. Fix it:
+      pi@raspberrypi ~ $ sudo apt-get install -f
+   Try to start JudoTimer form the menus or from command line:
+      pi@raspberrypi ~ $ judotimer
+
+*  You may want to start an application automatically after booting.
+   Create a file to directory /home/pi/.config/autostart for each
+   application that should start after the desktop is up. To start JudoInfo
+   make a file /home/pi/.config/autostart/judoinfo.desktop. 
+   - Make directory if it doesn't exist:
+       pi@raspberrypi ~ $ mkdir .config/autostart
+   - Use nano as your editor and open the file:
+       pi@raspberrypi ~ $ nano .config/autostart/judoinfo.desktop
+   - Add the following lines:
+
+      [Desktop Entry]
+      Encoding=UTF-8
+      Type=Application
+      Name=JudoInfo
+      Comment=
+      Exec=/usr/bin/judoinfo
+      StartupNotify=false
+      Terminal=true
+      Hidden=false
+
+   - Save file (ctl-O) and exit (ctl-X).
+
+   - To start JudoTimer in slave mode create file judotimer.desktop with content
+
+      [Desktop Entry]
+      Encoding=UTF-8
+      Type=Application
+      Name=JudoTimer
+      Comment=
+      Exec=/usr/bin/judotimer -s
+      StartupNotify=false
+      Terminal=true
+      Hidden=false
+
+*  Hint: You can do many things remotely without connecting any keyboard or mouse to the RPI.
+   Use SSH (Putty) to connect to the IP address you found earlier. Connection gives you
+   a command line with prompt like the Terminal window above.
+
+*  Hint: To remotely control the desktop you can use x11vnc. Installation:
+       pi@raspberrypi ~ $ sudo apt-get install x11vnc
+   Create file /home/pi/.config/autostart/x11vnc.desktop
+   with content
+
+      [Desktop Entry]
+      Encoding=UTF-8
+      Type=Application
+      Name=X11VNC
+      Comment=
+      Exec=x11vnc -forever -nopw -display :0 -tightfilexfer
+      StartupNotify=false
+      Terminal=false
+      Hidden=false
+
+   You need a VNC client for your Linux/Windows computer. There are many implementations
+   available for many platforms.

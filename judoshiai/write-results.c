@@ -1256,7 +1256,7 @@ static gboolean make_png_all_bg(gpointer user_data)
             struct judoka *j = get_data(i);
             if (j) {
                 const gchar *b = "?";
-                if (j->belt >= 0 && j->belt < 21)
+                if (j->belt >= 0 && j->belt < NUM_BELTS)
                     b = belts[j->belt];
                 write_competitor(f, j->first, j->last, b, 
                                  get_club_text(j, CLUB_TEXT_ADDRESS), 
@@ -1302,7 +1302,7 @@ static gboolean make_png_all_bg(gpointer user_data)
             struct judoka *j = get_data(i);
             if (j) {
                 const gchar *b = "?";
-                if (j->belt >= 0 && j->belt < 21)
+                if (j->belt >= 0 && j->belt < NUM_BELTS)
                     b = belts[j->belt];
                 write_competitor(f, j->first, j->last, b, 
                                  get_club_text(j, CLUB_TEXT_ADDRESS), 

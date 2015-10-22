@@ -116,6 +116,7 @@ static GdkColor color_yellow, color_white, color_grey, color_green, color_darkgr
 gboolean       connections_updated = FALSE;
 GtkWidget     *notebook;
 gboolean       advertise_addr = FALSE;
+gboolean       show_video = FALSE;
 
 #define MY_FONT "Arial"
 
@@ -326,6 +327,8 @@ static gboolean button_press_callback (GtkWidget      *event_box,
     ev_height = gdk_window_get_height(ev_w);
 
     GdkPixbuf *pix = gtk_image_get_pixbuf(data);
+    if (!pix)
+	return TRUE;
     im_width = gdk_pixbuf_get_width(pix);
     im_height = gdk_pixbuf_get_height(pix);
 
@@ -351,6 +354,8 @@ static gboolean button_release_callback (GtkWidget      *event_box,
     ev_height = gdk_window_get_height(ev_w);
 
     GdkPixbuf *pix = gtk_image_get_pixbuf(data);
+    if (!pix)
+	return TRUE;
     im_width = gdk_pixbuf_get_width(pix);
     im_height = gdk_pixbuf_get_height(pix);
 
@@ -399,6 +404,8 @@ static gboolean button_notify_callback (GtkWidget      *event_box,
     ev_height = gdk_window_get_height(ev_w);
 
     GdkPixbuf *pix = gtk_image_get_pixbuf(data);
+    if (!pix)
+	return TRUE;
     im_width = gdk_pixbuf_get_width(pix);
     im_height = gdk_pixbuf_get_height(pix);
 
@@ -664,8 +671,8 @@ int main( int   argc,
 
     //g_timeout_add(100, timeout_ask_for_data, NULL);
     g_timeout_add(1000, check_table, NULL);
-
-    g_idle_add(show_camera_video, NULL);
+    g_timeout_add(100, show_camera_video, NULL);
+    //g_idle_add(show_camera_video, NULL);
 
     /* All GTK applications must have a gtk_main(). Control ends here
      * and waits for an event to occur (like a key press or
@@ -1329,4 +1336,10 @@ void toggle_advertise(GtkWidget *menu_item, gpointer data)
 {
     advertise_addr = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
     g_key_file_set_boolean(keyfile, "preferences", "advertise", advertise_addr);
+}
+
+void toggle_video(GtkWidget *menu_item, gpointer data)
+{
+    show_video = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menu_item));
+    camera_addr = 0;
 }

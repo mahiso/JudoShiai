@@ -1,0 +1,32 @@
+* {
+    background-color: #ddd;
+}
+
+GtkWindow {
+    background-color: transparent;
+}
+
+GtkDrawingArea {
+    background-color: transparent;
+}
+
+GtkGrid {
+    background-color: transparent;
+}
+
+GtkDialog {
+    background-color: #ddd;
+}
+
+GtkMenuBar {
+    background-color: #ddd;
+}
+
+GtkMenuItem {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+GtkMenuItem selected {
+   background-color: #000;
+}

@@ -94,14 +94,14 @@ gint timeout_ask_for_data(gpointer data)
     }
     return TRUE;
 }
-
+#if 0
 static void ask_for_data(gint index)
 {
     ask_table[put_ptr++] = index;
     if (put_ptr >= ASK_TABLE_LEN)
         put_ptr = 0;
 }
-
+#endif
 gboolean msg_accepted(struct message *m)
 {
     switch (m->type) {
@@ -116,10 +116,6 @@ gboolean msg_accepted(struct message *m)
 
 void msg_received(struct message *input_msg)
 {
-    gint tatami;
-    gint position;
-    struct name_data *j;
-
     if (input_msg->sender < 10)
         return;
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-12 15:03+0200\n"
+"POT-Creation-Date: 2015-05-28 10:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgid "White won the voting"
 msgstr "Weiß hat die Abstimmung gewonnen"
 
 msgid "Match:"
-msgstr "Match:"
+msgstr "Kampf:"
 
 msgid "Next:"
 msgstr "Nächster:"
@@ -54,37 +54,37 @@ msgid "Match duration: automatic"
 msgstr "Kampfzeit: automatisch"
 
 msgid "Match duration: 2 min E-juniors"
-msgstr "Kampfzeit: 2 min U12"
+msgstr "Kampfzeit: 2 Min U12"
 
 msgid "Match duration: 2 min"
-msgstr "Kampfzeit: 2 min"
+msgstr "Kampfzeit: 2 Min"
 
 msgid "Match duration: 3 min"
-msgstr "Kampfzeit: 3 min"
+msgstr "Kampfzeit: 3 Min"
 
 msgid "Match duration: 4 min"
-msgstr "Kampfzeit: 4 min"
+msgstr "Kampfzeit: 4 Min"
 
 msgid "Match duration: 5 min"
-msgstr "Kampfzeit: 5 min"
+msgstr "Kampfzeit: 5 Min"
 
 msgid "Contest duration: automatic"
 msgstr "Kampfzeit: automatisch"
 
 msgid "Contest duration: 2 min (short pin times)"
-msgstr "Kampfzeit: 2 min U12 (kurze Haltezeit)"
+msgstr "Kampfzeit: 2 Min U12 (kurze Haltezeit)"
 
 msgid "Contest duration: 2 min"
-msgstr "Kampfzeit: 2 min"
+msgstr "Kampfzeit: 2 Min"
 
 msgid "Contest duration: 3 min"
-msgstr "Kampfzeit: 3 min"
+msgstr "Kampfzeit: 3 Min"
 
 msgid "Contest duration: 4 min"
-msgstr "Kampfzeit: 4 min"
+msgstr "Kampfzeit: 4 Min"
 
 msgid "Contest duration: 5 min"
-msgstr "Kampfzeit: 5 min"
+msgstr "Kampfzeit: 5 Min"
 
 msgid "Hantei: blue wins"
 msgstr "Hantei: Blau gewinnt"
@@ -141,7 +141,7 @@ msgid "About"
 msgstr "Über"
 
 msgid "Contest duration automatically from JudoShiai program"
-msgstr "Kampfzeit automatisch vom JudoShiai-Programmt"
+msgstr "Kampfzeit automatisch vom JudoShiai-Programm"
 
 msgid "View clocks only"
 msgstr "Nur Zeiten anzeigen"
@@ -249,7 +249,7 @@ msgid "Run Advertisements"
 msgstr "Werbung starten"
 
 msgid "Advertisement"
-msgstr "Anzeige"
+msgstr "Werbung"
 
 msgid "Choose a directory"
 msgstr "Verzeichnis wählen"
@@ -258,7 +258,7 @@ msgid "No koka"
 msgstr "Kein Koka"
 
 msgid "Leave points for GS"
-msgstr ""
+msgstr "Punkte im GS Übernehmen"
 
 msgid "View Log"
 msgstr "Log zeigen"
@@ -270,7 +270,7 @@ msgid "Contest area"
 msgstr "Matte"
 
 msgid "Set time"
-msgstr "Zeit setzen"
+msgstr "Zeit einstellen"
 
 msgid "Sound"
 msgstr "Ton"
@@ -357,7 +357,7 @@ msgid "OK"
 msgstr "OK"
 
 msgid "WINNER"
-msgstr "GEWINNER"
+msgstr "SIEGER"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -372,7 +372,7 @@ msgid "Font"
 msgstr "Schriftart"
 
 msgid "Replay Video"
-msgstr "Zeige Video erneut"
+msgstr "Zeige Video"
 
 msgid "Video server"
 msgstr "Videoserver"
@@ -396,7 +396,7 @@ msgid "No Limit"
 msgstr "Keine Zeitbegrenzung"
 
 msgid "If equal score less shido wins"
-msgstr "Bei gleicher Punktzahl Sieg mit weniger Shidos"
+msgstr "Bei gleicher Punktzahl - Sieg mit weniger Shidos"
 
 msgid "VLC control"
 msgstr "VLC Kontrolle"
@@ -411,7 +411,7 @@ msgid "Scale:"
 msgstr "Skala:"
 
 msgid "Competitor already exists!"
-msgstr "Kämpfer besteht bereits!"
+msgstr "Kämpfer bereits vorhanden!"
 
 msgid "Competitor"
 msgstr "Kämpfer"
@@ -420,7 +420,7 @@ msgid "copied"
 msgstr "kopiert"
 
 msgid "Category already exists!"
-msgstr "Klasse besteht bereits!"
+msgstr "Klasse bereits vorhanden!"
 
 msgid "Category"
 msgstr "Klasse"
@@ -510,13 +510,13 @@ msgid "Weight:"
 msgstr "Gewicht:"
 
 msgid "Seeding:"
-msgstr "Vorplatzierung:"
+msgstr "Setzplatz:"
 
 msgid "No seeding"
-msgstr "Keine Vorplatzierung"
+msgstr "Kein Setzplatz"
 
 msgid "Club Seeding:"
-msgstr "Verein-Vorplatzierung:"
+msgstr "Vereinssetzplatz:"
 
 msgid "Id:"
 msgstr "Id:"
@@ -555,10 +555,10 @@ msgid "Group"
 msgstr "Gruppe"
 
 msgid "Seeding"
-msgstr "Vorplatzierung"
+msgstr "Setzplatz"
 
 msgid "Club Seeding"
-msgstr "Verein-Vorplatzierung"
+msgstr "Vereinssetzplatz"
 
 msgid "Empty categories removed"
 msgstr "Leere Klassen gelöscht"
@@ -591,10 +591,10 @@ msgid "Database Validation"
 msgstr "Datenbanküberprüfung"
 
 msgid "Duplicate seedings:\n"
-msgstr "doppelte Vorplatzierung:\n"
+msgstr "doppelter Setzplatz:\n"
 
 msgid "seeding"
-msgstr "vorplatzieren"
+msgstr "setzen"
 
 msgid "defined"
 msgstr "angelegt"
@@ -603,7 +603,7 @@ msgid "times"
 msgstr "Male"
 
 msgid "Duplicate club seedings:\n"
-msgstr "Doppelte Vereinsvorplatzierung:\n"
+msgstr "Doppelte Vereinssetzplatz:\n"
 
 msgid "Missing category definitions:\n"
 msgstr "Fehlende Klasseneinrichtung:\n"
@@ -660,7 +660,7 @@ msgid "Number"
 msgstr "Nummer"
 
 msgid "Select first a competitor and then a number."
-msgstr "Erst einen Kämpfer dann eine Nummer auswählen."
+msgstr "Erst einen Kämpfer, dann einen Listenplatz auswählen."
 
 msgid "All the categories has been drawn"
 msgstr "Alle Klassen wurden ausgelost"
@@ -756,7 +756,7 @@ msgid "Sex:"
 msgstr "Geschlecht:"
 
 msgid "Girl Text:"
-msgstr ""
+msgstr "Text für weiblich" 
 
 msgid "Column Separator:"
 msgstr "Trennzeichen:"
@@ -833,7 +833,7 @@ msgid "IJF Qrt Final Rep"
 msgstr "IJF Viertelfinal-Trostrunde"
 
 msgid "FIN Dbl Repchg"
-msgstr "FIN Doppeltrostrunde"
+msgstr "FIN doppelte Trostrunde"
 
 msgid "SWE Dubb ćterkv"
 msgstr ""
@@ -854,7 +854,7 @@ msgid "ESP Dbl Lost"
 msgstr "ESP Doppel-KO"
 
 msgid "ESP Dbl Rep"
-msgstr "ESP Doppeltrostrunde"
+msgstr "ESP doppelte Trostrunde"
 
 msgid "ESP Simple Rep"
 msgstr "ESP Einfache Trostrunde"
@@ -863,10 +863,10 @@ msgid "Modified Dbl Elim"
 msgstr "Mod. Doppel-KO-System"
 
 msgid "FIN Dbl Repchg One Bronze"
-msgstr "FIN Doppeltrostrunde einmal Bronze"
+msgstr "FIN doppelte Trostrunde, einmal Bronze"
 
 msgid "Double Lost"
-msgstr ""
+msgstr "Doppel-KO"
 
 msgid "GBR Knock Out"
 msgstr "GBR KO-System"
@@ -884,10 +884,10 @@ msgid "Default"
 msgstr "Standard"
 
 msgid "FIN Double Repechage"
-msgstr "FIN Doppeltrostrunde"
+msgstr "FIN doppelte Trostrunde"
 
 msgid "SWE Double Repechage"
-msgstr "SWE Doppeltrostrunde"
+msgstr "SWE doppelte Trostrunde"
 
 msgid "SWE Direct Repechage"
 msgstr ""
@@ -905,7 +905,7 @@ msgid "ESP Double Lost"
 msgstr "ESP Doppel-KO-System"
 
 msgid "ESP Double Repechage"
-msgstr "ESP Doppel-Trostrunde"
+msgstr "ESP doppelte Trostrunde"
 
 msgid "ESP Simple Repechage"
 msgstr "ESP Einfache Trostrunde"
@@ -914,13 +914,13 @@ msgid "Modified Double Elimination"
 msgstr "Mod. Doppel-KO-System"
 
 msgid "FIN Double Repechage One Bronze"
-msgstr "FIN Doppel-Trostrunde Einmal Bronze"
+msgstr "FIN doppelte Trostrunde, einmal Bronze"
 
 msgid "DEN Double Elimination"
 msgstr "DEN Doppel-KO-System"
 
 msgid "EST Double Elim One Bronze"
-msgstr "EST Doppel-KO-System Einmal Bronze"
+msgstr "EST Doppel-KO-System, einmal Bronze"
 
 msgid "Next match"
 msgstr "Nächster Kampf"
@@ -938,7 +938,7 @@ msgid "changed"
 msgstr "geändert"
 
 msgid "Gold medal match"
-msgstr "Kampf um Gold"
+msgstr "Finale"
 
 msgid "Bronze match A"
 msgstr "Kampf um Bronze A"
@@ -1067,7 +1067,7 @@ msgid "competitors already existed"
 msgstr "Kämpfer bestehen bereits"
 
 msgid "competitors added unchanged"
-msgstr ""
+msgstr "Kämpfer ohne Änderungen hinzugefügt"
 
 msgid "Copy Weights"
 msgstr "Gewicht kopieren"
@@ -1100,7 +1100,7 @@ msgid "Open Tournament from Net"
 msgstr "Öffne Turnier aus dem Netz"
 
 msgid "Properties"
-msgstr "Turniereigenschaften"
+msgstr "Eigenschaften"
 
 msgid "Tournament Backup"
 msgstr "Turnier Backup"
@@ -1142,7 +1142,7 @@ msgid "New Category"
 msgstr "Neue Klasse"
 
 msgid "Remove Empty"
-msgstr "Leere löschen"
+msgstr "Leere Klassen löschen"
 
 msgid "Create Categories"
 msgstr "Klassen erstellen"
@@ -1157,7 +1157,7 @@ msgid "Print Matches (CSV)"
 msgstr "Kämpfe drucken (CSV)"
 
 msgid "Place To"
-msgstr "Platzieren auf"
+msgstr "Verteilen auf"
 
 msgid "Tatamis"
 msgstr "Matten"
@@ -1172,7 +1172,7 @@ msgid "Print Schedule to Printer"
 msgstr "Zeitplan ausdrucken"
 
 msgid "Print Schedule to PDF"
-msgstr "Zeitplan ausdrucken PDF"
+msgstr "Zeitplan als PDF ausdrucken"
 
 msgid "Control Tatami"
 msgstr ""
@@ -1337,7 +1337,7 @@ msgid "Start time:"
 msgstr "Startzeit:"
 
 msgid "Resolution (min):"
-msgstr "Auflösung (min)"
+msgstr "Auflösung (Min):" 
 
 msgid "Compressed timeline"
 msgstr "Komprimierte Zeitlinie"
@@ -1427,29 +1427,29 @@ msgid "White first:"
 msgstr "Weiß zuerst:"
 
 msgid "Best two out of three matches:"
-msgstr "2 Beste aus drei Kämpfen:"
+msgstr "Best of 3"
 
 msgid ""
 "Medal will be awarded \n"
 "only if a contest was won:"
 msgstr ""
-"Medaille nur wenn ein \n"
+"Medaille nur, wenn ein \n"
 "Kampf gewonnen wurde:"
 
 msgid "Seeded to fixed places:"
-msgstr "Vorplatzierung auf festen Platz:"
+msgstr "Setzplätze fest zuweisen:"
 
 msgid "Win in Golden Score gives 1 point"
-msgstr "Gewinne bei Golden Score zählen 1 Punkt"
+msgstr "Sieg in Golden Score zählt 1 Punkt"
 
 msgid "Double Pool 2 with carried forward points:"
 msgstr "Doppel-Pool 2 mit Punkteübertrag:"
 
 msgid "Two pool bronzes:"
-msgstr "Zwei Bronzepools:"
+msgstr "Zwei Bronzemedaillen im Pool:"
 
 msgid "Resolve 3-way ties by weights:"
-msgstr "Löse 3fach Patt durch Gewichtung:"
+msgstr "Entscheide 3-er-Patt anhand Gewicht:"
 
 msgid "Tournament properties"
 msgstr "Turniereigenschaften"
@@ -1458,7 +1458,7 @@ msgid "General"
 msgstr "Allgemein"
 
 msgid "Pool settings"
-msgstr "Pool Einstellungen"
+msgstr "Pooleinstellungen"
 
 msgid "Competitors:"
 msgstr "Kämpfer:"
@@ -1476,10 +1476,10 @@ msgid "Initialize"
 msgstr "Initialisieren"
 
 msgid "Players"
-msgstr "Spieler"
+msgstr "Kämpfer"
 
 msgid "Max age"
-msgstr "Max Alter"
+msgstr "Höchstalter"
 
 msgid "Min"
 msgstr "Min"
@@ -1494,7 +1494,7 @@ msgid "Default systems"
 msgstr "Standardsystem"
 
 msgid "Grade names"
-msgstr "Gradbezeichnungen"
+msgstr "Graduierungen"
 
 msgid "Remote address"
 msgstr "Remote Adresse"
@@ -1515,10 +1515,10 @@ msgid "----- Women -----"
 msgstr "--- Frauen ---"
 
 msgid "Highest age:"
-msgstr "Max Alter:"
+msgstr "Höchstalter:"
 
 msgid "Age text:"
-msgstr "Alter Text:"
+msgstr "Bezeichnung AK:"
 
 msgid "Match time:"
 msgstr "Kampfzeit:"
@@ -1533,13 +1533,13 @@ msgid "Pin times (IWYK):"
 msgstr "Haltezeit (IWYK):"
 
 msgid "Rep. time:"
-msgstr ""
+msgstr "Kampfzeit Trostrunde"
 
 msgid "Highest weight (g):"
 msgstr "Max. Gewicht (g):"
 
 msgid "Weight text:"
-msgstr "Text Gewicht:"
+msgstr "Bezeichnung GK:"
 
 msgid "Sheets"
 msgstr "Kampflisten"
@@ -1688,8 +1688,9 @@ msgstr "Polnisches System"
 msgid "Slovakian System"
 msgstr "Slowakisches System"
 
+
 msgid "German Judo Federation"
-msgstr "Deutscher Judo Bund"
++msgstr "Deutscher Judo Bund"
 
 msgid "Tatami"
 msgstr "Matte"
@@ -1698,46 +1699,46 @@ msgid "Hikiwake"
 msgstr ""
 
 msgid "Require judogi control"
-msgstr ""
+msgstr "Judogi-Kontrolle nötig"
 
 msgid "CTL"
 msgstr ""
 
 msgid "Show Flags"
-msgstr ""
+msgstr "Zeige Flagge"
 
 msgid "Show Initial of Name"
-msgstr ""
+msgstr "Zeige Initialen des Vorname"
 
 msgid "Flag size:"
-msgstr ""
+msgstr "Größe Flaggge"
 
 msgid "Name size:"
-msgstr ""
+msgstr "Größe Name"
 
 msgid "CONTROL"
-msgstr ""
+msgstr "KONTROLLE"
 
 msgid "THIS APPLICATION"
-msgstr ""
+msgstr "DIESE ANWENDUNG"
 
 msgid "NOT CONNECTED"
-msgstr ""
+msgstr "NICHT VERBUNDEN"
 
 msgid "Team:"
-msgstr ""
+msgstr "Mannschaft"
 
 msgid "Tatami:"
-msgstr ""
+msgstr "Matte"
 
 msgid "Create default members:"
-msgstr ""
+msgstr "Erstelle Standard-Besetzung"
 
 msgid "Team"
-msgstr ""
+msgstr "Mannschaft"
 
 msgid "Messages"
-msgstr ""
+msgstr "Nachrichten"
 
 msgid "Double Pool 3"
 msgstr ""
@@ -1761,49 +1762,52 @@ msgid "UKR Double Repechage"
 msgstr ""
 
 msgid "Customized"
-msgstr ""
+msgstr "Erstellt"
 
 msgid "Load Custom Systems"
-msgstr ""
+msgstr "Lade erstellte Systeme"
 
 msgid "New Team"
-msgstr ""
+msgstr "Neue Mannschaft"
 
 msgid "New Team Category"
-msgstr ""
+msgstr "Neue Mannschafts-Kategorie"
 
 msgid "Print Selected Accreditation Cards To Default Printer"
-msgstr ""
+msgstr "Drucke ausgewählte Akkreditierungskarten auf Standarddrucker"
 
 msgid "Results in Russian"
-msgstr ""
+msgstr "Ergebnisse in Russisch"
 
 msgid "Ukrainian System"
-msgstr ""
+msgstr "Ukrainisches System"
 
 msgid "Open file"
-msgstr ""
+msgstr "öffne Datei"
 
 msgid "New Password:"
-msgstr ""
+msgstr "Neues Passwort"
 
 msgid "Old Password:"
-msgstr ""
+msgstr "Altes Passwort"
 
 msgid "Wrong password!"
-msgstr ""
+msgstr "Falsches Passwort"
 
 msgid "No manual edit"
-msgstr ""
+msgstr "Keine manuelle Eingabe"
 
 msgid "Automatic send"
-msgstr ""
+msgstr "Automatisch Übertragen"
 
 msgid "Print label"
-msgstr ""
+msgstr "Drucke Label"
 
 msgid "No margins"
-msgstr ""
+msgstr "Kein Spielraum"
 
 msgid "Fit page"
-msgstr ""
+msgstr "Seite anpassen"
+
+msgid "No SOREMADE/IPPON texts"
+msgstr "SOREMADE/IPPON-Text nicht anzeigen"

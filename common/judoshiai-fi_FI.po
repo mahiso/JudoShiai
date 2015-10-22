@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-12 15:04+0200\n"
+"POT-Creation-Date: 2015-05-28 10:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1693,55 +1693,55 @@ msgid "Tatami"
 msgstr "Matto"
 
 msgid "Hikiwake"
-msgstr ""
+msgstr "Hikiwake"
 
 msgid "Require judogi control"
-msgstr ""
+msgstr "Judogikontrolli"
 
 msgid "CTL"
 msgstr ""
 
 msgid "Show Flags"
-msgstr ""
+msgstr "Näytä liput"
 
 msgid "Show Initial of Name"
-msgstr ""
+msgstr "Etunimen 1. kirjain"
 
 msgid "Flag size:"
-msgstr ""
+msgstr "Lipun koko:"
 
 msgid "Name size:"
-msgstr ""
+msgstr "Nimen koko:"
 
 msgid "CONTROL"
-msgstr ""
+msgstr "KONTROLLI"
 
 msgid "THIS APPLICATION"
-msgstr ""
+msgstr "TÄMÄ OHJELMA"
 
 msgid "NOT CONNECTED"
-msgstr ""
+msgstr "EI YHTEYTTÄ"
 
 msgid "Team:"
-msgstr ""
+msgstr "Joukkue:"
 
 msgid "Tatami:"
-msgstr ""
+msgstr "Tatami:"
 
 msgid "Create default members:"
-msgstr ""
+msgstr "Luo oletuskilpailijat"
 
 msgid "Team"
-msgstr ""
+msgstr "Joukkue"
 
 msgid "Messages"
-msgstr ""
+msgstr "Sanomat"
 
 msgid "Double Pool 3"
-msgstr ""
+msgstr "Tuplapooli 3"
 
 msgid "Custom"
-msgstr ""
+msgstr "Itse tehty"
 
 msgid "UKR Dbl Repchg"
 msgstr ""
@@ -1750,52 +1750,55 @@ msgid "UKR Double Repechage"
 msgstr ""
 
 msgid "Customized"
-msgstr ""
+msgstr "Mukautettu"
 
 msgid "Load Custom Systems"
-msgstr ""
+msgstr "Lataa itse tehdyt kaaviot"
 
 msgid "New Team"
-msgstr ""
+msgstr "Uusi joukkue"
 
 msgid "New Team Category"
-msgstr ""
+msgstr "Uusi joukkuekisa"
 
 msgid "Print Selected Accreditation Cards To Default Printer"
-msgstr ""
+msgstr "Tulosta valitut akreditointikortit oletuskirjoittimelle"
 
 msgid "Results in German"
-msgstr ""
+msgstr "Tulokset saksaksi"
 
 msgid "Results in Russian"
-msgstr ""
+msgstr "Tulokset venäjäksi"
 
 msgid "Ukrainian System"
-msgstr ""
+msgstr "Ukrainalainen järjestelmä"
 
 msgid "Open file"
-msgstr ""
+msgstr "Avaa tiedosto"
 
 msgid "New Password:"
-msgstr ""
+msgstr "Uusi salasana:"
 
 msgid "Old Password:"
-msgstr ""
+msgstr "Vanha salasana:"
 
 msgid "Wrong password!"
-msgstr ""
+msgstr "Salasana väärin!"
 
 msgid "No manual edit"
-msgstr ""
+msgstr "Ei manuaalista muuttamista"
 
 msgid "Automatic send"
-msgstr ""
+msgstr "Automaattinen lähetys"
 
 msgid "Print label"
-msgstr ""
+msgstr "Tulosta nimilappu"
 
 msgid "No margins"
-msgstr ""
+msgstr "Ei marginaaleja"
 
 msgid "Fit page"
-msgstr ""
+msgstr "Sovita sivulle"
+
+msgid "No SOREMADE/IPPON texts"
+msgstr "Ei SOREMADE/IPPON-tekstejä"

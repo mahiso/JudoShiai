@@ -83,9 +83,9 @@ static AVCodec *pCodec = NULL;
 static AVFrame *picture_RGB;
 static AVFrame *pFrame = NULL;
 static int width = 0, height = 0, stride, framenum = 0;
-static const unsigned char *picture = NULL;
-static uint32_t camera_addr, current_addr;
-
+static unsigned char picture[640*400*4];
+static uint32_t current_addr;
+uint32_t camera_addr;
 gint pic_button_x1, pic_button_y1, pic_button_x2, pic_button_y2;
 gboolean pic_button_drag = FALSE;
 
@@ -104,7 +104,7 @@ gboolean show_camera_video(gpointer arg)
     static int lastframe = 0;
     GdkPixbuf *pixbuf;
 
-    if (!picture || !width || !camera_image || framenum == lastframe)
+    if (!show_video || !width || !camera_image || framenum == lastframe)
 	return TRUE;
 
     lastframe = framenum;
@@ -143,6 +143,9 @@ static int read_function(void* opaque, uint8_t* buf, int buf_size)
     struct timeval timeout;
     gint r;
 
+    if (fd == 0)
+	return 0;
+
     FD_ZERO(&read_fd);
     FD_SET(fd, &read_fd);
 
@@ -155,6 +158,11 @@ static int read_function(void* opaque, uint8_t* buf, int buf_size)
 
     if (FD_ISSET(fd, &read_fd)) {
 	int n = recv(fd, buf, buf_size, 0);
+	if (n < 0) {
+            closesocket(fd);
+	    *fdp = 0;
+	    return 0;
+	}
 	return n;
     }
 
@@ -174,7 +182,7 @@ gpointer camera_video(gpointer args)
     {
 	int i;
 
-	while (!camera_addr) {
+	while (!camera_addr || !show_video) {
                 g_usleep(1000000);
 	}
 
@@ -194,6 +202,7 @@ gpointer camera_video(gpointer args)
 
         if (connect(comm_fd, (struct sockaddr *)&node, sizeof(node))) {
             closesocket(comm_fd);
+	    comm_fd = 0;
             g_usleep(1000000);
             continue;
         }
@@ -309,17 +318,18 @@ gpointer camera_video(gpointer args)
 					 PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
 
 		if (frameFinished) {
-		    /*
-		      g_print("Frame %d width=%d, height=%d, pFrame->linesize[0]=%d\n", i++,
-		      width, height, pFrame->linesize[0]);
-		    */
+#if 0
+		    g_print("Frame %d width=%d, height=%d, pFrame->linesize[0]=%d\n", i++,
+			    width, height, pFrame->linesize[0]);
+#endif
 		    sws_scale(sws_ctx,
 			      (uint8_t const * const *)pFrame->data,
 			      pFrame->linesize, 0,
 			      height, picture_RGB->data, picture_RGB->linesize);
 
-		    picture = picture_RGB->data[0];
+		    //picture = picture_RGB->data[0];
 		    stride = picture_RGB->linesize[0];
+		    memcpy(picture, picture_RGB->data[0], stride*height);
 
 		    // Drawing is done as a background job.
 		    framenum++;
@@ -329,8 +339,10 @@ gpointer camera_video(gpointer args)
 	} // while
 
     err:
+	//picture = NULL;
 	width = 0;
 	closesocket(comm_fd);
+	comm_fd = 0;
 
 	// Free the RGB image
 	av_free(buffer);

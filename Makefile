@@ -169,7 +169,7 @@ debian:
 	cp gnome/*-pak .
 	checkinstall -D --install=no --pkgname=judoshiai --pkgversion=$(SHIAI_VER_NUM) \
 	--maintainer=oh2ncp@kolumbus.fi --nodoc \
-	--requires libao4,libatk1.0-0,libcairo2,libcurl3,libgdk-pixbuf2.0-0,libgtk3.0-0,libpango-1.0-0,librsvg2-2,libcanberra-gtk-module
+	--requires libao4,libatk1.0-0,libcairo2,libcurl3,libgdk-pixbuf2.0-0,libgtk-3-0,libpango-1.0-0,librsvg2-2
 	mv *.deb $(RELDIR)/
 	rm description-pak postinstall-pak postremove-pak
 

@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2015 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,6 +52,7 @@ void read_svg_file(void);
 gchar *svg_file = NULL;
 
 static gchar *svg_data = NULL;
+static gchar *datamax = NULL;
 static gsize  svg_datalen = 0;
 static gint   svg_width;
 static gint   svg_height;
@@ -117,10 +118,11 @@ void read_svg_file(void)
 
     if (svg_file == NULL || svg_file[0] == 0)
         return;
-    
+
     if (!g_file_get_contents(svg_file, &svg_data, &svg_datalen, NULL))
         g_print("CANNOT OPEN '%s'\n", svg_file);
     else  {
+		datamax = svg_data + svg_datalen;
         RsvgHandle *h = rsvg_handle_new_from_data((guchar *)svg_data, svg_datalen, NULL);
         if (h) {
             RsvgDimensionData dim;
@@ -161,7 +163,7 @@ gint write_judoka(RsvgHandle *handle, gint start, struct name_data *j)
                 p = strchr(buf, '/');
                 if (p) *p = 0;
                 WRITE(buf);
-            } else 
+            } else
                 WRITE(j->club);
         } else if (IS_SAME(attr[i].code, "cntclub")) {
             WRITE(j->club);
@@ -179,28 +181,27 @@ gint paint_svg(struct paint_data *pd)
 
     if (svg_ok == FALSE)
         return FALSE;
-    
+
     if (pd->c) {
         cairo_set_source_rgb(pd->c, 1.0, 1.0, 1.0);
         cairo_rectangle(pd->c, 0.0, 0.0, pd->paper_width, pd->paper_height);
         cairo_fill(pd->c);
     }
- 
+
     RsvgHandle *handle = rsvg_handle_new();
-    
+
     guchar *p = (guchar *)svg_data;
-    while(*p) {
+    while (p < (guchar *)datamax && *p) {
         if (*p == '%' && IS_LABEL_CHAR(p[1])) {
             memset(attr, 0, sizeof(attr));
             cnt = 0;
             p++;
-
             while (IS_LABEL_CHAR(*p) || IS_VALUE_CHAR(*p) || *p == '-' || *p == '\'' || *p == '|' || *p == '!') {
                 while (IS_LABEL_CHAR(*p))
                     attr[cnt].code[attr[cnt].codecnt++] = *p++;
-                
+
                 if (*p == '-') p++;
-            
+
                 while (IS_VALUE_CHAR(*p))
                     attr[cnt].value = attr[cnt].value*10 + *p++ - '0';
 
@@ -234,7 +235,7 @@ gint paint_svg(struct paint_data *pd)
                 gint tatami = attr[0].value-1;
                 gint fight = attr[1].value;
                 gint who = attr[2].value;
-                
+
                 if (attr[2].code[0] == '#') {
                     if (match_list[tatami][fight].number < 1000) {
                         gchar buf[16];
@@ -244,9 +245,7 @@ gint paint_svg(struct paint_data *pd)
                 } else {
                     if (who == 1) ix = match_list[tatami][fight].blue;
                     else ix = match_list[tatami][fight].white;
-
                     j = avl_get_data(ix);
-
                     if (j) {
                         write_judoka(handle, 3, j);
                     }
@@ -261,14 +260,14 @@ gint paint_svg(struct paint_data *pd)
                 if (j) {
                     WRITE(j->last);
                 }
-            }                
+            }
         } // *p = %
         else {
             WRITE2(p, 1);
             p++;
         }
     }
-    
+
     rsvg_handle_close(handle, NULL);
 
     if (pd->c) {

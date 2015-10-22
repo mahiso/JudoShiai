@@ -245,7 +245,7 @@ void msg_received(struct message *input_msg)
             strncpy(msg.u.update_label.text3, input_msg->u.next_match.cat_1,
                     sizeof(msg.u.update_label.text3)-1);
 
-            write_tv_logo(&(msg.u.update_label));
+            /*write_tv_logo(&(msg.u.update_label));*/
 
             if (mode != MODE_SLAVE)
                 send_label_msg(&msg);

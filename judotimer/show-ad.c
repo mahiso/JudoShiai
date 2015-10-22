@@ -1867,7 +1867,7 @@ static void destroy_ad( GtkWidget *widget,
     msg.type = MSG_UPDATE_LABEL;
     msg.u.update_label.label_num = STOP_COMPETITORS;
 
-    write_tv_logo(&(msg.u.update_label));
+    /*write_tv_logo(&(msg.u.update_label));*/
     
     if (mode != MODE_SLAVE)
         send_label_msg(&msg);

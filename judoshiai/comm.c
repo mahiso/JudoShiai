@@ -46,6 +46,7 @@
 #define BTHPROTO_RFCOMM BTPROTO_RFCOMM
 #endif
 
+#include <sys/time.h>
 #include <gtk/gtk.h>
 
 #include "sqlite3.h"
@@ -592,7 +593,6 @@ gpointer node_thread(gpointer args)
     gint xmllen = strlen(xml);
     struct message msg_out;
     gboolean msg_out_ready;
-    FILE *loki = fopen("loki.txt", "w");
 
 #ifndef WIN32
     signal(SIGPIPE, SIG_IGN);

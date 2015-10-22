@@ -1,3 +1,12 @@
+Documentation is included in the software package, but online versions
+as well as other documents are available here:
+http://judoshiai.sourceforge.net/
+
+Versions:
+Windows: judoshiai-setup-n.n.exe
+Linux (Debian based): judoshiai_n.n-1_amd64.deb
+Raspberry Pi: judoshiai_n.n-1_armhf.deb
+
 RELEASE NOTE
 VERSION 2.4
 
@@ -6,6 +15,7 @@ Common
 
 + Migration from GTK2 to GTK3.
 + More SSDP sending for node discovery.
++ German translation enhanced
 
 JudoShiai
 ----------
@@ -23,6 +33,8 @@ JudoShiai
 + Pool letters added to knock-out systems.
 + Page numbering added to sheets.
 + Category parameter change is updated to JudoTimers immediatelly.
++ Number of the category's contest area added to SVG templates.
++ Bug fixes (grade printing).
 
 JudoTimer
 ----------
@@ -31,6 +43,9 @@ JudoTimer
 + Country flags, first name, and control added to competitor advertisement.
 + Master mode removed. Now normal mode works like master mode.
 + Most of the mouse and keyboard input is disabled in slave mode.
++ Better communication with slave timer.
++ Layout template enhancements (transparency, background picture, conditional visibility).
++ Unnecessary features removed (VLC control, blue first, no koka).
 
 JudoInfo
 ---------

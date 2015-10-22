@@ -64,7 +64,7 @@
 13 0.67 0.7 0.05   0.3   0.05   0   0.686 0.0   0.0   0.0   0.0   0.0   1
 
 # Scores for the first player: ippon, waza-ari, yuko, shido
-14 0.3 0.1 0.19   0.25   1.21   0   0.0   0.0   0.0   1.0   1.0   1.0   0
+14 0.3 0.1 0.19   0.25   1.21   0   0.0   0.0   0.0    1.0   1.0   1.0   0
 15 0.49 0.1 0.19   0.25   1.21   0   0.0   0.0   0.0   1.0   1.0   1.0   0
 16 0.68 0.1 0.19   0.25   1.21   0   0.0   0.0   0.0   1.0   1.0   1.0   0
 17 0.87 0.1 0.13   0.25   0.8   0   0.867 0.424 0.0   1.0   1.0   1.0   0
@@ -110,3 +110,16 @@
 # Flag of the white palyer's country
 36 0.0 0.4   0.15 0.2   0.0   1   0.0   0.0   0.0  -1.0   1.0   1.0   0
 
+# Screen background color: red, green, blue (0 - 1.0). Negative red = transparent.
+# This is usefull if texts do not cover all the areas.
+#100  0.0  1.0  0.0
+
+# Clock foreground run and stop colors, and background color.
+#101  0.0 1.0 1.0  0.0 1.0 0.4  0.0 0.6 0.0
+
+# Osaekomi clock foreground run and stop colors, and background color.
+#102  1.0 1.0 0.0  0.2 0.5 0.2  0.0 0.0 0.3
+
+# Hide clock if osakomi clock runs. This makes possible to use the same space
+# for both clocks (0 = no hide, 1 = hide).
+#103  1

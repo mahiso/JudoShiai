@@ -27,7 +27,7 @@ static GtkWidget *menubar, *preferences, *help, *preferencesmenu, *helpmenu;
 static GtkWidget *quit, *manual;
 static GtkWidget *node_ip, *my_ip, *about;
 static GtkWidget *light, *menu_light;
-static GtkWidget *writefile, *lang_menu_item, *advertise;
+static GtkWidget *writefile, *lang_menu_item, *advertise, *video;
 
 gboolean show_tatami[NUM_TATAMIS];
 
@@ -159,6 +159,11 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
     g_signal_connect(G_OBJECT(advertise), "activate",
 		     G_CALLBACK(toggle_advertise), NULL);
 
+    video = gtk_check_menu_item_new_with_label("Show video");
+    gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), video);
+    g_signal_connect(G_OBJECT(video), "activate",
+		     G_CALLBACK(toggle_video), NULL);
+
     //create_separator(preferencesmenu);
     writefile = gtk_menu_item_new_with_label("");
     //gtk_menu_shell_append(GTK_MENU_SHELL(preferencesmenu), writefile);
@@ -225,6 +230,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(my_ip,        _("Own IP addresses"));
 
     change_menu_label(advertise,    "Advertise addresses");
+    change_menu_label(video,        "Show video");
 
     change_menu_label(manual,       _("Manual"));
     change_menu_label(about,        _("About"));

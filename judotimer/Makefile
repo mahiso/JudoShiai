@@ -9,7 +9,7 @@ $(OBJDIR):
 
 OBJS += $(OBJDIR)/main.o $(OBJDIR)/menus.o $(OBJDIR)/stopwatch.o $(OBJDIR)/comm.o \
 	$(OBJDIR)/ip.o $(OBJDIR)/protocol.o $(OBJDIR)/show-ad.o $(OBJDIR)/sound.o \
-	$(OBJDIR)/video.o $(OBJDIR)/tvlogo.o $(OBJDIR)/language.o
+	$(OBJDIR)/video.o $(OBJDIR)/language.o
 
 CFLAGS += -DAPPLICATION="\"judotimer\""
 CFLAGS += -DAPP_NUM=2
