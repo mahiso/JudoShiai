@@ -1690,7 +1690,7 @@ msgstr "Slowakisches System"
 
 
 msgid "German Judo Federation"
-+msgstr "Deutscher Judo Bund"
+msgstr "Deutscher Judo Bund"
 
 msgid "Tatami"
 msgstr "Matte"
