@@ -567,6 +567,7 @@ static void draw_code_39_string(gchar *s, struct paint_data *pd, double bar_heig
 }
 
 #define NUM_WN_TEXTS 32
+#define NUM_PAGE_TEXTS 32
 #define IS_PICTURE 1
 
 struct wn_data_s {
@@ -586,10 +587,14 @@ static struct wn_data_s wn_texts_default[] = {
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, NULL, NULL}
 };
 static struct wn_data_s wn_texts[NUM_WN_TEXTS] = {{0}};
+static struct wn_data_s page_texts[NUM_PAGE_TEXTS] = {{0}};
 static gint num_wn_texts = 0;
+static gint num_page_texts = 0;
 static gdouble note_w, note_h;
 static gdouble border;
 static gchar *background;
+static gdouble wn_width_offset = 0.0;
+static gdouble wn_height_offset = 0.0;
 
 #define X_MM(_a) (_a*pd->paper_width/pd->paper_width_mm)
 #define Y_MM(_a) (_a*pd->paper_height/pd->paper_height_mm)
@@ -633,8 +638,8 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
             gtk_page_setup_get_bottom_margin(setup, GTK_UNIT_MM);
     }
 
-    note_w = paper_width_mm/2;
-    note_h = paper_height_mm/5;
+    note_w = (paper_width_mm - wn_width_offset)/2;
+    note_h = (paper_height_mm - wn_height_offset)/5;
 
     border = 1.0;
     g_free(background);
@@ -659,6 +664,25 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
         wn_texts[t].font = strdup(wn_texts_default[t].font);
         g_free(wn_texts[t].text);
         wn_texts[t].text = strdup(wn_texts_default[t].text);
+
+	page_texts[t].x = wn_texts_default[t].x;
+        page_texts[t].y = wn_texts_default[t].y;
+        page_texts[t].width = wn_texts_default[t].width;
+        page_texts[t].height = wn_texts_default[t].height;
+        page_texts[t].angle = wn_texts_default[t].angle;
+        page_texts[t].size = wn_texts_default[t].size;
+        page_texts[t].align = wn_texts_default[t].align;
+        page_texts[t].red = wn_texts_default[t].red;
+        page_texts[t].green = wn_texts_default[t].green;
+        page_texts[t].blue = wn_texts_default[t].blue;
+        page_texts[t].slant = wn_texts_default[t].slant;
+        page_texts[t].weight = wn_texts_default[t].weight;
+        page_texts[t].flags = 0;
+        g_free(page_texts[t].font);
+        page_texts[t].font = strdup(wn_texts_default[t].font);
+        g_free(page_texts[t].text);
+        page_texts[t].text = strdup(wn_texts_default[t].text);
+	
         t++;
     }
     num_wn_texts = t;
@@ -677,6 +701,7 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
         gint linenum = 0;
 
         num_wn_texts = 0;
+	num_page_texts = 0;
 
         while (ok && fgets(line, sizeof(line), f)) {
             linenum++;
@@ -734,6 +759,46 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
                 wn_texts[num_wn_texts].text = strdup(p);
                 if (num_wn_texts < NUM_WN_TEXTS - 1) 
                     num_wn_texts++;
+            } else if (strncmp(p1, "page_text ", 10) == 0 ||
+                       strncmp(p1, "page_picture ", 13) == 0) {
+                gboolean pic = strncmp(p1, "page_picture ", 13) == 0;
+                p = p1;
+                NEXT_TOKEN;
+                x = atof(p);
+                NEXT_TOKEN;
+                y = atof(p);
+		if (pic) { // picture size
+		    NEXT_TOKEN;
+                    pw = atof(p);
+                    NEXT_TOKEN;
+                    ph = atof(p);
+                }
+                NEXT_TOKEN;
+                a = -atof(p)*2.0*3.14159265/360.0;
+                NEXT_TOKEN;
+                page_texts[num_page_texts].x = x;
+                page_texts[num_page_texts].y = y;
+                if (pic) {
+                    wn_texts[num_page_texts].width = pw;
+                    wn_texts[num_page_texts].height = ph;
+                    wn_texts[num_page_texts].flags = IS_PICTURE;
+                } else {
+                    wn_texts[num_page_texts].flags = 0;
+                }
+                page_texts[num_page_texts].angle = a;
+                page_texts[num_page_texts].size = size;
+                page_texts[num_page_texts].red = r;
+                page_texts[num_page_texts].green = g;
+                page_texts[num_page_texts].blue = b;
+                page_texts[num_page_texts].slant = slant;
+                page_texts[num_page_texts].weight = weight;
+                page_texts[num_page_texts].align = align;
+                g_free(page_texts[num_page_texts].font);
+                page_texts[num_page_texts].font = strdup(font);
+                g_free(page_texts[num_page_texts].text);
+                page_texts[num_page_texts].text = strdup(p);
+                if (num_page_texts < NUM_PAGE_TEXTS - 1) 
+                    num_page_texts++;
             } else if (strncmp(p1, "font ", 5) == 0) {
                 p = p1;
                 NEXT_TOKEN;
@@ -761,7 +826,8 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
                     slant = CAIRO_FONT_SLANT_NORMAL;
             } else if (strncmp(p1, "fontweight ", 11) == 0) {
                 if (strstr(p1 + 11, "bold"))
-                    weight = CAIRO_FONT_WEIGHT_BOLD;
+         
+           weight = CAIRO_FONT_WEIGHT_BOLD;
                 else
                     weight = CAIRO_FONT_WEIGHT_NORMAL;
             } else if (strncmp(p1, "background", 10) == 0) {
@@ -779,10 +845,16 @@ static void read_print_template(gchar *templatefile, GtkPrintContext *context)
             } else if (strncmp(p1, "pagegeom ", 9) == 0) {
                 p = p1;
                 NEXT_TOKEN;
-                note_w = paper_width_mm/atof(p);
+                note_w = (paper_width_mm - wn_width_offset)/atof(p);
                 NEXT_TOKEN;
-                note_h = paper_height_mm/atof(p);
-            } else if (strncmp(p1, "color ", 6) == 0) {
+                note_h = (paper_height_mm - wn_height_offset)/atof(p);
+            } else if (strncmp(p1, "card_offset ", 12) == 0) {
+		p = p1;
+		NEXT_TOKEN;
+		wn_width_offset = atof(p);
+		NEXT_TOKEN;
+		wn_height_offset = atof(p);
+	    } else if (strncmp(p1, "color ", 6) == 0) {
                 p = p1;
                 NEXT_TOKEN;
                 r = atof(p);
@@ -891,21 +963,21 @@ static void filter_winners(void)
 static gint get_num_pages(struct paint_data *pd)
 {
     gint i, pages = 1;
-    gdouble x = 0.0, y = 0.0;
+    gdouble x = X_MM(wn_width_offset), y = Y_MM(wn_height_offset);
 
     for (i = 0; i < num_selected_judokas; i++) {
         x += X_MM(note_w);
         if (x + X_MM(note_w) > pd->paper_width + 1.0) {
-            x = 0.0;
+            x = X_MM(wn_width_offset);
             y += Y_MM(note_h);
             if (y + Y_MM(note_h) > pd->paper_height + 1.0) {
-                y = 0.0;
+                y = Y_MM(wn_height_offset);
                 pages++;
             }
         }
     }
 
-    if (x == 0.0 && y == 0.0)
+    if (x == X_MM(wn_width_offset) && y == Y_MM(wn_height_offset))
         pages--;
 
     return pages;
@@ -914,7 +986,7 @@ static gint get_num_pages(struct paint_data *pd)
 static gint get_starting_judoka(struct paint_data *pd, gint what, gint pagenum)
 {
     gint i, pages = 1;
-    gdouble x = 0.0, y = 0.0;
+    gdouble x = X_MM(wn_width_offset), y = Y_MM(wn_height_offset);
 
     if (what & PRINT_ONE_PER_PAGE)
         return pagenum-1;
@@ -924,10 +996,10 @@ static gint get_starting_judoka(struct paint_data *pd, gint what, gint pagenum)
             return i;
         x += X_MM(note_w);
         if (x + X_MM(note_w) > pd->paper_width + 1.0) {
-            x = 0.0;
+            x = X_MM(wn_width_offset);
             y += Y_MM(note_h);
             if (y + Y_MM(note_h) > pd->paper_height + 1.0) {
-                y = 0.0;
+                y = Y_MM(wn_height_offset);
                 pages++;
             }
         }
@@ -974,8 +1046,60 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
     }
 
     //numpages = num_selected_judokas/10 + 1;
+
+
+	gdouble x = 0, y = 0;
+
+	// print page text
+	for (t = 0; t < num_page_texts; t++) {
+            cairo_save(pd->c);
+            cairo_set_source_rgb(pd->c, page_texts[t].red, page_texts[t].green, page_texts[t].blue);
+            cairo_translate(pd->c, x + X_MM(page_texts[t].x), y + Y_MM(page_texts[t].y));
+            cairo_move_to(pd->c, 0, 0);
+            cairo_rotate(pd->c, page_texts[t].angle);
+            cairo_select_font_face(pd->c, page_texts[t].font,
+                                   page_texts[t].slant,
+                                   page_texts[t].weight);
+            cairo_set_font_size(pd->c, page_texts[t].size);
+            gint k = 0, d = 0;
+            gchar ch;
+            while ((ch = page_texts[t].text[k])) {
+                    buf[d++] = ch;
+                    k++;
+            }
+            buf[d] = 0;
+
+            if (page_texts[t].flags & IS_PICTURE) {
+                gint w, h;
+                cairo_surface_t *img = cairo_image_surface_create_from_png(buf);
+                if (img && cairo_surface_status(img) == CAIRO_STATUS_SUCCESS) {
+                    w = cairo_image_surface_get_width(img);
+                    h = cairo_image_surface_get_height(img);
+                    gdouble scx = X_MM(page_texts[t].width)/w;
+                    gdouble scy = Y_MM(page_texts[t].height)/h;
+                    cairo_scale(pd->c, scx, scy);
+                    cairo_set_source_surface(pd->c, img, 0, 0);
+                    cairo_paint(pd->c);
+                    cairo_surface_destroy(img); 
+                }                
+            } else {
+                if (wn_texts[t].align != -1.0) {
+                    cairo_text_extents(pd->c, buf, &extents);
+                    if (wn_texts[t].align == 0.0)
+                        cairo_move_to(pd->c, -extents.width/2, 0);
+                    else
+                        cairo_move_to(pd->c, -extents.width, 0);
+                }
+                cairo_show_text(pd->c, buf);
+            }
+            cairo_restore(pd->c);
+        }
+
         
-    gdouble x = 0.0, y = 0.0;
+    	// print cards 
+	x = X_MM(wn_width_offset);
+	y = Y_MM(wn_height_offset);
+    
     double bar_height = H(0.02);
     gchar id_str[10];
     gchar request[128];
@@ -1142,10 +1266,10 @@ static void paint_weight_notes(struct paint_data *pd, gint what, gint page)
 
         x += X_MM(note_w);
         if (what & PRINT_ONE_PER_PAGE || x + X_MM(note_w) > pd->paper_width + 1.0) {
-            x = 0.0;
+            x = X_MM(wn_width_offset);
             y += Y_MM(note_h);
             if (what & PRINT_ONE_PER_PAGE || y + Y_MM(note_h) > pd->paper_height + 1.0) {
-                y = 0.0;
+                y = Y_MM(wn_height_offset);
                 current_page++;
 #if 0
                 if (current_page == page || page == 0)
