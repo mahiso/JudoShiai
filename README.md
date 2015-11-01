@@ -8,6 +8,7 @@ The fork is used to implement some "special" needs by my club.
 Implemented Features
 --------------------
 
+- Export of results to a CSV file (#1)
 - Categories of Deutscher Judo Bund 
   - Official and some inofficial (U9/12, Ü30)
 - Build on CentOS 7
