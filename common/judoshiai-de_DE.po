@@ -1168,6 +1168,15 @@ msgstr "Alle Klassen auslosen"
 msgid "Print All (Web And PDF)"
 msgstr "Alle drucken (Web und PDF)"
 
+msgid "Export Results to CSV"
+msgstr "Exportieren als CSV Datei"
+
+msgid "CSV Results File"
+msgstr "CSV Datei"
+
+msgid "results.cvs"
+msgstr "ergebnisse.cvs"
+
 msgid "Print Schedule to Printer"
 msgstr "Zeitplan ausdrucken"
 

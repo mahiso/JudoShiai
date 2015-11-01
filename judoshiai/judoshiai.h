@@ -999,6 +999,7 @@ extern void locate_2(GtkWidget *w, gpointer data);
 extern void locate_3(GtkWidget *w, gpointer data);
 extern void locate_4(GtkWidget *w, gpointer data);
 extern void make_png_all(GtkWidget *w, gpointer data);
+extern void write_results_csv(GtkWidget *w, gpointer data);
 extern int get_output_directory(void);
 extern gchar *txt2hex(const gchar *txt);
 extern void make_next_matches_html(void);

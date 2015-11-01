@@ -78,6 +78,7 @@ static GtkWidget *menubar,
     *category_properties, *category_to_tatamis[NUM_TATAMIS],
     *draw_all_categories, 
     *results_print_all, *results_print_schedule_printer, *results_print_schedule_pdf, *results_ftp,
+    *results_print_csv,
     *preference_comm, *preference_comm_node, *preference_own_ip_addr, *preference_show_connections,
     *preference_auto_sheet_update, *preference_result_languages[NUM_PRINT_LANGS], *preference_langsel,
     *preference_weights_to_pool_sheets, 
@@ -273,16 +274,19 @@ GtkWidget *get_menubar_menu(GtkWidget  *window)
 
     /* Create the Results menu content. */
     results_print_all              = gtk_menu_item_new_with_label(_("Print All (Web And PDF)"));
+    results_print_csv              = gtk_menu_item_new_with_label(_("Export Results to CSV"));
     results_print_schedule_printer = gtk_menu_item_new_with_label(_("Print Schedule to Printer"));
     results_print_schedule_pdf     = gtk_menu_item_new_with_label(_("Print Schedule to PDF"));
     results_ftp                    = gtk_menu_item_new_with_label(_("Copy to Server"));
 
     gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_all);
+    gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_csv);
     gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_schedule_printer);
     gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_ftp);
     //gtk_menu_shell_append(GTK_MENU_SHELL(results_menu), results_print_schedule_pdf);
 
     g_signal_connect(G_OBJECT(results_print_all),              "activate", G_CALLBACK(make_png_all), 0);
+    g_signal_connect(G_OBJECT(results_print_csv),              "activate", G_CALLBACK(write_results_csv), 0);
     g_signal_connect(G_OBJECT(results_print_schedule_printer), "activate", G_CALLBACK(print_schedule_cb), NULL);
     g_signal_connect(G_OBJECT(results_print_schedule_pdf),      "activate", G_CALLBACK(print_doc),
                      (gpointer)(PRINT_SCHEDULE | PRINT_TO_PDF));
@@ -715,6 +719,7 @@ void set_menu_active(void)
     SET_SENSITIVE(draw_all_categories, DB_OK);
 
     SET_SENSITIVE(results_print_all             , DB_OK);
+    SET_SENSITIVE(results_print_csv             , DB_OK);
     SET_SENSITIVE(results_print_schedule_printer, DB_OK);
     SET_SENSITIVE(results_print_schedule_pdf    , DB_OK);
     SET_SENSITIVE(results_ftp                   , DB_OK && (current_directory != NULL));
@@ -778,6 +783,7 @@ gboolean change_language(GtkWidget *eventbox, GdkEventButton *event, void *param
     change_menu_label(draw_all_categories, _("Draw All Categories"));
 
     change_menu_label(results_print_all             , _("Print All (Web And PDF)"));
+    change_menu_label(results_print_csv             , _("Export Results to CSV"));
     change_menu_label(results_print_schedule_printer, _("Print Schedule"));
     change_menu_label(results_print_schedule_pdf    , _("Print Schedule to PDF"));
     change_menu_label(results_ftp                   , _("Copy to Server"));
