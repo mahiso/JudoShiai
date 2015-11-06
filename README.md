@@ -8,7 +8,8 @@ The fork is used to implement some "special" needs by my club.
 Implemented Features
 --------------------
 
-- Export of results to a CSV file (#1)
+- Change of last name to upper chars after modify (same behaviour as during creation) (issue #3)
+- Export of results to a CSV file (issue #1)
 - Categories of Deutscher Judo Bund 
   - Official and some inofficial (U9/12, Ü30)
 - Build on CentOS 7

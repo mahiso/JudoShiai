@@ -97,6 +97,28 @@ static gboolean set_weight_on_button_pressed(GtkWidget *treeview,
                                              gpointer userdata);
 
 
+/**
+ * Formats last and first name of created/edited judoka.
+ * - last: Convert to upper case
+ * - first: Convert first char to upper case
+ */
+static void format_last_first(struct judoka *edited) {
+	const gchar *lastname = edited->last;
+
+    if (edited->first == NULL || edited->first[0] == 0)
+		edited->first = g_strdup(" ");
+
+	const gchar *firstname = edited->first;
+	gchar *letter = g_utf8_strup(firstname, 1);
+
+	edited->first = g_strdup_printf("%s%s", letter, g_utf8_next_char(firstname));
+	edited->last = g_utf8_strup(lastname, -1);
+
+	g_free((void *)firstname);
+	g_free((void *)lastname);
+	g_free((void *)letter);
+}
+
 static void judoka_edited_callback(GtkWidget *widget, 
 				   GdkEvent *event,
 				   gpointer data)
@@ -229,21 +251,7 @@ static void judoka_edited_callback(GtkWidget *widget,
     complete_add_if_not_exist(club_completer, edited.club);
 
     if (ix == NEW_JUDOKA) {
-        const gchar *lastname = edited.last;
-
-        if (edited.first == NULL || edited.first[0] == 0)
-            edited.first = g_strdup(" ");
-
-        const gchar *firstname = edited.first;
-        gchar *letter = g_utf8_strup(firstname, 1);
-		
-        edited.first = g_strdup_printf("%s%s", letter, 
-                                       g_utf8_next_char(firstname));
-        g_free((void *)firstname);
-        g_free((void *)letter);
-
-        edited.last = g_utf8_strup(lastname, -1);
-        g_free((void *)lastname);
+        format_last_first(&edited);
 
         edited.index = current_index++;
                 
@@ -271,6 +279,7 @@ static void judoka_edited_callback(GtkWidget *widget,
     } else {
         edited.index = ix;
         if (edited.visible) {
+            format_last_first(&edited);
             db_update_judoka(edited.index, &edited);
         } else {
             /* update displayed category for competitors */
