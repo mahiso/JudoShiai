@@ -390,6 +390,7 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
     SET_VAL(PROP_THREE_MATCHES_FOR_TWO, "0", 0);
     SET_VAL(PROP_EQ_SCORE_LESS_SHIDO_WINS, "1", 1);
     SET_VAL(PROP_GS_WIN_GIVES_1_POINT, "0", 0);
+    SET_VAL(PROP_TWO_POOL_BRONZES, "0", 0);
 
     if (number_of_tatamis == 0)
         number_of_tatamis = 3;
@@ -406,8 +407,10 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
         SET_VAL(PROP_TWO_POOL_BRONZES, "1", 1);
     } else {
         SET_VAL(PROP_SEEDED_TO_FIXED_PLACES, "0", 0);
-        SET_VAL(PROP_TWO_POOL_BRONZES, "0", 0);
     }
+
+    if (draw_system == DRAW_DJB)
+        SET_VAL(PROP_TWO_POOL_BRONZES, "1", 1);
 
     if (draw_system == DRAW_AUSTRALIAN)
         SET_VAL(PROP_DPOOL2_WITH_CARRIED_FORWARD_POINTS, "1", 1);
