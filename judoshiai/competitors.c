@@ -1185,7 +1185,7 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
                          "cell-background-set", FALSE, 
                          NULL);
 
-        if (last[0] == '_' || (deleted & TEAM))
+        if ((last && last[0] == '_') || (deleted & TEAM))
             g_object_set(renderer, 
                          "foreground", "Gray", FALSE, 
                          NULL);
