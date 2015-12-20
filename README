@@ -27,9 +27,14 @@ Next some libraries:
 
 $ sudo apt-get install librsvg2-dev libao-dev libmpg123-dev libcurl4-openssl-dev
 
-Libraries on CentOS:
+Libraries on CentOS7:
 
-$ sudo yum install ffmpeg-devel libxml2-devel
+Most multimedia packages are in NUX Desktop repository. Install it if not already done:
+$ sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro
+$ sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-1.el7.nux.noarch.rpm
+
+Install libraries:
+$ sudo yum install glib2-devel ffmpeg-devel libxml2-devel cairo-devel gtk3-devel curl-devel librsvg2-devel libao-devel libmpg123-devel faac-devel
 
 Create some missing links on CentOS:
 
