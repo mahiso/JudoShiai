@@ -511,7 +511,10 @@ gint paint_svg(struct paint_data *pd)
                             free_judoka(j);
                     }
                 } else if (attr[1].code[0] == 'p') {
-                    gint who = attr[1].value;
+            		// don't print "0" for unmatched fights
+            		if (!MATCHED(fight))
+            			continue;
+            		gint who = attr[1].value;
                     gboolean ifmatched = FALSE;
                     gint points = who == 1 ? m[fight].blue_points : m[fight].white_points;
                     gint next = 2;
