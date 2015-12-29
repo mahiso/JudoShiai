@@ -1,0 +1,149 @@
+# A template has instructions how to print a competitor list.
+# The list can be used for many purposes:
+# - print weigh-in notes where the competitor's weight is written down
+# - print ID cards
+# - print diplomas after the tournament
+#
+# Template file is composed of lines. A line starting with a hash mark is a comment,
+# otherwise it is a data line. Data belongs to one of the following categories:
+# - general settings
+# - attributes
+# - texts and pictures
+#
+# General settings:
+# - Card size is the size of the printed competitor ID/weigh-in note in mm.
+#   As many as possible cards are fitted on one A4 page.
+#     cardsize 105 59.4
+#   Page geometry is a better way to tell how many cards you want on one page.
+#   Printer marginals are taken into the considiration. 
+#   The following line is the default and can be left out (2 columns, 5 rows).
+#     pagegeom 2 5
+# - Background picture can be used. Only PNG files are supported.
+#   Picture is resized to the notesize. Example:
+#     background C:\Pictures\MyBackground.png
+# - Note is surrounded by a border. You can set the border line width.
+#   Line width 0 means no border.
+#     border 1
+# - It is possible to print medal winners only. The following line prints
+#   gold, silver, and bronze medalists:
+#     winners 1 2 3
+#   Positions 1-7 are valid. Note! You must print the results first, since that
+#   saves the position information to the database!
+#
+# Page settings:
+#
+# - Text to print on all pages
+#	page_text 15.0 30.0 0.0 This is sample text
+#
+# - Picture to print on all pages
+#	page_picture 10 20 10 6 0 C:\Pictures\MyFlag.png
+#
+# - Offset (mm) on page to start print of cards, e.g to get space used for page text / header
+#	 card_offset 20.0 35.0
+#
+# Attribute lines describe how the text should look like. Their values are valid
+# until replaced by another attribute line:
+# - Font should be something that is supported by your system. The deafult is Arial.
+#     font Arial
+# - Default font size is 12:
+#     fontsize 12
+# - Text can be bold and/or italic:
+#     fontweight normal
+#     fontweight bold
+#     fontslant normal
+#     fontslant italic
+# - Text can be aligned left, center, or right. Left is the default:
+#     align left
+# - Font color is described by three numbers from 0.0 to 1.0. Numbers indicate the amount
+#   of red, green and blue. The default is black. Examples:
+#   White:
+#     color 1.0 1.0 1.0
+#   Black:
+#     color 0 0 0
+#   Blue:
+#     color 0 0 1.0
+#   Grey:
+#     color 0.5 0.5 0.5
+# 
+# Text uses the current attribute values. A text line contains also text's 
+# position (mm) and angle (degrees). Position is expressed by two numbers telling the
+# text's distance from the note's left and top sides. The distance is measured to the left
+# bottom corner of the first letter. Example text starting 15 mm from the left and 
+# 30 mm from the top:
+#     text 15.0 30.0 0.0 This is sample text
+# Vertical text from bottom up:
+#     text 55 77 90.0 This text is rotated 90 degrees counter-clockwise.
+# Text going down in 45 degree angle:
+#     text 10 20 -45 Going downhill...
+# All the text after the angle is printed to the end of line.
+#
+# A picture can be inserted anywhere inside the note sheet. The picture line contains
+# the position, size, angle, and path to a PNG file.
+#     picture 10 20 10 6 0 C:\Pictures\MyFlag.png
+# The position (10 20) is the place for the top left corner of the picture (mm). 
+# Picture will be resized to 10x6 mm. Angle is 0. In the end of the line is 
+# the file name of the picture.
+#
+# Both text and picture file name can contain special strings that are substituted
+# by their real values. For example the following line would write competitors name:
+#     text 10 20 0 Competitor: %LAST%, %FIRST%
+# The note would have text "Competitor: Smith, John" and the next note could read
+# "Competitor: Jones, Sarah", etc.
+#
+# The special strings are:
+#
+# %REGCATEGORY%       Name of the category the competitor registered.
+# %REALCATEGORY%      Name of the category the competitor really participates.
+# %LAST%              Last name.
+# %FIRST%             First name.
+# %CLUB%              Name of the club.
+# %COUNTRY%           Name of the country.
+# %CLUBCOUNTRY%       Club and country combined (result depends on the settings).
+# %INDEX%             Internal database index.
+# %BARCODE%           This is not text but a barcode presentation of the INDEX.
+# %WEIGHT%            Competitor's weight.
+# %YOB%               Competitor's year of birth.
+# %GRADE%             Competitor's grade (belt).
+# %ID%                Competitor's ID.
+# %ID-BARCODE%        Competitor's ID printed as barcode 39. Supported characters are
+#                     numbers, uppercase characters A-Z, and special characters 
+#                     '-', '.', '$', '/', '+', '%', and space. 
+# %ID-BARCODE-EXT%    Competitor's ID printed as extended barcode 39. All 
+#                     the 7-bit ASCII characters are supported. Barcode reader must be set
+#                     for the extended mode. UTF-8 is not supported.
+# %WEIGHTTEXT%        Text "Weight" in selected language.
+# %WINPOS%            Competitor's position in Arabic numerals (1-7). Note! You must print the results first!
+# %WINPOSR%           Competitor's position in Roman numerals (I-VII).
+#
+# Picture file name can also contain the special strings. The following line inserts
+# the flag of the competitor's country rotated 45 degrees:
+#     picture 10 30 10 6 45 C:\Pictures\Flags\%COUNTRY%.png
+# (The flags are not included in the JudoShiai software)
+# 
+
+pagegeom 1 38
+fontslant normal
+fontweight bold
+font Arial
+color 0.0 0.0 0.0
+border 0
+
+fontsize 24
+page_text 40.0 10.0 0 Teilnehmerinnen - Ü30
+fontsize 12 
+page_text 20.0 20.0 0 Bitte Unstimmigkeiten umgehend im Wettkampfbüro melden.
+fontsize 14
+page_text 20.0 30.0 0 Name
+page_text 95.0 30.0 0 Geburtsjahr
+page_text 125.0 30.0 0 Verein
+
+fontsize 8
+fontweight normal
+page_text 5 270 90 Erstellt mit JudoShiai - https://mahiso.de/judoshiai
+
+card_offset 0.0 37.0
+fontsize 12
+fontweight normal
+text 20.0 0.0 0 %LAST%, %FIRST%
+text 105.0 0.0 0 %YOB%
+text 125.0. 0.0 0 %CLUB%
