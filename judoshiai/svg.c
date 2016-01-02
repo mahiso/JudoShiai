@@ -716,7 +716,7 @@ gint paint_svg(struct paint_data *pd)
                                 gint k;
                                 for (k = 1; k <= dp2 ? 4 : num_judokas; k++) {
                                     if (pmp->c[k] == comp) {
-                                        snprintf(buf, sizeof(buf), "%d", k);
+                                   		snprintf(buf, sizeof(buf), "%d", prop_get_int_val(PROP_TWO_POOL_BRONZES) && k == 4 ? 3 : k);
                                         WRITE(buf);
                                         break;
                                     }
@@ -730,7 +730,7 @@ gint paint_svg(struct paint_data *pd)
                                 if (pmp->finished) {
                                     for (k = 1; k <= num_pool_a; k++) {
                                         if (c_a[k] == comp) {
-                                            snprintf(buf, sizeof(buf), "%d", k);
+                                            snprintf(buf, sizeof(buf), "%d", prop_get_int_val(PROP_TWO_POOL_BRONZES) && k == 4 ? 3 : k);
                                             WRITE(buf);
                                             break;
                                         }
@@ -740,7 +740,7 @@ gint paint_svg(struct paint_data *pd)
                                 if (pmp->finished) {
                                     for (k = 1; k <= num_pool_b; k++) {
                                         if (c_b[k] == comp) {
-                                            snprintf(buf, sizeof(buf), "%d", k);
+                                            snprintf(buf, sizeof(buf), "%d", prop_get_int_val(PROP_TWO_POOL_BRONZES) && k == 4 ? 3 : k);
                                             WRITE(buf);
                                             break;
                                         }
@@ -754,7 +754,7 @@ gint paint_svg(struct paint_data *pd)
                                         gint k;
                                         for (k = 1; k <= pool_size[i]; k++) {
                                             if (c[i][k] == comp) {
-                                                snprintf(buf, sizeof(buf), "%d", k);
+                                                snprintf(buf, sizeof(buf), "%d", prop_get_int_val(PROP_TWO_POOL_BRONZES) && k == 4 ? 3 : k);
                                                 WRITE(buf);
                                             }
                                         }
@@ -775,13 +775,13 @@ gint paint_svg(struct paint_data *pd)
                     struct judoka *j = pm.j[pm.c[res]];
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
-                        set_competitor_position(j->index, COMP_POS_DRAWN | res);
+                   		set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
                     }
                 } else if (systm.system == SYSTEM_DPOOL2) {
                     struct judoka *j = pm2.j[pm2.c[res]];
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
-                        set_competitor_position(j->index, COMP_POS_DRAWN | res);
+                        set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
                     }
                 } else if (systm.system == SYSTEM_DPOOL3) {
                     gint ix = 0;
@@ -795,7 +795,7 @@ gint paint_svg(struct paint_data *pd)
                     struct judoka *j = get_data(ix);
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
-                        set_competitor_position(j->index, COMP_POS_DRAWN | res);
+                        set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
                         free_judoka(j);
                     }
                 } else if (systm.system == SYSTEM_DPOOL ||
@@ -812,7 +812,7 @@ gint paint_svg(struct paint_data *pd)
                     struct judoka *j = get_data(ix);
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
-                        set_competitor_position(j->index, COMP_POS_DRAWN | res);
+                        set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
                         free_judoka(j);
                     }
                 } else if (systm.system == SYSTEM_CUSTOM) {
