@@ -37,8 +37,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="274.69949"
-     inkscape:cy="693.03254"
+     inkscape:cx="275.4066"
+     inkscape:cy="745.86633"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="1920"
@@ -554,7 +554,7 @@
        style="font-size:10.68999958px;font-style:normal;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text263">
       <tspan
-         id="tspan265">Wins</tspan>
+         id="tspan265">%t20</tspan>
     </text>
     <text
        x="522.79999"
@@ -562,7 +562,7 @@
        style="font-size:10.68999958px;font-style:normal;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text267">
       <tspan
-         id="tspan269">Pts</tspan>
+         id="tspan269">%t21</tspan>
     </text>
     <text
        x="548"
