@@ -14,12 +14,22 @@ RUNDIR=$(DEVELDIR)
 all:
 	make -C common
 	make -C judoshiai
+ifeq ($(JUDOTIMER),YES)
 	make -C judotimer
+endif
+ifeq ($(JUDOINFO),YES)
 	make -C judoinfo
+endif
 	make -C judoweight
 	make -C judojudogi
 ifeq ($(JUDOPROXY),YES)
 	make -C judoproxy
+endif
+ifeq ($(JUDOTIMER),YES)
+	make -C emscripten/judotimer
+endif
+ifeq ($(JUDOINFO),YES)
+	make -C emscripten/judoinfo
 endif
 	make -C doc
 	rm -rf $(RELDIR)
@@ -108,17 +118,19 @@ endif
 	cp etc/*.svg $(RELDIR)/etc/
 	cp etc/*.html $(RELDIR)/etc/
 	cp etc/*.js $(RELDIR)/etc/
+#	cp etc/*.js.mem $(RELDIR)/etc/
+	cp etc/*.ttf $(RELDIR)/etc/
 	cp etc/result-texts-*.txt $(RELDIR)/etc/
 	cp -r etc/flags-ioc $(RELDIR)/etc/
 	cp licenses/* $(RELDIR)/licenses
 	cp -r svg $(RELDIR)/
 	cp -r custom-examples $(RELDIR)/
 	@echo
-	@echo "To make a setup executable run" 
+	@echo "To make a setup executable run"
 	@echo "  make setup"
 	@echo
 	@echo "To make a Debian package run (Linux only)"
-	@echo "  sudo make debian" 
+	@echo "  sudo make debian"
 
 #echo 'gtk-theme-name = "MS-Windows"' >$(RELDIR)/etc/gtk-2.0/gtkrc
 
@@ -141,20 +153,28 @@ endif
 install:
 	cp -r $(RELDIR) /usr/lib/
 	ln -sf /usr/lib/judoshiai/bin/judoshiai /usr/bin/judoshiai
+ifeq ($(JUDOTIMER),YES)
 	ln -sf /usr/lib/judoshiai/bin/judotimer /usr/bin/judotimer
+	cp gnome/judotimer.desktop /usr/share/applications/
+	cp etc/judotimer.png /usr/share/pixmaps/
+endif
+ifeq ($(JUDOINFO),YES)
 	ln -sf /usr/lib/judoshiai/bin/judoinfo /usr/bin/judoinfo
+	cp gnome/judoinfo.desktop /usr/share/applications/
+	cp etc/judoinfo.png /usr/share/pixmaps/
+endif
 	ln -sf /usr/lib/judoshiai/bin/judoweight /usr/bin/judoweight
 	ln -sf /usr/lib/judoshiai/bin/judojudogi /usr/bin/judojudogi
+ifeq ($(JUDOPROXY),YES)
 	ln -sf /usr/lib/judoshiai/bin/judoproxy /usr/bin/judoproxy
+	cp gnome/judoproxy.desktop /usr/share/applications/
+	cp etc/judoproxy.png /usr/share/pixmaps/
+endif
 	cp gnome/judoshiai.desktop /usr/share/applications/
-	cp gnome/judotimer.desktop /usr/share/applications/
 	cp gnome/judoinfo.desktop /usr/share/applications/
 	cp gnome/judoweight.desktop /usr/share/applications/
 	cp gnome/judojudogi.desktop /usr/share/applications/
-	cp gnome/judoproxy.desktop /usr/share/applications/
 	cp etc/judoshiai.png /usr/share/pixmaps/
-	cp etc/judotimer.png /usr/share/pixmaps/
-	cp etc/judoinfo.png /usr/share/pixmaps/
 	cp etc/judoweight.png /usr/share/pixmaps/
 	cp etc/judojudogi.png /usr/share/pixmaps/
 	cp etc/judoproxy.png /usr/share/pixmaps/

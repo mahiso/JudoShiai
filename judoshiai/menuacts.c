@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -34,7 +34,7 @@ void about_shiai( GtkWidget *w, gpointer data)
     gtk_show_about_dialog (NULL, 
                            "name", "JudoShiai",
                            "title", "About JudoShiai",
-                           "copyright", "Copyright 2006-2015 Hannu Jokinen",
+                           "copyright", "Copyright 2006-2016 Hannu Jokinen",
                            "version", SHIAI_VERSION,
                            "website", "http://sourceforge.net/projects/judoshiai/",
                            NULL);

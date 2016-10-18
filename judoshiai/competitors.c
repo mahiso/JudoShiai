@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,7 +39,7 @@ struct model_iter {
 #define NEW_WCLASS 0x7ffffff2
 #define IS_NEW_WCLASS(_x) (_x >= NEW_WCLASS && _x <= NEW_WCLASS + 2)
 
-GtkWidget *competitor_dialog = NULL; 
+GtkWidget *competitor_dialog = NULL;
 GtkWindow *bcdialog = NULL;
 
 gchar *belts[NUM_BELTS] = {0};
@@ -92,8 +92,8 @@ gint sort_iter_compare_func(GtkTreeModel *model,
                             GtkTreeIter  *b,
                             gpointer      userdata);
 void toolbar_sort(void);
-static gboolean set_weight_on_button_pressed(GtkWidget *treeview, 
-                                             GdkEventButton *event, 
+static gboolean set_weight_on_button_pressed(GtkWidget *treeview,
+                                             GdkEventButton *event,
                                              gpointer userdata);
 
 
@@ -119,9 +119,9 @@ static void format_last_first(struct judoka *edited) {
 	g_free((void *)letter);
 }
 
-static void judoka_edited_callback(GtkWidget *widget, 
-				   GdkEvent *event,
-				   gpointer data)
+static void judoka_edited_callback(GtkWidget *widget,
+			    GdkEvent *event,
+				gpointer data)
 {
     gint ret;
     gint event_id = ptr_to_gint(event);
@@ -134,7 +134,7 @@ static void judoka_edited_callback(GtkWidget *widget,
 
     weight_entry = NULL;
     memset(&edited, 0, sizeof(edited));
-        
+
     if (catdata) {
         system = catdata->system;
         edited.deleted = catdata->deleted & (TEAM | TEAM_EVENT);
@@ -202,7 +202,7 @@ static void judoka_edited_callback(GtkWidget *widget,
             edited.deleted |= JUDOGI_NOK;
     }
 #endif
-    if (judoka_tmp->hansokumake && 
+    if (judoka_tmp->hansokumake &&
         gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(judoka_tmp->hansokumake)))
         edited.deleted |= HANSOKUMAKE;
 
@@ -219,10 +219,10 @@ static void judoka_edited_callback(GtkWidget *widget,
     if (judoka_tmp->coachid)
         edited.coachid = g_strdup(gtk_entry_get_text(GTK_ENTRY(judoka_tmp->coachid)));
 
-    if ((event_id != GTK_RESPONSE_OK && event_id != RESPONSE_PRINT && 
-         event_id != RESPONSE_COACH) || 
-        edited.last == NULL || 
-        edited.last[0] == 0 || 
+    if ((event_id != GTK_RESPONSE_OK && event_id != RESPONSE_PRINT &&
+         event_id != RESPONSE_COACH) ||
+        edited.last == NULL ||
+        edited.last[0] == 0 ||
         (edited.last[0] == '?' && edited.last[1] == 0))
         goto out;
 
@@ -252,9 +252,24 @@ static void judoka_edited_callback(GtkWidget *widget,
 
     if (ix == NEW_JUDOKA) {
         format_last_first(&edited);
+        const gchar *lastname = edited.last;
+
+        if (edited.first == NULL || edited.first[0] == 0)
+            edited.first = g_strdup(" ");
+
+        const gchar *firstname = edited.first;
+        gchar *letter = g_utf8_strup(firstname, 1);
+
+        edited.first = g_strdup_printf("%s%s", letter,
+                                       g_utf8_next_char(firstname));
+        g_free((void *)firstname);
+        g_free((void *)letter);
+
+        edited.last = g_utf8_strup(lastname, -1);
+        g_free((void *)lastname);
 
         edited.index = current_index++;
-                
+
         if ((edited.regcategory == NULL || edited.regcategory[0] == 0) &&
             edited.weight > 10000) {
             gint gender = 0;
@@ -288,7 +303,7 @@ static void judoka_edited_callback(GtkWidget *widget,
             if (find_iter(&iter, ix)) {
                 gboolean ok = gtk_tree_model_iter_children(current_model, &comp, &iter);
                 while (ok) {
-                    gtk_tree_store_set((GtkTreeStore *)current_model, 
+                    gtk_tree_store_set((GtkTreeStore *)current_model,
                                        &comp,
                                        COL_CATEGORY, edited.last,
                                        -1);
@@ -346,7 +361,7 @@ static void judoka_edited_callback(GtkWidget *widget,
         } else if (db_category_match_status(index1) & REAL_MATCH_EXISTS) {
             SHOW_MESSAGE("%s: %s", realcategory, _("Remove drawing first"));
         } else if (db_competitor_match_status(edited.index) & MATCH_EXISTS) {
-            SHOW_MESSAGE("%s %s: %s.", 
+            SHOW_MESSAGE("%s %s: %s.",
                          edited.first, edited.last, _("Remove drawing first"));
         } else {
             g_free((gpointer)edited.category);
@@ -424,7 +439,7 @@ out:
     }
 }
 
-static GtkWidget *set_entry(GtkWidget *table, int row, 
+static GtkWidget *set_entry(GtkWidget *table, int row,
 			    char *text, const char *deftxt)
 {
     GtkWidget *tmp;
@@ -449,7 +464,7 @@ static GtkWidget *set_entry(GtkWidget *table, int row,
 }
 
 /*
- * Activations 
+ * Activations
  */
 
 void view_on_row_activated(GtkTreeView        *treeview,
@@ -461,9 +476,9 @@ void view_on_row_activated(GtkTreeView        *treeview,
     GtkTreeIter   iter;
     int i;
     GtkWidget *dialog, *table, *tmp;
-    gchar   *last = NULL, 
-        *first = NULL, 
-        *club = NULL, 
+    gchar   *last = NULL,
+        *first = NULL,
+        *club = NULL,
         *regcategory = NULL,
         *category = NULL,
 	*country = NULL,
@@ -489,12 +504,12 @@ void view_on_row_activated(GtkTreeView        *treeview,
             gtk_tree_model_get(model, &iter,
                                COL_INDEX, &index,
                                COL_LAST_NAME, &last,
-                               COL_FIRST_NAME, &first, 
-                               COL_BIRTHYEAR, &birthyear, 
-                               COL_CLUB, &club, 
-                               COL_WCLASS, &regcategory, 
-                               COL_BELT, &belt, 
-                               COL_WEIGHT, &weight, 
+                               COL_FIRST_NAME, &first,
+                               COL_BIRTHYEAR, &birthyear,
+                               COL_CLUB, &club,
+                               COL_WCLASS, &regcategory,
+                               COL_BELT, &belt,
+                               COL_WEIGHT, &weight,
                                COL_VISIBLE, &visible,
                                COL_CATEGORY, &category,
                                COL_DELETED, &deleted,
@@ -519,7 +534,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
         index = ptr_to_gint(userdata);
         strcpy(clubseeding_s, "0");
     }
-	
+
     judoka_tmp->index = index;
     judoka_tmp->visible = visible;
     judoka_tmp->category = g_strdup(category);
@@ -544,7 +559,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
                                                          GTK_STOCK_PRINT,
                                                          RESPONSE_COACH);
         gtk_button_set_label(GTK_BUTTON(coach_button), _("Competitors"));
-        gtk_button_set_image(GTK_BUTTON(coach_button), 
+        gtk_button_set_image(GTK_BUTTON(coach_button),
                              gtk_image_new_from_stock(GTK_STOCK_PRINT, GTK_ICON_SIZE_BUTTON));
     }
 
@@ -664,9 +679,9 @@ void view_on_row_activated(GtkTreeView        *treeview,
             weight_entry = wbutton;
             if (last && last[0])
                 gtk_widget_grab_focus(wbutton);
-            g_signal_connect(G_OBJECT(wbutton), "button-press-event", 
+            g_signal_connect(G_OBJECT(wbutton), "button-press-event",
                              (GCallback) set_weight_on_button_pressed, judoka_tmp->weight);
-            g_signal_connect(G_OBJECT(wbutton), "key-press-event", 
+            g_signal_connect(G_OBJECT(wbutton), "key-press-event",
                              (GCallback) set_weight_on_button_pressed, judoka_tmp->weight);
         } else {
             judoka_tmp->weight = set_entry(table, 8, _("Weight:"), weight_s);
@@ -682,7 +697,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
         gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, _("No seeding"));
         gchar buf[8];
         for (i = 0; i < NUM_SEEDED; i++) {
-            snprintf(buf, sizeof(buf), "%d", i+1); 
+            snprintf(buf, sizeof(buf), "%d", i+1);
             gtk_combo_box_text_append(GTK_COMBO_BOX_TEXT(tmp), NULL, buf);
         }
         gtk_grid_attach(GTK_GRID(table), tmp, 1, row, 1, 1);
@@ -693,7 +708,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
         gtk_combo_box_append_text((GtkComboBox *)tmp, _("No seeding"));
         gchar buf[8];
         for (i = 0; i < NUM_SEEDED; i++) {
-            snprintf(buf, sizeof(buf), "%d", i+1); 
+            snprintf(buf, sizeof(buf), "%d", i+1);
             gtk_combo_box_append_text((GtkComboBox *)tmp, buf);
         }
         gtk_table_attach_defaults(GTK_TABLE(table), tmp, 1, 2, row, row+1);
@@ -786,7 +801,7 @@ void view_on_row_activated(GtkTreeView        *treeview,
 #if (GTKVER == 3)
         gtk_entry_set_completion(GTK_ENTRY(judoka_tmp->club), club_completer);
 #else
-        g_signal_connect(G_OBJECT(judoka_tmp->club), "key-press-event", 
+        g_signal_connect(G_OBJECT(judoka_tmp->club), "key-press-event",
                          G_CALLBACK(complete_cb), club_completer);
 #endif
         row++;
@@ -821,8 +836,8 @@ void view_on_row_activated(GtkTreeView        *treeview,
 
             gtk_table_attach_defaults(GTK_TABLE(table), tmp, 1, 2, 1, 2);
 #endif
-            gtk_combo_box_set_active(GTK_COMBO_BOX(tmp), 
-                                     catdata ? 
+            gtk_combo_box_set_active(GTK_COMBO_BOX(tmp),
+                                     catdata ?
                                      get_system_menu_selection(catdata->system.wishsys) :
                                      CAT_SYSTEM_DEFAULT);
 
@@ -874,9 +889,9 @@ void view_on_row_activated(GtkTreeView        *treeview,
         }
     }
 
-    g_free(last); 
-    g_free(first); 
-    g_free(club); 
+    g_free(last);
+    g_free(first);
+    g_free(club);
     g_free(regcategory);
     g_free(category);
     g_free(country);
@@ -898,7 +913,7 @@ void new_regcategory(GtkWidget *w, gpointer data)
     view_on_row_activated(NULL, NULL, NULL, gint_to_ptr(NEW_WCLASS+ptr_to_gint(data)));
 }
 
-static void print_competitors_callback(GtkWidget *widget, 
+static void print_competitors_callback(GtkWidget *widget,
                                        GdkEvent *event,
                                        gpointer data)
 {
@@ -916,8 +931,8 @@ static void print_competitors_callback(GtkWidget *widget,
     gtk_widget_destroy(widget);
 }
 
-static gboolean display_coach(GtkWidget *treeview, 
-                              GdkEventButton *event, 
+static gboolean display_coach(GtkWidget *treeview,
+                              GdkEventButton *event,
                               gpointer userdata)
 {
     display_competitor(ptr_to_gint(userdata) | 0x10000);
@@ -953,9 +968,9 @@ void print_competitors_dialog(const gchar *cid, gint ix)
             free_judoka(j);
         }
 
-        g_signal_connect(G_OBJECT(tmp), "button-press-event", 
+        g_signal_connect(G_OBJECT(tmp), "button-press-event",
                          (GCallback) display_coach, gint_to_ptr(ix));
-        g_signal_connect(G_OBJECT(tmp), "key-press-event", 
+        g_signal_connect(G_OBJECT(tmp), "key-press-event",
                          (GCallback) display_coach, gint_to_ptr(ix));
     } else {
         tmp = gtk_label_new("");
@@ -966,7 +981,7 @@ void print_competitors_dialog(const gchar *cid, gint ix)
     }
 
 #if (GTKVER == 3)
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        tmp, FALSE, FALSE, 0);
 #else
     gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), tmp);
@@ -978,7 +993,7 @@ void print_competitors_dialog(const gchar *cid, gint ix)
             tmp = gtk_label_new(buf);
             g_object_set(tmp, "xalign", 0.0, NULL);
 #if (GTKVER == 3)
-            gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+            gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                                tmp, FALSE, FALSE, 0);
 #else
             gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), tmp);
@@ -989,7 +1004,7 @@ void print_competitors_dialog(const gchar *cid, gint ix)
 
     g_signal_connect(G_OBJECT(dialog), "response",
                      G_CALLBACK(print_competitors_callback), g_strdup(cid));
-    
+
     gtk_widget_show_all(dialog);
 
     num_selected_judokas = 0;
@@ -1058,13 +1073,13 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
     gchar *comment = NULL;
     GtkTreeIter parent;
 
-    gtk_tree_model_get(model, iter, 
+    gtk_tree_model_get(model, iter,
                        COL_INDEX, &index,
-                       COL_LAST_NAME, &last, 
-                       COL_VISIBLE, &visible, 
+                       COL_LAST_NAME, &last,
+                       COL_VISIBLE, &visible,
                        COL_WEIGHT, &weight,
                        COL_SEEDING, &seeding,
-                       COL_DELETED, &deleted, 
+                       COL_DELETED, &deleted,
                        COL_COMMENT, &comment, -1);
 
     if (visible) {
@@ -1088,7 +1103,7 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
                        comment && comment[0] ? " *" : "",
                        jstatus&0xf ? pos : "");
         else
-            g_snprintf(buf, sizeof(buf), "%s%s%s", last, 
+            g_snprintf(buf, sizeof(buf), "%s%s%s", last,
                        comment && comment[0] ? " *" : "",
                        jstatus&0xf ? pos : "");
 
@@ -1098,20 +1113,20 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
             g_object_set(renderer, "strikethrough", FALSE, "cell-background-set", FALSE, NULL);
 
         if (deleted & JUDOGI_OK)
-            g_object_set(renderer, 
-                         "foreground", "darkgreen", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "darkgreen", FALSE,
                          NULL);
         else if (deleted & JUDOGI_NOK)
-            g_object_set(renderer, 
-                         "foreground", "darkred", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "darkred", FALSE,
                          NULL);
         else if (jstatus == 0 && (cstatus & REAL_MATCH_EXISTS))
-            g_object_set(renderer, 
-                         "foreground", "blue", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "blue", FALSE,
                          NULL);
         else
-            g_object_set(renderer, 
-                         "foreground", "black", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "black", FALSE,
                          NULL);
     } else {
         gint status = 0;
@@ -1119,7 +1134,7 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
         gboolean tie = FALSE;
         gboolean extra = FALSE;
         gint numcomp = 0;
-		
+
         if (user_data == NULL) {
             //status = weight;
             struct category_data *catdata = avl_get_category(index);
@@ -1150,56 +1165,56 @@ void last_name_cell_data_func (GtkTreeViewColumn *col,
 #endif
         }
 
-        if (tie && prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS) == FALSE)
-            g_object_set(renderer, 
-                         "cell-background", "Red", 
-                         "cell-background-set", TRUE, 
+        if (tie /*&& prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS) == FALSE*/)
+            g_object_set(renderer,
+                         "cell-background", "Red",
+                         "cell-background-set", TRUE,
                          NULL);
         else if (extra)
-            g_object_set(renderer, 
-                         "cell-background", "Lightblue", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Lightblue",
+                         "cell-background-set", TRUE,
                          NULL);
         else if (deleted & TEAM)
-            g_object_set(renderer, 
-                         "cell-background", "Lightgreen", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Lightgreen",
+                         "cell-background-set", TRUE,
                          NULL);
         else if (((status & SYSTEM_DEFINED /*REAL_MATCH_EXISTS*/) && (status & MATCH_UNMATCHED) == 0))
-            g_object_set(renderer, 
-                         "cell-background", "Green", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Green",
+                         "cell-background-set", TRUE,
                          NULL);
         else if (status & MATCH_MATCHED)
-            g_object_set(renderer, 
-                         "cell-background", "Orange", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Orange",
+                         "cell-background-set", TRUE,
                          NULL);
         else if (status & REAL_MATCH_EXISTS)
-            g_object_set(renderer, 
-                         "cell-background", "Yellow", 
-                         "cell-background-set", TRUE, 
+            g_object_set(renderer,
+                         "cell-background", "Yellow",
+                         "cell-background-set", TRUE,
                          NULL);
         else
-            g_object_set(renderer, 
-                         "cell-background-set", FALSE, 
+            g_object_set(renderer,
+                         "cell-background-set", FALSE,
                          NULL);
 
         if ((last && last[0] == '_') || (deleted & TEAM))
-            g_object_set(renderer, 
-                         "foreground", "Gray", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "Gray", FALSE,
                          NULL);
         else if (deleted & TEAM_EVENT)
-            g_object_set(renderer, 
-                         "foreground", "Blue", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "Blue", FALSE,
                          NULL);
         else if (defined)
-            g_object_set(renderer, 
-                         "foreground", "Black", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "Black", FALSE,
                          NULL);
         else
-            g_object_set(renderer, 
-                         "foreground", "Brown", FALSE, 
+            g_object_set(renderer,
+                         "foreground", "Brown", FALSE,
                          NULL);
 
         g_snprintf(buf, sizeof(buf), "%s%s", extra ? "! " : "", last);
@@ -1224,13 +1239,13 @@ void first_name_cell_data_func (GtkTreeViewColumn *col,
     guint  index;
     guint  weight;
 
-    gtk_tree_model_get(model, iter, 
+    gtk_tree_model_get(model, iter,
                        COL_INDEX, &index,
-                       COL_FIRST_NAME, &first, 
-                       COL_VISIBLE, &visible, 
+                       COL_FIRST_NAME, &first,
+                       COL_VISIBLE, &visible,
                        COL_WEIGHT, &weight,
                        COL_DELETED, &deleted, -1);
-  
+
     if (visible) {
         g_snprintf(buf, sizeof(buf), "%s", first);
     } else {
@@ -1260,12 +1275,12 @@ void birthyear_cell_data_func (GtkTreeViewColumn *col,
     guint  index;
     guint  yob;
 
-    gtk_tree_model_get(model, iter, 
+    gtk_tree_model_get(model, iter,
                        COL_INDEX, &index,
-                       COL_VISIBLE, &visible, 
+                       COL_VISIBLE, &visible,
                        COL_BIRTHYEAR, &yob,
                        -1);
-  
+
     if (visible) {
         g_object_set(renderer,
                      "weight-set", FALSE,
@@ -1304,12 +1319,12 @@ void weight_cell_data_func (GtkTreeViewColumn *col,
     gint   weight, birthyear;
     gboolean visible;
 
-    gtk_tree_model_get(model, iter, 
-                       COL_WEIGHT, &weight, 
-                       COL_VISIBLE, &visible, 
+    gtk_tree_model_get(model, iter,
+                       COL_WEIGHT, &weight,
+                       COL_VISIBLE, &visible,
                        COL_BIRTHYEAR, &birthyear,
                        -1);
-  
+
     if (visible) {
         g_snprintf(buf, sizeof(buf), "%d,%02d", weight/1000, (weight%1000)/10);
         g_object_set(renderer, "foreground-set", FALSE, NULL); /* print this normal */
@@ -1333,7 +1348,7 @@ void belt_cell_data_func (GtkTreeViewColumn *col,
     gtk_tree_model_get(model, iter, COL_BELT, &belt, COL_VISIBLE, &visible, -1);
 
     strcpy(buf, "?");
-  
+
     if (visible) {
         if (belt >= 0 && belt < NUM_BELTS) {
             g_snprintf(buf, sizeof(buf), "%s", belts[belt]);
@@ -1359,12 +1374,12 @@ void seeding_cell_data_func (GtkTreeViewColumn *col,
     gint   seeding, clubseeding;
     gboolean visible;
 
-    gtk_tree_model_get(model, iter, 
-                       COL_VISIBLE, &visible, 
+    gtk_tree_model_get(model, iter,
+                       COL_VISIBLE, &visible,
                        COL_SEEDING, &seeding,
                        COL_CLUBSEEDING, &clubseeding,
                        -1);
-  
+
     buf[0] = 0;
 
     if (visible) {
@@ -1381,14 +1396,14 @@ void seeding_cell_data_func (GtkTreeViewColumn *col,
 static gchar *selected_regcategory = NULL;
 static gboolean selected_visible;
 
-static gboolean view_on_button_pressed(GtkWidget *treeview, 
-                                       GdkEventButton *event, 
+static gboolean view_on_button_pressed(GtkWidget *treeview,
+                                       GdkEventButton *event,
                                        gpointer userdata)
 {
     gboolean handled = FALSE;
 
     /* single click with the left or right mouse button? */
-    if (event->type == GDK_BUTTON_PRESS  &&  
+    if (event->type == GDK_BUTTON_PRESS  &&
         (event->button == 1 || event->button == 3)) {
         GtkTreePath *path;
         GtkTreeModel *model;
@@ -1396,7 +1411,7 @@ static gboolean view_on_button_pressed(GtkWidget *treeview,
         guint index;
 
         if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(treeview),
-                                          (gint) event->x, 
+                                          (gint) event->x,
                                           (gint) event->y,
                                           &path, NULL, NULL, NULL)) {
             GtkTreeIter parent;
@@ -1425,7 +1440,7 @@ static gboolean view_on_button_pressed(GtkWidget *treeview,
             }
 
             if (event->button == 3) {
-                view_popup_menu(treeview, event, 
+                view_popup_menu(treeview, event,
                                 gint_to_ptr(index),
                                 selected_regcategory,
                                 selected_visible);
@@ -1444,8 +1459,8 @@ static gboolean view_on_button_pressed(GtkWidget *treeview,
     return handled; /* we did not handle this */
 }
 
-static gboolean set_weight_on_button_pressed(GtkWidget *treeview, 
-                                             GdkEventButton *event, 
+static gboolean set_weight_on_button_pressed(GtkWidget *treeview,
+                                             GdkEventButton *event,
                                              gpointer userdata)
 {
     GtkEntry *weight = userdata;
@@ -1464,7 +1479,7 @@ static gboolean set_weight_on_button_pressed(GtkWidget *treeview,
 gboolean view_onPopupMenu (GtkWidget *treeview, gpointer userdata)
 {
     view_popup_menu(treeview, NULL, userdata, "?", FALSE);
-        
+
     return TRUE; /* we handled this */
 }
 #endif
@@ -1671,7 +1686,7 @@ static GtkWidget *create_view_and_model(void)
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
     gtk_tree_selection_set_mode(gtk_tree_view_get_selection(GTK_TREE_VIEW(view)),
                                 GTK_SELECTION_MULTIPLE);
-				    
+
     g_object_unref(model); /* destroy model automatically with view */
 
     /*
@@ -1805,13 +1820,13 @@ void set_judokas_page(GtkWidget *notebook)
     GtkWidget *view;
     GtkTreeViewColumn *col;
     gboolean retval = FALSE;
-    
+
 #if 0
     GtkSettings *settings = gtk_settings_get_default();
     gtk_settings_set_long_property(settings ,"gtk-tooltip-timeout", 500, NULL);
 #endif
 
-    /* 
+    /*
      * list of judokas
      */
     judokas_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
@@ -2029,7 +2044,7 @@ void remove_empty_regcategories(GtkWidget *w, gpointer data)
     }
 
     g_list_foreach(rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
-    g_list_free(rr_list);        
+    g_list_free(rr_list);
 
     SYS_LOG_INFO(_("Empty categories removed"));
 }
@@ -2093,7 +2108,7 @@ void remove_unweighed_competitors(GtkWidget *w, gpointer data)
     }
 
     g_list_foreach(rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
-    g_list_free(rr_list);        
+    g_list_free(rr_list);
 
     SYS_LOG_INFO(_("Unweighted competitors removed"));
 }
@@ -2104,7 +2119,7 @@ static gboolean foreach_selected_competitor(GtkTreeModel *model,
                                             GList       **rowref_list)
 {
     gboolean visible;
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(current_view));
 
     g_assert ( rowref_list != NULL );
@@ -2143,7 +2158,7 @@ void remove_competitors(GtkWidget *w, gpointer data)
                 struct judoka *j = get_data_by_iter(&iter);
 
                 if (j && (db_competitor_match_status(j->index) & MATCH_EXISTS)) {
-                    SHOW_MESSAGE("%s %s: %s", 
+                    SHOW_MESSAGE("%s %s: %s",
                                  j->first, j->last, _("Matches exist. Undo the drawing first."));
                     free_judoka(j);
                 } else if (j) {
@@ -2159,7 +2174,7 @@ void remove_competitors(GtkWidget *w, gpointer data)
     }
 
     g_list_foreach(rr_list, (GFunc) gtk_tree_row_reference_free, NULL);
-    g_list_free(rr_list);        
+    g_list_free(rr_list);
 
     SYS_LOG_INFO(_("Competitors removed"));
 }
@@ -2214,7 +2229,7 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
         label[6] = 0;
 
         display_competitor(jnum);
-                
+
         if (barcode)
             gtk_label_set_text(GTK_LABEL(barcode), label);
 
@@ -2230,7 +2245,7 @@ static gboolean key_press(GtkWidget *widget, GdkEventKey *event, gpointer userda
             keys[5] = event->keyval - GDK_0;
         else
             keys[5] = event->keyval - GDK_KP_0;
-                
+
         for (i = 0; i < 6; i++)
             label[i] = keys[i] + '0';
         label[6] = 0;
@@ -2282,12 +2297,12 @@ static gboolean foreach_select_coach(GtkTreeModel *model,
     return FALSE; /* do not stop walking the store, call us with next row */
 }
 
-static void on_enter(GtkEntry *entry, gpointer user_data)  { 
+static void on_enter(GtkEntry *entry, gpointer user_data)  {
     const gchar *the_text;
     gint indx;
     gboolean coach;
 
-    the_text = gtk_entry_get_text(GTK_ENTRY(entry)); 
+    the_text = gtk_entry_get_text(GTK_ENTRY(entry));
     indx = db_get_index_by_id(the_text, &coach);
 
     if (coach) {
@@ -2302,14 +2317,14 @@ static void on_enter(GtkEntry *entry, gpointer user_data)  {
 }
 
 #if 0
-static void on_expose(GtkEntry *dialog, gpointer user_data)  { 
+static void on_expose(GtkEntry *dialog, gpointer user_data)  {
     //g_print("expose\n");
     //gtk_window_present(GTK_WINDOW(dialog));
     //gtk_widget_grab_focus(GTK_WIDGET(dialog));
 }
 #endif
 
-static void barcode_delete_callback(GtkWidget *widget, 
+static void barcode_delete_callback(GtkWidget *widget,
                                     GdkEvent *event,
                                     gpointer data)
 {
@@ -2340,7 +2355,7 @@ void barcode_search(GtkWidget *w, gpointer data)
     hbox = gtk_grid_new();
     gtk_grid_attach(GTK_GRID(hbox), label, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(hbox), bcentry, 1, 0, 1, 1);
-    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), 
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
                        hbox, FALSE, FALSE, 0);
 #else
     hbox = gtk_hbox_new (FALSE, 5);
@@ -2356,12 +2371,12 @@ void barcode_search(GtkWidget *w, gpointer data)
     bcdialog = (void *)dialog;
 
     /* Call gtk_widget_destroy() when the dialog emits the response signal. */
-    g_signal_connect(G_OBJECT(bcentry), 
+    g_signal_connect(G_OBJECT(bcentry),
                      "activate", G_CALLBACK(on_enter), dialog);
     g_signal_connect(G_OBJECT(dialog), "response",
                      G_CALLBACK(barcode_delete_callback), NULL);
 #if 0
-    g_signal_connect(G_OBJECT(dialog), 
+    g_signal_connect(G_OBJECT(dialog),
                      "key-press-event", G_CALLBACK(key_press), NULL);
 #endif
 }

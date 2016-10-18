@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -2006,6 +2006,7 @@ void do_print(GtkWidget *menuitem, gpointer userdata)
 
     gtk_print_operation_set_use_full_page(print, FALSE);
     gtk_print_operation_set_unit(print, GTK_UNIT_POINTS);
+    gtk_print_operation_set_allow_async(print, TRUE);
 
     /*res = */gtk_print_operation_run(print,
                                       ptr_to_gint(userdata) & PRINT_TO_DEFAULT ? 

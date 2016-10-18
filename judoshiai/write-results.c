@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,28 +22,28 @@ static gint saved_competitors[TOTAL_NUM_COMPETITORS];
 static gint saved_competitor_cnt = 0;
 
 
-static void write_result(FILE *f, gint num, const gchar *first, const gchar *last, 
+static void write_result(FILE *f, gint num, const gchar *first, const gchar *last,
 			 const gchar *club, const gchar *country)
 {
     if (club_text == (CLUB_TEXT_CLUB|CLUB_TEXT_COUNTRY))
         if (firstname_lastname())
-            fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s/%s</td></tr>\r\n", 
+            fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s/%s</td></tr>\r\n",
                     num, utf8_to_html(first), utf8_to_html(last), utf8_to_html(club), utf8_to_html(country));
         else
-            fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s/%s</td></tr>\r\n", 
+            fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s/%s</td></tr>\r\n",
                     num, utf8_to_html(last), utf8_to_html(first), utf8_to_html(club), utf8_to_html(country));
     else {
 	struct club_name_data *data = club_name_get(club);
-	if (club_text == CLUB_TEXT_CLUB && 
+	if (club_text == CLUB_TEXT_CLUB &&
 	    data && data->address && data->address[0])
-	    fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s, %s</td></tr>\r\n", 
-		    num, utf8_to_html(firstname_lastname() ? first : last), 
-                    utf8_to_html(firstname_lastname() ? last : first), 
+	    fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s, %s</td></tr>\r\n",
+		    num, utf8_to_html(firstname_lastname() ? first : last),
+                    utf8_to_html(firstname_lastname() ? last : first),
 		    utf8_to_html(club), utf8_to_html(data->address));
 	else
-	    fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s</td></tr>\r\n", 
-		    num, utf8_to_html(firstname_lastname() ? first : last), 
-                    utf8_to_html(firstname_lastname() ? last : first), 
+	    fprintf(f, "<tr><td>%d.</td><td>%s %s</td><td>%s</td></tr>\r\n",
+		    num, utf8_to_html(firstname_lastname() ? first : last),
+                    utf8_to_html(firstname_lastname() ? last : first),
                     utf8_to_html(club_text==CLUB_TEXT_CLUB ? club : country));
     }
 
@@ -51,7 +51,7 @@ static void write_result(FILE *f, gint num, const gchar *first, const gchar *las
         club_stat_add(club, country, num);
 }
 
-void write_competitor(FILE *f, const gchar *first, const gchar *last, const gchar *belt, 
+void write_competitor(FILE *f, const gchar *first, const gchar *last, const gchar *belt,
                       const gchar *club, const gchar *category, const gint index, const gboolean by_club)
 {
     // save last club as a hash
@@ -64,7 +64,7 @@ void write_competitor(FILE *f, const gchar *first, const gchar *last, const gcha
     if (by_club) {
         gchar buf[16], buf2[16];
         gint crc = pwcrc32((guchar *)club, strlen(club));
-        
+
         if (crc != last_crc)
             member_count = 0;
         member_count++;
@@ -72,31 +72,31 @@ void write_competitor(FILE *f, const gchar *first, const gchar *last, const gcha
 
         if (create_statistics) {
             gint pos = avl_get_competitor_position(index);
-        
+
             if (pos > 0)
                 snprintf(buf, sizeof(buf), "%d.", pos);
             else
                 snprintf(buf, sizeof(buf), "-");
 
-            fprintf(f, 
+            fprintf(f,
                     "<tr><td>%d</td><td>%s</td><td><a href=\"%d.html\">%s %s</a></td><td>%s</td>"
                     "<td onclick=\"openCatWindow('%s','%d')\">"
-                    "<a href=\"competitors2.html\">%s</a></td><td align=\"center\">%s</td></tr>\r\n", 
-                    member_count, member_count == 1 ? utf8_to_html(club) : "", 
-                    index, 
-                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last), 
-                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first), 
-                    grade_visible ? belt : "", 
+                    "<a href=\"competitors2.html\">%s</a></td><td align=\"center\">%s</td></tr>\r\n",
+                    member_count, member_count == 1 ? utf8_to_html(club) : "",
+                    index,
+                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last),
+                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first),
+                    grade_visible ? belt : "",
                     category, index, category, buf);
         } else
-            fprintf(f, 
+            fprintf(f,
                     "<tr><td>%d</td><td>%s</td><td>%s %s</td><td>%s</td>"
                     "<td onclick=\"openCatWindow('%s','%d')\">"
-                    "<a href=\"competitors2.html\">%s</a></td><td>&nbsp;</td></tr>\r\n", 
-                    member_count, member_count == 1 ? utf8_to_html(club) : "", 
-                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last), 
-                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first), 
-                    grade_visible ? belt : "",  
+                    "<a href=\"competitors2.html\">%s</a></td><td>&nbsp;</td></tr>\r\n",
+                    member_count, member_count == 1 ? utf8_to_html(club) : "",
+                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last),
+                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first),
+                    grade_visible ? belt : "",
                     category, index, category);
 
         last_crc = crc;
@@ -104,29 +104,29 @@ void write_competitor(FILE *f, const gchar *first, const gchar *last, const gcha
         if (create_statistics) {
             gchar buf[16];
             gint pos = avl_get_competitor_position(index);
-        
+
             if (pos > 0)
                 snprintf(buf, sizeof(buf), "%d.", pos);
             else
                 snprintf(buf, sizeof(buf), "-");
 
-            fprintf(f, 
+            fprintf(f,
                     "<tr><td><a href=\"%d.html\">%s %s</a></td><td>%s</td><td>%s</td>"
                     "<td onclick=\"openCatWindow('%s','%d')\">"
-                    "<a href=\"competitors.html\">%s</a></td><td align=\"center\">%s</td></tr>\r\n", 
-                    index, 
-                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last), 
-                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first), 
-                    grade_visible ? belt : "", 
+                    "<a href=\"competitors.html\">%s</a></td><td align=\"center\">%s</td></tr>\r\n",
+                    index,
+                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last),
+                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first),
+                    grade_visible ? belt : "",
                     utf8_to_html(club), category, index, category, buf);
         } else
-            fprintf(f, 
+            fprintf(f,
                     "<tr><td>%s %s</td><td>%s</td><td>%s</td>"
                     "<td onclick=\"openCatWindow('%s','%d')\">"
-                    "<a href=\"competitors.html\">%s</a></td><td>&nbsp;</td></tr>\r\n", 
-                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last), 
-                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first), 
-                    grade_visible ? belt : "", utf8_to_html(club), 
+                    "<a href=\"competitors.html\">%s</a></td><td>&nbsp;</td></tr>\r\n",
+                    firstname_lastname() ? utf8_to_html(first) : utf8_to_html(last),
+                    firstname_lastname() ? utf8_to_html(last) : utf8_to_html(first),
+                    grade_visible ? belt : "", utf8_to_html(club),
                     category, index, category);
 
         saved_competitors[saved_competitor_cnt] = index;
@@ -140,13 +140,15 @@ void write_competitor(FILE *f, const gchar *first, const gchar *last, const gcha
 static void make_top_frame_1(FILE *f, gchar *meta)
 {
     fprintf(f, "<html><head>"
+	    "<meta name=\"viewport\" content=\"width=device-width, "
+	    "target-densitydpi=device-dpi\">\r\n"
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n"
             "%s"
             "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">\r\n"
             "<meta name=\"keywords\" content=\"JudoShiai-%s\" />\r\n"
             "<title>%s  %s  %s</title></head>\r\n"
             "<body class=\"titleframe\"><table><tr>\r\n"
-            "<td colspan=\"2\" align=\"center\" class=\"tournamentheader\"><h1>%s  %s  %s</h1></td></tr><tr>\r\n", 
+            "<td colspan=\"2\" align=\"center\" class=\"tournamentheader\"><h1>%s  %s  %s</h1></td></tr><tr>\r\n",
             meta,
             SHIAI_VERSION,
             prop_get_str_val(PROP_NAME), prop_get_str_val(PROP_DATE), prop_get_str_val(PROP_PLACE),
@@ -174,27 +176,27 @@ static gint make_left_frame(FILE *f)
     gboolean ok;
     gint num_cats = 0;
 
-    fprintf(f, 
+    fprintf(f,
             "<td valign=\"top\"><table class=\"resultslink\"><tr><td class=\"resultslink\">"
             "<a href=\"index.html\">%s</a></td></tr></table>\r\n", _T(results));
     fprintf(f,
             "<table class=\"competitorslink\"><tr><td class=\"competitorslink\">"
             "<a href=\"competitors.html\">%s</a></td></tr></table>\r\n", _T(competitor));
     if (create_statistics) {
-        fprintf(f, 
+        fprintf(f,
                 "<table class=\"medalslink\"><tr><td class=\"medalslink\">"
                 "<a href=\"medals.html\">%s</a></td></tr></table>\r\n", _T(medals));
-        fprintf(f, 
+        fprintf(f,
                 "<table class=\"statisticslink\"><tr><td class=\"statisticslink\">"
                 "<a href=\"statistics.html\">%s</a></td></tr></table>\r\n", _T(statistics));
     }
 
     if (automatic_web_page_update) {
-        fprintf(f, 
+        fprintf(f,
                 "<table class=\"nextmatcheslink\"><tr><td class=\"nextmatcheslink\">"
                 "<a href=\"nextmatches.html\">%s</a></td></tr></table>\r\n", _T(nextmatch2));
-        
-        fprintf(f, 
+
+        fprintf(f,
                 "<table class=\"nextmatcheslink\"><tr><td class=\"nextmatcheslink\">"
                 "<a href=\"coach.html\">%s</a></td></tr></table>\r\n", _T(coach));
     }
@@ -212,7 +214,7 @@ static gint make_left_frame(FILE *f)
         gint index;
 
         num_cats++;
-                                
+
         if (n >= 1 && n <= NUM_COMPETITORS) {
             struct judoka *j;
 
@@ -227,15 +229,15 @@ static gint make_left_frame(FILE *f)
             if (j) {
                 if (j->last && j->last[0] != '?' && j->last[0] != '_' && team == FALSE) {
                     if (!automatic_web_page_update) {
-                        fprintf(f, 
+                        fprintf(f,
                                 "<tr><td class=\"categorylinksleft\"><a href=\"%s.html\">%s</a></td>"
                                 "<td class=\"categorylinksright\">"
                                 "<a href=\"%s.pdf\" target=\"_blank\"> "
-                                "(PDF)</a></td></tr>\r\n", 
-                                txt2hex(j->last), utf8_to_html(j->last), 
+                                "(PDF)</a></td></tr>\r\n",
+                                txt2hex(j->last), utf8_to_html(j->last),
                                 txt2hex(j->last));
                     } else {
-                        fprintf(f, "<tr><td class=\"categorylinksonly\"><a href=\"%s.html\">%s</a></td></tr>\r\n", 
+                        fprintf(f, "<tr><td class=\"categorylinksonly\"><a href=\"%s.html\">%s</a></td></tr>\r\n",
                                 txt2hex(j->last), utf8_to_html(j->last));
                     }
                 }
@@ -262,7 +264,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
         num_judokas = 4;
 
     if (pm.finished)
-        get_pool_winner(num_judokas, pm.c, pm.yes, pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+        get_pool_winner(num_judokas, pm.c, pm.yes, pm.wins, pm.pts, pm.tim, pm.mw, pm.j, pm.all_matched, pm.tie);
 
     for (i = 1; i <= num_judokas; i++) {
         if (pm.finished == FALSE || pm.j[pm.c[i]] == NULL)
@@ -274,7 +276,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
         // Spanish have two bronzes in pool system
         if (i <= 4 && prop_get_int_val(PROP_TWO_POOL_BRONZES) &&
             (pm.j[pm.c[i]]->deleted & HANSOKUMAKE) == 0) {
-            write_result(f, i == 4 ? 3 : i, pm.j[pm.c[i]]->first, 
+            write_result(f, i == 4 ? 3 : i, pm.j[pm.c[i]]->first,
                          pm.j[pm.c[i]]->last, pm.j[pm.c[i]]->club, pm.j[pm.c[i]]->country);
             avl_set_competitor_position(pm.j[pm.c[i]]->index, i == 4 ? 3 : i);
             db_set_category_positions(category, pm.j[pm.c[i]]->index, i);
@@ -284,7 +286,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
             if (prop_get_int_val(PROP_WIN_NEEDED_FOR_MEDAL) && pm.wins[pm.c[i]] == 0)
                 continue;
 
-            write_result(f, i, pm.j[pm.c[i]]->first, 
+            write_result(f, i, pm.j[pm.c[i]]->first,
                          pm.j[pm.c[i]]->last, pm.j[pm.c[i]]->club, pm.j[pm.c[i]]->country);
             avl_set_competitor_position(pm.j[pm.c[i]]->index, i);
             db_set_category_positions(category, pm.j[pm.c[i]]->index, i);
@@ -304,7 +306,7 @@ static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_
 
     fill_pool_struct(category, num_judokas, &pm, FALSE);
 
-    i = num_matches(sys.system, num_judokas) + 
+    i = num_matches(sys.system, num_judokas) +
         ((sys.system == SYSTEM_DPOOL || sys.system == SYSTEM_DPOOL3) ? 1 : 5);
 
     if (sys.system == SYSTEM_DPOOL3) {
@@ -328,7 +330,7 @@ static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_
             bronze2 = pm.m[i].white;
         else
             bronze2 = pm.m[i].blue;
-        
+
         i++;
     }
 
@@ -399,7 +401,7 @@ static void french_results(FILE *f, gint category, struct judoka *ctg,
 {
     struct match m[NUM_MATCHES];
     struct judoka *j1;
-    gint gold = 0, silver = 0, bronze1 = 0, bronze2 = 0, fourth = 0, 
+    gint gold = 0, silver = 0, bronze1 = 0, bronze2 = 0, fourth = 0,
         fifth1 = 0, fifth2 = 0, seventh1 = 0, seventh2 = 0;
     gint winner= 0, loser = 0;
     gint sys = systm.system - SYSTEM_FRENCH_8;
@@ -529,7 +531,7 @@ static void write_cat_result(FILE *f, gint category)
     sys = db_get_system(category);
     num_judokas = sys.numcomp;
 
-    fprintf(f, "<tr><td colspan=\"3\"><b><a href=\"%s.html\">%s</a></b> (%d) </td></tr>\r\n", 
+    fprintf(f, "<tr><td colspan=\"3\"><b><a href=\"%s.html\">%s</a></b> (%d) </td></tr>\r\n",
             txt2hex(ctg->last), utf8_to_html(ctg->last), num_judokas);
 
     switch (sys.system) {
@@ -550,7 +552,7 @@ static void write_cat_result(FILE *f, gint category)
     case SYSTEM_FRENCH_32:
     case SYSTEM_FRENCH_64:
     case SYSTEM_FRENCH_128:
-        french_results(f, category, ctg, num_judokas, 
+        french_results(f, category, ctg, num_judokas,
                        sys, 0);
         break;
     }
@@ -613,17 +615,17 @@ static void print_embedded_text(FILE *f, gchar *name, struct compsys systm, gint
     }
 
     if (pagenum)
-        fprintf(f, 
+        fprintf(f,
                 "<object data=\"%s-%d.svg\" type=\"image/svg+xml\" width=\"%d\" height=\"%d\"></object>\r\n",
                 name, pagenum, w, h);
     else
-        fprintf(f, 
+        fprintf(f,
                 "<object data=\"%s.svg\" type=\"image/svg+xml\" width=\"%d\" height=\"%d\"></object>\r\n",
                 name, w, h);
 
 #if 0
     if (pagenum)
-        fprintf(f, 
+        fprintf(f,
                 "\r\n<!--[if !IE]>-->\r\n"
                 "<object data=\"%s-%d.svg\" type=\"image/svg+xml\" class=\"catimg\"\r\n"
                 "width=\"%d\" height=\"%d\" id=\"svgobj%d\"> <!--<![endif]-->\r\n"
@@ -636,7 +638,7 @@ static void print_embedded_text(FILE *f, gchar *name, struct compsys systm, gint
                 "</object>\r\n", name, pagenum, w, h, pagenum,
                 name, pagenum, w, h, pagenum, name, pagenum, w, h, pagenum);
     else
-        fprintf(f, 
+        fprintf(f,
                 "\r\n<!--[if !IE]>-->\r\n"
                 "<object data=\"%s.svg\" type=\"image/svg+xml\" class=\"catimg\"\r\n"
                 "width=\"%d\" height=\"%d\" id=\"svgobj%d\"> <!--<![endif]-->\r\n"
@@ -684,7 +686,7 @@ void write_html(gint cat)
     progress_show(-1.0, j->last);
 
     struct compsys sys = db_get_system(cat);
-        
+
     hextext = txt2hex(j->last);
     snprintf(buf, sizeof(buf), "%s.html", hextext);
 
@@ -716,7 +718,7 @@ void write_html(gint cat)
 
         snprintf(buf, sizeof(buf), "%s.map", hextext);
         copy_from_file(buf, f);
-        
+
         fprintf(f, "</div></td></tr>\r\n");
 
         for (i = 1; i < num_pages(sys); i++) {
@@ -883,11 +885,11 @@ out:
         if (category_definitions[i].stat.total)
             fprintf(f, "<td>%d", category_definitions[i].stat.goldenscores);
 
-    fprintf(f, "\n<tr><td class=\"stat1\">%s:<td>%d:%02d", _T(time), 
+    fprintf(f, "\n<tr><td class=\"stat1\">%s:<td>%d:%02d", _T(time),
             tott ? (tots/tott)/60 : 0, tott ? (tots/tott)%60 : 0);
     for (i = 0; i < num_categories; i++)
         if (category_definitions[i].stat.total) {
-            gint tmo = category_definitions[i].stat.time / 
+            gint tmo = category_definitions[i].stat.time /
                 category_definitions[i].stat.total;
             fprintf(f, "<td>%d:%02d", tmo/60, tmo%60);
         }
@@ -902,7 +904,7 @@ void write_comp_stat(gint index)
     struct judoka *j = get_data(index);
     if (!j)
         return;
-        
+
     snprintf(buf, sizeof(buf), "%d.html", index);
 
     FILE *f = open_write(buf);
@@ -922,7 +924,7 @@ void write_comp_stat(gint index)
                 "<td class=\"cshdr\">%s<td class=\"cshdr\">%s</tr>\r\n",
                 j->last,
                 _T(name), _T(points), _T(name), _T(time));
-        
+
         db_print_category_matches(catdata, f);
 
         goto end_cat;
@@ -933,8 +935,8 @@ void write_comp_stat(gint index)
             "<tr><td class=\"cshdr\">%s<td class=\"cshdr\">%s<td class=\"cshdr\">IWY/S"
             "<td align=\"center\" class=\"cshdr\">%s<td class=\"cshdr\">IWY/S"
             "<td class=\"cshdr\">%s<td class=\"cshdr\">%s</tr>\r\n",
-            utf8_to_html(firstname_lastname() ? j->first : j->last), 
-            utf8_to_html(firstname_lastname() ? j->last : j->first), 
+            utf8_to_html(firstname_lastname() ? j->first : j->last),
+            utf8_to_html(firstname_lastname() ? j->last : j->first),
             utf8_to_html(j->club),
             _T(category), _T(name), _T(points), _T(name), _T(time));
 
@@ -944,7 +946,7 @@ void write_comp_stat(gint index)
                                  index, index);
     gint numrows = db_get_table(cmd);
     g_free(cmd);
-        
+
     if (numrows < 0)
         goto out;
 
@@ -968,7 +970,7 @@ void write_comp_stat(gint index)
         gint white_points = atoi(db_get_data(i, "white_points"));
         gint mtime = atoi(db_get_data(i, "time"));
         if (blue_points || white_points)
-            fprintf(f, 
+            fprintf(f,
                     "<tr><td "
                     "onclick=\"top.location.href='%s.html'\" "
                     "style=\"cursor: pointer\""
@@ -987,18 +989,18 @@ void write_comp_stat(gint index)
                     txt2hex(c->last),
                     utf8_to_html(c->last),
                     j1->index,
-                    utf8_to_html(firstname_lastname() ? j1->first : j1->last), 
+                    utf8_to_html(firstname_lastname() ? j1->first : j1->last),
                     utf8_to_html(firstname_lastname() ? j1->last : j1->first),
                     prop_get_int_val(PROP_WHITE_FIRST) ? "wscore" : "bscore",
-                    (blue_score>>16)&15, (blue_score>>12)&15, (blue_score>>8)&15, 
+                    (blue_score>>16)&15, (blue_score>>12)&15, (blue_score>>8)&15,
                     blue_score&7, blue_score&8?"H":"",
                     blue_points,
-                    white_points, 
+                    white_points,
                     prop_get_int_val(PROP_WHITE_FIRST) ? "bscore" : "wscore",
-                    (white_score>>16)&15, (white_score>>12)&15, (white_score>>8)&15, 
+                    (white_score>>16)&15, (white_score>>12)&15, (white_score>>8)&15,
                     white_score&7, white_score&8?"H":"",
                     j2->index,
-                    utf8_to_html(firstname_lastname() ? j2->first : j2->last), 
+                    utf8_to_html(firstname_lastname() ? j2->first : j2->last),
                     utf8_to_html(firstname_lastname() ? j2->last : j2->first), mtime/60, mtime%60);
 
     done:
@@ -1049,7 +1051,7 @@ void write_htmls(gint num_cats)
 }
 
 static void init_club_data(void)
-{ 
+{
     /* competitors */
     gchar *cmd = g_strdup_printf("select * from competitors where \"deleted\"&1=0");
     gint numrows = db_get_table(cmd), k;
@@ -1073,7 +1075,7 @@ static void init_club_data(void)
 
 static gint make_png_all_id = 0;
 
-static enum { 
+static enum {
     MAKE_PNG_STATE_IDLE = 0,
     MAKE_PNG_STATE_INDEX_HTML_1,
     MAKE_PNG_STATE_INDEX_HTML_2, // 15 sec
@@ -1091,7 +1093,7 @@ static enum {
     MAKE_PNG_STATE_COMP_STAT, // 23 s
     MAKE_PNG_STATE_CAT_MATCHES,
     MAKE_PNG_STATE_STATISTICS_HTML
-} 
+}
     make_png_all_state = MAKE_PNG_STATE_IDLE;
 
 static gint competitor_table[TOTAL_NUM_COMPETITORS];
@@ -1109,7 +1111,7 @@ static gint list_categories(gint *num_comp)
     while (ok) {
         gint n = gtk_tree_model_iter_n_children(current_model, &iter);
         gint index;
-            
+
         if (n >= 1 && n <= NUM_COMPETITORS) {
             gtk_tree_model_get(current_model, &iter,
                                COL_INDEX, &index,
@@ -1118,7 +1120,7 @@ static gint list_categories(gint *num_comp)
                 competitor_table[competitor_count++] = index;
             comps += n;
         }
-            
+
         ok = gtk_tree_model_iter_next(current_model, &iter);
     }
 
@@ -1137,7 +1139,7 @@ static gboolean make_png_all_bg(gpointer user_data)
 
     switch (make_png_all_state) {
 
-        /* 
+        /*
          * clean up
          */
     case MAKE_PNG_STATE_IDLE:
@@ -1147,8 +1149,8 @@ static gboolean make_png_all_bg(gpointer user_data)
         make_png_all_state = MAKE_PNG_STATE_INDEX_HTML_1;
         return TRUE;
 
-        /* 
-         * index.html 
+        /*
+         * index.html
          */
     case MAKE_PNG_STATE_INDEX_HTML_1:
         f = open_write("index.html");
@@ -1192,20 +1194,20 @@ static gboolean make_png_all_bg(gpointer user_data)
         make_png_all_state = MAKE_PNG_STATE_NEXT_MATCHES;
         return TRUE;
 
-        /* 
-         * netxmatches.html 
+        /*
+         * netxmatches.html
          */
     case MAKE_PNG_STATE_NEXT_MATCHES:
         init_club_data();
 
         if (automatic_web_page_update) {
-            make_next_matches_html(); 
+            make_next_matches_html();
         }
         make_png_all_state = MAKE_PNG_STATE_CAT_HTMLS_1;
         return TRUE;
-        
-        /* 
-         * sheets 
+
+        /*
+         * sheets
          */
     case MAKE_PNG_STATE_CAT_HTMLS_1:
         list_categories(NULL);
@@ -1227,8 +1229,8 @@ static gboolean make_png_all_bg(gpointer user_data)
         make_png_all_state = MAKE_PNG_STATE_COMPETITORS_HTML_1;
         return TRUE;
 
-        /* 
-         * competitors 
+        /*
+         * competitors
          */
     case MAKE_PNG_STATE_COMPETITORS_HTML_1:
         f = open_write("competitors.html");
@@ -1241,9 +1243,9 @@ static gboolean make_png_all_bg(gpointer user_data)
         fprintf(f,
                 "<td><table class=\"competitors\">"
                 "<tr><td colspan=\"5\" align=\"center\"><h2>%s</h2></td></tr>\n", _T(competitor));
-        fprintf(f, "<tr><th>%s</th><th>%s</th><th><a href=\"competitors2.html\">%s</a></th><th>%s</th><th>&nbsp;%s&nbsp;</th></tr>\n", 
-                _T(name), grade_visible ? _T(grade) : "", 
-                (club_text & CLUB_TEXT_COUNTRY) ? _T(country) :_T(club), 
+        fprintf(f, "<tr><th>%s</th><th>%s</th><th><a href=\"competitors2.html\">%s</a></th><th>%s</th><th>&nbsp;%s&nbsp;</th></tr>\n",
+                _T(name), grade_visible ? _T(grade) : "",
+                (club_text & CLUB_TEXT_COUNTRY) ? _T(country) :_T(club),
                 _T(category), create_statistics ? _T(position) : "");
         write_competitor_for_coach_display(NULL); // init file
 
@@ -1258,8 +1260,8 @@ static gboolean make_png_all_bg(gpointer user_data)
                 const gchar *b = "?";
                 if (j->belt >= 0 && j->belt < NUM_BELTS)
                     b = belts[j->belt];
-                write_competitor(f, j->first, j->last, b, 
-                                 get_club_text(j, CLUB_TEXT_ADDRESS), 
+                write_competitor(f, j->first, j->last, b,
+                                 get_club_text(j, CLUB_TEXT_ADDRESS),
                                  j->category, j->index, 0);
                 write_competitor_for_coach_display(j);
             }
@@ -1290,7 +1292,7 @@ static gboolean make_png_all_bg(gpointer user_data)
                 "<td><table class=\"competitors\">"
                 "<tr><td colspan=\"6\" align=\"center\"><h2>%s</h2></td></tr>\n", _T(competitor));
         fprintf(f, "<tr><th></th><th>%s</th><th><a href=\"competitors.html\">%s</a></th>"
-                "<th>%s</th><th>%s</th><th>&nbsp;%s&nbsp;</th></tr>\n", 
+                "<th>%s</th><th>%s</th><th>&nbsp;%s&nbsp;</th></tr>\n",
                 _T(club), _T(name), grade_visible ? _T(grade) : "", _T(category), create_statistics ? _T(position) : "");
 
         make_png_all_state = MAKE_PNG_STATE_COMPETITORS2_HTML_2;
@@ -1304,8 +1306,8 @@ static gboolean make_png_all_bg(gpointer user_data)
                 const gchar *b = "?";
                 if (j->belt >= 0 && j->belt < NUM_BELTS)
                     b = belts[j->belt];
-                write_competitor(f, j->first, j->last, b, 
-                                 get_club_text(j, CLUB_TEXT_ADDRESS), 
+                write_competitor(f, j->first, j->last, b,
+                                 get_club_text(j, CLUB_TEXT_ADDRESS),
                                  j->category, j->index, TRUE);
                 //write_competitor_for_coach_display(j);
             }
@@ -1418,8 +1420,8 @@ void make_png_all(GtkWidget *w, gpointer data)
 
     /* copy files */
     gchar *files_to_copy[] = {"style.css", "coach.html", "coach.js",
-                              "asc.png", "desc.png", "bg.png", "refresh.png", "clear.png", 
-                              "jquery-1.10.2.min.js", "jquery-1.10.2.min.map", "jquery.tablesorter.js", 
+                              "asc.png", "desc.png", "bg.png", "refresh.png", "clear.png",
+                              "jquery-1.10.2.min.js", "jquery-1.10.2.min.map", "jquery.tablesorter.js",
                               "sie.js", NULL};
     for (i = 0; files_to_copy[i]; i++) {
         f = open_write(files_to_copy[i]);
@@ -1443,11 +1445,11 @@ void make_png_all(GtkWidget *w, gpointer data)
     f = open_write("words.js");
     if (f) {
         gint txts[] = {notdrawntext, finishedtext, matchongoingtext, startedtext,
-                       drawingreadytext, coachtext, nametext, surnametext, weighttext, 
+                       drawingreadytext, coachtext, nametext, surnametext, weighttext,
                        categorytext, statustext, positiontext, displaytext,
                        matchafter1text, matchafter2text, -1};
-        gchar *vars[] = {"not_drawn", "finished", "match_ongoing", "started", 
-                         "drawing_ready", "coach", "firstname", "lastname", "weight", 
+        gchar *vars[] = {"not_drawn", "finished", "match_ongoing", "started",
+                         "drawing_ready", "coach", "firstname", "lastname", "weight",
                          "category", "status", "place", "display",
                          "match_after_1", "match_after_2", NULL};
 
@@ -1477,7 +1479,7 @@ void make_png_all(GtkWidget *w, gpointer data)
 
     /* netxmatches.html */
     if (automatic_web_page_update) {
-        make_next_matches_html(); 
+        make_next_matches_html();
     }
 
     /* sheets */
@@ -1590,7 +1592,7 @@ void make_next_matches_html(void)
         }
 
         fprintf(f, "<td class=\"cpl\">%s:<br>", _T(prevwinner));
-        fprintf(f, "</td>\r\n<td class=\"cpr\">%s<br>%s %s<br>&nbsp;</td>", 
+        fprintf(f, "</td>\r\n<td class=\"cpr\">%s<br>%s %s<br>&nbsp;</td>",
                 utf8_to_html(xc), utf8_to_html(xf), utf8_to_html(xl));
     }
     fprintf(f, "</tr>\r\n");
@@ -1641,16 +1643,16 @@ void make_next_matches_html(void)
             blue = get_data(m[k].blue);
             white = get_data(m[k].white);
 
-            fprintf(f, "<td %s>%s %s<br>%s<br>&nbsp;</td><td %s>%s %s<br>%s<br>&nbsp;</td>", 
+            fprintf(f, "<td %s>%s %s<br>%s<br>&nbsp;</td><td %s>%s %s<br>%s<br>&nbsp;</td>",
                     class_dl,
-                    blue ? utf8_to_html(blue->first) : "?", 
-                    blue ? utf8_to_html(blue->last) : "?", 
-                    blue ? utf8_to_html(get_club_text(blue, 0)) : "?", 
+                    blue ? utf8_to_html(blue->first) : "?",
+                    blue ? utf8_to_html(blue->last) : "?",
+                    blue ? utf8_to_html(get_club_text(blue, 0)) : "?",
                     class_dr,
-                    white ? utf8_to_html(white->first) : "?", 
-                    white ? utf8_to_html(white->last) : "?", 
+                    white ? utf8_to_html(white->first) : "?",
+                    white ? utf8_to_html(white->last) : "?",
                     white ? utf8_to_html(get_club_text(white, 0)) : "?");
-			
+
             free_judoka(blue);
             free_judoka(white);
         }
@@ -1693,7 +1695,7 @@ int get_output_directory(void)
     gtk_widget_show(statistics);
     if (svg_in_use()) {
         svg = gtk_check_button_new_with_label(_("Print SVG"));
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(svg), 
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(svg),
                                      g_key_file_get_boolean(keyfile, "preferences", "printsvg", &error));
         gtk_widget_show(svg);
     }
@@ -1727,7 +1729,7 @@ int get_output_directory(void)
         gtk_widget_destroy(dialog);
         return -1;
     }
-                
+
     name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
     strcpy(current_directory, name);
     g_free (name);

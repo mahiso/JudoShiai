@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -24,6 +24,13 @@ G_LOCK_DEFINE(db);
 
 guint64 cumul_db_time = 0;
 gint    cumul_db_count = 0;
+
+void db_notify_cb(void *arg, int op, char const *db_name,
+		  char const *table_name, sqlite3_int64 rowid)
+{
+    g_print("db %s table %s op=%d rowid=%lld\n",
+	    db_name, table_name, op, rowid);
+}
 
 gint db_exec(const char *dbn, char *cmd, void *data, void *dbcb)
 {
@@ -136,6 +143,7 @@ gint db_open(void)
 	maindb = NULL;
 	G_UNLOCK(db);
     }
+
 #ifdef FAST_DB
     rc = sqlite3_exec(maindb, "PRAGMA synchronous=OFF", NULL, NULL, &zErrMsg);
     if (rc != SQLITE_OK && rc != SQLITE_ABORT && zErrMsg) {

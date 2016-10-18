@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -403,6 +403,7 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
     } while (0)
 
 #define WEIGHT(_a) (ju[c[_a]]->weight)
+#define TIME(_a) (match_time[c[_a]])
 
 #define MATCHED(_a) (m[_a].blue_points || m[_a].white_points)
 
@@ -480,9 +481,20 @@ static void comment_cell_data_func (GtkTreeViewColumn *col,
         COPY_PLAYER(_to, _which, _who);                  \
         set_match(&m[_to]); db_set_match(&m[_to]); } while (0)
 
+/*
+  Swedish rules. Other countries use the same or a subset:
+  16.2 Poolsystem Poolsegraren räknas fram enligt följande:
+  1. Antal vunna matcher.
+  2. Vid lika antal vunna matcher avgör poängen.
+  3. Vid lika antal vunna matcher och poäng avgör inbördes möte.
+  4. Vid lika antal vinster och inbördes inte går att räkna ut vinner den med
+     snabbast vinst. (Räknat på totala summan av alla vinster)
+  5. Vid samma tid för vinst avgör invägningsvikten och den med lägst vikt vinner.
+  6. Vid lika vikt avgör utslagsmatcher mellan de tävlande.
+ */
 
 void get_pool_winner(gint num, gint c[21], gboolean yes[21],
-                     gint wins[21], gint pts[21],
+                     gint wins[21], gint pts[21], gint match_time[21],
                      gboolean mw[21][21], struct judoka *ju[21], gboolean all[21], gboolean tie[21])
 {
     gint i, j;
@@ -520,59 +532,36 @@ void get_pool_winner(gint num, gint c[21], gboolean yes[21],
         }
     }
 
-    if (num >= 3 && TIE3(1,2,3)) {
-        /* weight matters */
-        if (WEIGHT(1) > WEIGHT(2)) SWAP(1,2);
-        if (WEIGHT(1) > WEIGHT(3)) SWAP(1,3);
-        if (WEIGHT(2) > WEIGHT(3)) SWAP(2,3);
-        if (WEIGHT(1) == WEIGHT(2) && mw[c[2]][c[1]]) SWAP(1,2);
-        if (WEIGHT(2) == WEIGHT(3) && mw[c[3]][c[2]]) SWAP(2,3);
-        SET_TIE3(1);
-    }
-    if (num >= 4 && TIE3(2,3,4)) {
-        /* weight matters */
-        if (WEIGHT(2) > WEIGHT(3)) SWAP(2,3);
-        if (WEIGHT(2) > WEIGHT(4)) SWAP(2,4);
-        if (WEIGHT(3) > WEIGHT(4)) SWAP(3,4);
-        if (WEIGHT(2) == WEIGHT(3) && mw[c[3]][c[2]]) SWAP(2,3);
-        if (WEIGHT(3) == WEIGHT(4) && mw[c[4]][c[3]]) SWAP(3,4);
-        SET_TIE3(2);
-    }
-    if (num >= 5 && TIE3(3,4,5)) {
-        /* weight matters */
-        if (WEIGHT(3) > WEIGHT(4)) SWAP(3,4);
-        if (WEIGHT(3) > WEIGHT(5)) SWAP(3,5);
-        if (WEIGHT(4) > WEIGHT(5)) SWAP(4,5);
-        if (WEIGHT(3) == WEIGHT(4) && mw[c[4]][c[3]]) SWAP(3,4);
-        if (WEIGHT(4) == WEIGHT(5) && mw[c[5]][c[4]]) SWAP(4,5);
-        SET_TIE3(3);
-    }
-    if (num >= 6 && TIE3(4,5,6)) {
-        /* weight matters */
-        if (WEIGHT(4) > WEIGHT(5)) SWAP(4,5);
-        if (WEIGHT(4) > WEIGHT(6)) SWAP(4,6);
-        if (WEIGHT(5) > WEIGHT(6)) SWAP(5,6);
-        if (WEIGHT(4) == WEIGHT(5) && mw[c[5]][c[4]]) SWAP(4,5);
-        if (WEIGHT(5) == WEIGHT(6) && mw[c[6]][c[5]]) SWAP(5,6);
-        SET_TIE3(4);
-    }
-    if (num >= 7 && TIE3(5,6,7)) {
-        /* weight matters */
-        if (WEIGHT(5) > WEIGHT(6)) SWAP(5,6);
-        if (WEIGHT(5) > WEIGHT(7)) SWAP(5,7);
-        if (WEIGHT(6) > WEIGHT(7)) SWAP(6,7);
-        if (WEIGHT(5) == WEIGHT(6) && mw[c[6]][c[5]]) SWAP(5,6);
-        if (WEIGHT(6) == WEIGHT(7) && mw[c[7]][c[6]]) SWAP(6,7);
-        SET_TIE3(5);
-    }
+    for (i = 1; i < num - 1; i++) {
+	gboolean t = TRUE;
+	if (TIE3(i, i+1, i+2)) {
+	    if (prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_TIME)) {
+		/* fastest wins  */
+		if (TIME(i) > TIME(i+1)) SWAP(i, i+1);
+		if (TIME(i) > TIME(i+2)) SWAP(i, i+2);
+		if (TIME(i+1) > TIME(i+2)) SWAP(i+1, i+2);
+		if (TIME(i) == TIME(i+1) && mw[c[i+1]][c[i]]) SWAP(i,i+1);
+		if (TIME(i+1) == TIME(i+2) && mw[c[i+2]][c[i+1]]) SWAP(i+1,i+2);
+		if (TIME(i) != TIME(i+1) || TIME(i+1) != TIME(i+2))
+		    t = FALSE; /* solved */
+	    }
+	    if (t && prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS)) {
+		/* weight matters */
+		if (WEIGHT(i) > WEIGHT(i+1)) SWAP(i,i+1);
+		if (WEIGHT(i) > WEIGHT(i+2)) SWAP(i,i+2);
+		if (WEIGHT(i+1) > WEIGHT(i+2)) SWAP(i+1,i+2);
+		if (WEIGHT(i) == WEIGHT(i+1) && mw[c[i+1]][c[i]]) SWAP(i,i+1);
+		if (WEIGHT(i+1) == WEIGHT(i+2) && mw[c[i+2]][c[i+1]]) SWAP(i+1,i+2);
+		if (WEIGHT(i) != WEIGHT(i+1) || WEIGHT(i+1) != WEIGHT(i+2))
+		    t = FALSE;
+	    }
 
-#if 0
-    for (i = 1; i < 8; i++)
-        if (ju[c[i]])
-            g_print("Kilpailija %s: %d voittoa ja %d pistettä, paino %d, del %d\n",
-                    ju[c[i]]->last, wins[c[i]], pts[c[i]], ju[c[i]]->weight, ju[c[i]]->deleted);
-    g_print("\n");
-#endif
+	    if (t) {
+		SET_TIE3(i);
+		break;
+	    }
+	}
+    }
 }
 
 static gint num_matches_table[] =   {0,0,1,3,6,10,15,21};
@@ -724,12 +713,14 @@ void fill_pool_struct(gint category, gint num, struct pool_matches *pm, gboolean
 
         if (COMP_1_PTS_WIN(pm->m[i]) && pm->yes[blue] == TRUE && pm->yes[white] == TRUE) {
             pm->wins[blue]++;
+	    pm->tim[blue] += pm->m[i].match_time;
             pm->pts[blue] += pm->m[i].blue_points;
             pm->pts[white] += pm->m[i].white_points; // team event points
             pm->mw[blue][white] = TRUE;
             pm->mw[white][blue] = FALSE;
         } else if (COMP_2_PTS_WIN(pm->m[i]) && pm->yes[blue] == TRUE && pm->yes[white] == TRUE) {
             pm->wins[white]++;
+	    pm->tim[white] += pm->m[i].match_time;
             pm->pts[white] += pm->m[i].white_points;
             pm->pts[blue] += pm->m[i].blue_points; // team event points
             pm->mw[blue][white] = FALSE;
@@ -1051,7 +1042,7 @@ static void update_pool_matches(gint category, gint num)
 
     if (num_pools == 1) {
         if (pm.finished) {
-            get_pool_winner(num, pm.c, pm.yes, pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+            get_pool_winner(num, pm.c, pm.yes, pm.wins, pm.pts, pm.tim, pm.mw, pm.j, pm.all_matched, pm.tie);
             if (catdata)
                 catdata->tie = pm.tie[0];
         }
@@ -1095,7 +1086,7 @@ static void update_pool_matches(gint category, gint num)
     }
 
     for (i = 0; i < num_pools; i++) {
-        get_pool_winner(pool_size[i], c[i], yes[i], pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+        get_pool_winner(pool_size[i], c[i], yes[i], pm.wins, pm.pts, pm.tim, pm.mw, pm.j, pm.all_matched, pm.tie);
         pool_done[i] = pool_finished(num, last_match, sys.system, yes[i], &pm);
         if (catdata && pool_done[i])
             catdata->tie = catdata->tie || pm.tie[0];
@@ -1121,7 +1112,8 @@ static void update_pool_matches(gint category, gint num)
             ma.category = category;
             ma.number = last_match+i+1;
             if (pool_done[0] == FALSE || pool_done[1] == FALSE ||
-                (catdata && catdata->tie && prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS) == FALSE)) {
+                (catdata && catdata->tie
+		 /*&& prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS) == FALSE*/)) {
                 ma.blue = 0;
                 ma.white = 0;
             } else {
@@ -1202,7 +1194,8 @@ static void update_pool_matches(gint category, gint num)
             ma.category = category;
             ma.number = last_match+i+1;
 
-            if (catdata == NULL || catdata->tie == FALSE || prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS)) {
+            if (catdata == NULL || catdata->tie == FALSE
+		/* || prop_get_int_val(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS)*/) {
                 if (pool_done[i])
                     ma.blue = (pm.j[c[i][1]]->deleted & HANSOKUMAKE) ? GHOST : pm.j[c[i][1]]->index;
 
@@ -2862,6 +2855,11 @@ struct score {
     GtkWidget *ippon, *wazaari, *yuko, *shido;
 };
 
+struct match_time {
+    guint category, number;
+    GtkWidget *min, *sec;
+};
+
 static void set_score(GtkWidget *widget,
                       GdkEvent *event,
                       gpointer data)
@@ -2880,6 +2878,28 @@ static void set_score(GtkWidget *widget,
         //update_matches(category, sys, db_find_match_tatami(category, number));
         //db_force_match_number(category);
         //make_backup();
+    }
+
+    g_free(s);
+    gtk_widget_destroy(widget);
+}
+
+static void set_time(GtkWidget *widget,
+		     GdkEvent *event,
+		     gpointer data)
+{
+    struct match_time *s = data;
+    struct compsys sys = db_get_system(s->category);
+
+    if (ptr_to_gint(event) == GTK_RESPONSE_OK) {
+        db_set_time(s->category, s->number,
+		    gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->min))*60 +
+		    gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(s->sec)));
+
+        db_read_match(s->category, s->number);
+        update_matches(s->category, sys, db_find_match_tatami(s->category, s->number));
+        db_force_match_number(s->category);
+        make_backup();
     }
 
     g_free(s);
@@ -2953,6 +2973,44 @@ static void view_match_score_popup_menu(GtkWidget *treeview,
     g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(set_score), s);
 }
 
+static void view_match_time_popup_menu(GtkWidget *treeview,
+				       GdkEventButton *event,
+				       guint category,
+				       guint number,
+				       guint tim)
+{
+    struct match_time *s = g_malloc0(sizeof *s);
+    GtkWidget *dialog, *table;
+
+    s->category = category;
+    s->number = number;
+
+    dialog = gtk_dialog_new_with_buttons (_("Set time"),
+                                          NULL,
+                                          GTK_DIALOG_DESTROY_WITH_PARENT,
+                                          GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                          NULL);
+
+    s->min = gtk_spin_button_new_with_range(0.0, 99.0, 1.0);
+    s->sec = gtk_spin_button_new_with_range(0.0, 59.0, 1.0);
+
+    table = gtk_grid_new();
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new("Min"), 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), gtk_label_new("Sec"), 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), s->min,               0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), s->sec,               1, 1, 1, 1);
+
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->min), tim/60);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(s->sec), tim%60);
+
+    gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
+                       table, FALSE, FALSE, 0);
+    gtk_widget_show_all(dialog);
+
+    g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(set_time), s);
+}
+
 
 static gboolean view_onButtonPressed(GtkWidget *treeview,
                                      GdkEventButton *event,
@@ -2964,8 +3022,8 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
         GtkTreeModel *model;
         GtkTreeIter iter;
         GtkTreeViewColumn *col, *blue_pts_col, *white_pts_col, *blue_score_col, *white_score_col;
-        GtkTreeViewColumn *blue_col, *white_col;
-        guint category, number, blue, white, w, b, blue_score, white_score;
+        GtkTreeViewColumn *blue_col, *white_col, *time_col;
+        guint category, number, blue, white, w, b, blue_score, white_score, tim;
         gboolean visible, handled = FALSE;
         guint category1, number1;
 
@@ -2986,6 +3044,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
                                COL_MATCH_WHITE_SCORE, &white_score,
                                COL_MATCH_BLUE, &b,
                                COL_MATCH_WHITE, &w,
+                               COL_MATCH_TIME, &tim,
                                -1);
             category1 = category | (number & MATCH_CATEGORY_SUB_MASK);
             number1 = number & MATCH_CATEGORY_MASK;
@@ -3009,6 +3068,7 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
             white_score_col = gtk_tree_view_get_column (GTK_TREE_VIEW(treeview), COL_MATCH_WHITE_SCORE);
             blue_col = gtk_tree_view_get_column (GTK_TREE_VIEW(treeview), COL_MATCH_BLUE);
             white_col = gtk_tree_view_get_column (GTK_TREE_VIEW(treeview), COL_MATCH_WHITE);
+            time_col = gtk_tree_view_get_column (GTK_TREE_VIEW(treeview), COL_MATCH_TIME);
 
             if (!visible && event->button == 3) {
                 view_match_popup_menu(treeview, event,
@@ -3057,6 +3117,12 @@ static gboolean view_onButtonPressed(GtkWidget *treeview,
                                             number1,
                                             white_score,
                                             FALSE);
+                handled = TRUE;
+            } else if (visible && event->button == 3 && col == time_col) {
+                view_match_time_popup_menu(treeview, event,
+					   category1,
+					   number1,
+					   tim);
                 handled = TRUE;
             } else if (visible && event->button == 3 && b != GHOST && w != GHOST) {
                 view_next_match_popup_menu(treeview, event,

@@ -371,3 +371,22 @@ div.catdiv {
     page-break-before: always;
 }
 }
+
+/* Override css from other files */
+a {
+    color: #003060;
+}
+
+table.treetable a {
+    color: #003060;
+}
+
+a:hover,
+a:focus {
+    color: #0060c0;
+    text-decoration: underline;
+}
+
+table.treetable tbody td:first-child {
+  font-weight: bold;
+}

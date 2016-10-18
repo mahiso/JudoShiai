@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -545,16 +545,23 @@ void send_html_top(http_parser_t *parser, gchar *bodyattr)
     sendf(s, "HTTP/1.0 200 OK\r\n");
     sendf(s, "Content-Type: text/html; charset=utf-8\r\n\r\n");
     sendf(s, "<html><head>"
+	  "<meta name=\"viewport\" content=\"width=device-width, "
+	  "target-densitydpi=device-dpi\">\r\n"
+	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap.css\">"
+	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"jquery.treetable.theme.default.css\" />\r\n"
+	  "<link rel=\"stylesheet\" type=\"text/css\" href=\"jquery.treetable.css\" />\r\n"
           "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
-          "<link rel=\"stylesheet\" type=\"text/css\" href=\"menu.css\">"
+ 	  "<script language=\"JavaScript\" type=\"text/javascript\" src=\"jquery.js\"></script>"
+	  "<script language=\"JavaScript\" type=\"text/javascript\" src=\"bootstrap.min.js\"></script>"
+	  "<script language=\"JavaScript\" type=\"text/javascript\" src=\"jquery.treetable.js\"></script>\r\n"
           "<title>JudoShiai</title></head><body %s>\r\n", bodyattr);
     /*
     sendf(s, "<table class=\"topbuttons\">"
           "<tr><td><a href=\"categories\">%s</a></td>\r\n", _("Match controlling and browsing"));
     sendf(s, "<td><a href=\"competitors\">%s</a></td>\r\n", _("Competitors"));
     sendf(s, "</tr></table>\r\n");*/
-
-    sendf(s, "<p id=\"navb\"><ul id=\"nav\">"); 
+#if 0
+    sendf(s, "<p id=\"navb\"><ul id=\"nav\">");
 
     sendf(s, "<li>%s<ul>\r\n", _("Competitors"));
     sendf(s, "<li><a href=\"competitors\">%s</a></li>\r\n", _("Show"));
@@ -573,6 +580,48 @@ void send_html_top(http_parser_t *parser, gchar *bodyattr)
     }
 
     sendf(s, "</ul></p><hr>");
+#endif
+
+       sendf(s, "<nav class=\"navbar navbar-default\" role=\"navigation\">"
+	     "<div class=\"navbar-header\">"
+	     "<button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">"
+	     "<span class=\"sr-only\">Toggle navigation</span>"
+	     "<span class=\"icon-bar\"></span>"
+	     "<span class=\"icon-bar\"></span>"
+	     "<span class=\"icon-bar\"></span>"
+	     "<span class=\"icon-bar\"></span>"
+	     "<span class=\"icon-bar\"></span>"
+	     "</button>"
+	     "<a class=\"navbar-brand\" href=\"#\">JudoShiai</a>"
+	     "</div>");
+
+       sendf(s, "<div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">"
+	     "<ul class=\"nav navbar-nav\">");
+
+       sendf(s, "<li class=\"dropdown\">"
+	     "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">%s<b class=\"caret\"></b></a>"
+	     "<ul class=\"dropdown-menu\">", _("Competitors"));
+       sendf(s, "<li><a href=\"competitors\">%s</a></li>\r\n", _("Show"));
+       sendf(s, "<li><a href=\"delcompetitors\">%s</a></li>\r\n", _("Show Deleted"));
+       sendf(s, "<li><a href=\"getcompetitor?index=0\">%s</a></li>\r\n", _("New Competitor"));
+       sendf(s, "</ul>"
+	     "</li>");
+
+       sendf(s, "<li><a href=\"categories\">%s</a></li>\r\n", _("Matches"));
+
+       if (webpwcrc32) {
+	   if (is_accepted(parser->address))
+	       sendf(s, "<li><a href=\"logout\">%s</a></li>\r\n", _("Logout"));
+	   else
+	       sendf(s, "<li><a href=\"login\">%s</a></li>\r\n", _("Login"));
+       }
+
+       sendf(s, "<li><a href=\"timer.html\"><img src=\"judotimer.png\"></a></li>\r\n");
+       sendf(s, "<li><a href=\"info.html\"><img src=\"judoinfo.png\"></a></li>\r\n");
+
+       sendf(s,  "</ul>"
+	     "</div><!-- /.navbar-collapse -->"
+	     "</nav>\r\n");
 }
 
 void send_html_bottom(http_parser_t *parser)
@@ -661,7 +710,7 @@ void run_judotimer(http_parser_t *parser)
         msg.u.result.minutes = tmo;
         msg.u.result.blue_score = b;
         msg.u.result.white_score = w;
-        msg.u.result.blue_vote = bvote; 
+        msg.u.result.blue_vote = bvote;
         msg.u.result.white_vote = wvote;
         msg.u.result.blue_hansokumake = bhkm;
         msg.u.result.white_hansokumake = whkm;
@@ -1045,13 +1094,13 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
     gchar **tablecopy;
 
     if (!strcmp(order, "club"))
-        tablecopy = db_get_table_copy("select * from competitors order by \"club\",\"last\",\"first\" asc", 
+        tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"club\",\"last\",\"first\" asc", 
                                       &numrows, &numcols);
     else if (!strcmp(order, "last"))
-        tablecopy = db_get_table_copy("select * from competitors order by \"last\",\"first\" asc", 
+        tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"last\",\"first\" asc", 
                                       &numrows, &numcols);
     else if (!strcmp(order, "regcat"))
-		tablecopy = db_get_table_copy("select * from competitors order by  \"deleted\",\"regcategory\",\"last\",\"first\" asc",
+		tablecopy = db_get_table_copy("select * from competitors order by  \"category\",\"deleted\",\"regcategory\",\"last\",\"first\" asc",
                 &numrows, &numcols);
 //       tablecopy = db_get_table_copy("select * from competitors order by \"regcategory\",\"last\",\"first\" asc",
 //                                      &numrows, &numcols);
@@ -1059,16 +1108,16 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
     	tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"last\",\"first\" asc",
                 &numrows, &numcols);
     else if (!strcmp(order, "weight"))
-    	tablecopy = db_get_table_copy("select * from competitors order by \"weight\",\"last\",\"first\" asc",
+    	tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"weight\",\"last\",\"first\" asc",
                 &numrows, &numcols);
     else if (!strcmp(order, "ID"))
-    	tablecopy = db_get_table_copy("select * from competitors order by \"id\",\"last\",\"first\" asc",
+    	tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"id\",\"last\",\"first\" asc",
                 &numrows, &numcols);
     else if (!strcmp(order, "Index"))
-    	tablecopy = db_get_table_copy("select * from competitors order by \"index\",\"last\",\"first\" asc",
+    	tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"index\",\"last\",\"first\" asc",
                 &numrows, &numcols);
     else
-        tablecopy = db_get_table_copy("select * from competitors order by \"country\",\"club\",\"last\",\"first\" asc", 
+        tablecopy = db_get_table_copy("select * from competitors order by \"category\",\"country\",\"club\",\"last\",\"first\" asc", 
                                       &numrows, &numcols);
 
     if (!tablecopy)
@@ -1078,17 +1127,21 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
 
     sendf(s, SEARCH_FIELD);
 
-    sendf(s, "<table>\r\n");
-    sendf(s, "<tr><td><a href=\"?order=country\"><b>%s</b></a></td>"
-          "<td><a href=\"?order=club\"><b>%s</b></a></td>"
-          "<td><a href=\"?order=last\"><b>%s</b></a></td>"
-          "<td><b>%s</b></td>"
-          "<td><a href=\"?order=regcat\"><b>%s</b></a></td>"
-            "<td><a href=\"?order=category\"><b>%s</b></a></td>"
-            "<td><a href=\"?order=weight\"><b>%s</b></a></td>"
-            "<td><a href=\"?order=ID\"><b>%s</b></a>/<a href=\"?order=Index\"><b>%s</b></a></td>"
-          "<td></td></tr>\r\n",
-          _("Country"), _("Club"), _("Surname"), _("Name"), _("Reg.Cat"), _("Category"),_("Weight"), _("ID"), _("Index"));
+    sendf(s, "<table id=\"competitors\">\r\n");
+    sendf(s, "<tr>"
+          "<th><a href=\"#\" onclick=\"sort(0);\"><b>%s</b></a></th>"
+          "<th><b>%s</b></th>"
+          "<th><a href=\"#\" onclick=\"sort(2);\"><b>%s</b></a></th>"
+	  "<th><a href=\"#\" onclick=\"sort(3);\"><b>%s</b></a></th>"
+          "<th><a href=\"#\" onclick=\"sort(4);\"><b>%s</b></a></th>"
+	  "<th><a href=\"#\" onclick=\"sort(5);\"><b>%s</b></a></th>"
+	  "<th><a href=\"#\" onclick=\"sort(6);\"><b>%s/%s</b></a></th>"
+          "<th></th></tr>\r\n",
+          _("Surname"), _("Name"), _("Club"), _("Country"), _("Reg.Cat"), _("Weight"), _("ID"), _("Index"));
+
+    gchar lastcat[16];
+    lastcat[0] = 0;
+    gint catid = 7000;
 
     for (row = 0; row < numrows; row++) {
 
@@ -1104,18 +1157,381 @@ void get_competitors(http_parser_t *parser, gboolean show_deleted)
         gchar *id = db_get_col_data(tablecopy, numcols, row, "id");
         gint   deleted = my_atoi(db_get_col_data(tablecopy, numcols, row, "deleted"));
 
+	if (strcmp(lastcat, cat)) {
+	    catid++;
+            sendf(s, "<tr data-tt-id=\"%d\"><td>%s</td><td></td><td></td><td></td>"
+		  "<td></td><td></td><td></td></tr>\r\n", catid, cat);
+	    strcpy(lastcat, cat);
+	}
+
         if (((deleted&1) && show_deleted) ||
             ((deleted&1) == 0 && show_deleted == FALSE)) {
-            sendf(s, "<tr %s><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
-                  "<td>%s</td><td>%s</td><td>%d.%02d</td>"
+            sendf(s, "<tr %s data-tt-id=\"%s\" data-tt-parent-id=\"%d\">"
+		  "<td><a href=\"getcompetitor?index=%s\">%s</a></td><td>%s</td><td>%s</td><td>%s</td>"
+                  "<td>%s</td><td>%d.%02d</td>"
                   "<td><a href=\"getcompetitor?index=%s\">%s/%s</a></td></tr>\r\n",
-                  (deleted & JUDOGI_OK) ? "class=\"judogiok\"" : ((deleted & JUDOGI_NOK) ? "class=\"judoginok\"" : ""), 
-                  country, club, last, first, rcat,cat,weight/1000, (weight%1000)/10,idx,id, idx);
+                  (deleted & JUDOGI_OK) ? "class=\"judogiok\"" : ((deleted & JUDOGI_NOK) ? "class=\"judoginok\"" : ""),
+		  idx, catid, idx,
+                  last, first, club, country, rcat, weight/1000, (weight%1000)/10,
+		  idx, id, idx);
         }
-    }	
+    }
 
     sendf(s, "</table>\r\n");
+    sendf(s, "<script> $(\"#competitors\").treetable({ expandable: true }); </script>\r\n");
+    sendf(s, "<script> function sort(col) {"
+	  "$(\"#competitors tr:not(:first-child)\").each(function() {"
+	  "var node = $(\"#competitors\").treetable(\"node\", $(this).attr('data-tt-id'));"
+	  "$(\"#competitors\").treetable(\"sortBranch\", node, col); });"
+	  "} </script>\r\n");
+
     send_html_bottom(parser);
+
+    db_close_table_copy(tablecopy);
+}
+
+void get_match_info(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    avl_node *node;
+    http_var_t *var;
+    int t = 0, i;
+    node = avl_get_first(parser->queryvars);
+    while (node) {
+        var = (http_var_t *)node->key;
+        if (var) {
+            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
+            if (!strcmp(var->name, "t"))
+                t = atoi(var->value);
+        }
+        node = avl_get_next(node);
+    }
+
+    if (t < 1 || t > NUM_TATAMIS) {
+	/* abstract */
+	sendf(s, "HTTP/1.0 200 OK\r\n");
+	sendf(s, "Content-Type: text/plain\r\n\r\n");
+	for (t = 1; t <= NUM_TATAMIS; t++) {
+	    struct match *m = get_cached_next_matches(t);
+	    int crc = 0xffffffff;
+	    for (i = 0; i < NEXT_MATCH_NUM; i++)
+		crc ^= (crc >> 8) ^
+		    (m[i].category << 16) ^
+		    (m[i].number << 8) ^
+		    (m[i].blue << 6) ^ m[i].white;
+	    sendf(s, "%d,%d\r\n", t, crc);
+	}
+	sendf(s, "\r\n");
+	return;
+    }
+
+    struct match *m = get_cached_next_matches(t);
+    if (!m) {
+	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
+	return;
+    }
+
+    sendf(s, "HTTP/1.0 200 OK\r\n");
+    sendf(s, "Content-Type: text/plain\r\n\r\n");
+
+    sendf(s, "%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+	  t, 0,
+	  next_matches_info[t-1][0].won_catnum,
+	  next_matches_info[t-1][0].won_matchnum,
+	  next_matches_info[t-1][0].won_ix,
+	  0, 0, 0);
+
+    for (i = 0; i < NEXT_MATCH_NUM; i++) {
+	sendf(s, "%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+	      t, i+1, m[i].category, m[i].number,
+	      m[i].blue, m[i].white,
+	      0, 0);
+    }
+
+    sendf(s, "\r\n");
+}
+
+void get_name_info(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    avl_node *node;
+    http_var_t *var;
+    int comp = 0;
+    node = avl_get_first(parser->queryvars);
+    while (node) {
+        var = (http_var_t *)node->key;
+        if (var) {
+            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
+            if (!strcmp(var->name, "c"))
+                comp = atoi(var->value);
+        }
+        node = avl_get_next(node);
+    }
+
+    struct judoka *j = get_data(comp);
+    if (!j) {
+	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
+	return;
+    }
+
+    sendf(s, "HTTP/1.0 200 OK\r\n");
+    sendf(s, "Content-Type: text/plain\r\n\r\n");
+    sendf(s, "%d\t%s\t%s\t%s\r\n\r\n",
+	  comp, j->last, j->first, get_club_text(j, CLUB_TEXT_ABBREVIATION));
+    free_judoka(j);
+}
+
+void set_result(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    struct message msg;
+    const char *tmp;
+
+    if (!is_accepted(parser->address)) {
+	sendf(s, "HTTP/1.0 200 OK\r\n");
+	sendf(s, "Content-Type: text/plain\r\n\r\n");
+	sendf(s, "%s!\r\n", _("No rights to give results"));
+	sendf(s, "%s.\r\n", _("Login"));
+	return;
+    }
+
+    memset(&msg, 0, sizeof(msg));
+    msg.type = MSG_RESULT;
+
+    tmp = httpp_get_query_param(parser, "t");
+    if (tmp) msg.u.result.tatami = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "c");
+    if (tmp) msg.u.result.category = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "m");
+    if (tmp) msg.u.result.match = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "min");
+    if (tmp) msg.u.result.minutes = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "s1");
+    if (tmp) msg.u.result.blue_score = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "s2");
+    if (tmp) msg.u.result.white_score = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "v1");
+    if (tmp) msg.u.result.blue_vote = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "v2");
+    if (tmp) msg.u.result.white_vote = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "h1");
+    if (tmp) msg.u.result.blue_hansokumake = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "h2");
+    if (tmp) msg.u.result.white_hansokumake = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "l");
+    if (tmp) msg.u.result.legend = atoi(tmp);
+
+    if (msg.u.result.tatami &&
+	(msg.u.result.blue_score != msg.u.result.white_score ||
+	 msg.u.result.blue_vote != msg.u.result.white_vote ||
+	 msg.u.result.blue_hansokumake != msg.u.result.white_hansokumake)) {
+	sendf(s, "HTTP/1.0 200 OK\r\n");
+	sendf(s, "Content-Type: text/plain\r\n\r\nOK\r\n\r\n");
+	put_to_rec_queue(&msg);
+	return;
+    }
+
+    sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
+    return;
+}
+
+void cancel_rest(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    struct message msg;
+    const char *tmp;
+
+    if (!is_accepted(parser->address)) {
+	sendf(s, "HTTP/1.0 200 OK\r\n");
+	sendf(s, "Content-Type: text/plain\r\n\r\n");
+	sendf(s, "%s!\r\n", _("No rights to give results"));
+	sendf(s, "%s.\r\n", _("Login"));
+	return;
+    }
+
+    memset(&msg, 0, sizeof(msg));
+    msg.type = MSG_CANCEL_REST_TIME;
+
+    tmp = httpp_get_query_param(parser, "c");
+    if (tmp) msg.u.cancel_rest_time.category = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "m");
+    if (tmp) msg.u.cancel_rest_time.number = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "b");
+    if (tmp) msg.u.cancel_rest_time.blue = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "w");
+    if (tmp) msg.u.cancel_rest_time.white = atoi(tmp);
+
+    sendf(s, "HTTP/1.0 200 OK\r\n");
+    sendf(s, "Content-Type: text/plain\r\n\r\nOK\r\n\r\n");
+    put_to_rec_queue(&msg);
+}
+
+void get_judoshiai(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    int t = 0, x = 0, y = 0;
+    static gint tab = 0;
+    const char *tmp;
+    struct message msg;
+
+    tmp = httpp_get_query_param(parser, "x");
+    if (tmp) x = atoi(tmp);
+    tmp = httpp_get_query_param(parser, "y");
+    if (tmp) y = atoi(tmp);
+    g_print("tab=%d x=%d y=%d\n", tab, x, y);
+
+    if (y > 44 && y < 76) {
+	t = (x-14)/125;
+	if (t != tab) {
+	    x = y = 0;
+	    memset(&msg, 0, sizeof(msg));
+	    msg.type = MSG_EVENT;
+	    msg.u.event.event = MSG_EVENT_SELECT_TAB;
+	    msg.u.event.tab = t;
+	    struct message *msg2 = put_to_rec_queue(&msg);
+	    time_t start = time(NULL);
+	    while ((time(NULL) < start + 5) && (msg2->type != 0))
+		g_usleep(10000);
+
+	    tab = t;
+	}
+    } else if (tab == 0 && y > 77) {
+	    memset(&msg, 0, sizeof(msg));
+	    msg.type = MSG_EVENT;
+	    msg.u.event.event = MSG_EVENT_CLICK_COMP;
+	    msg.u.event.x = x - 25;
+	    msg.u.event.y = y - 110;
+	    struct message *msg2 = put_to_rec_queue(&msg);
+	    time_t start = time(NULL);
+	    while ((time(NULL) < start + 5) && (msg2->type != 0))
+		g_usleep(10000);
+    } else if (tab == 1) {
+	    memset(&msg, 0, sizeof(msg));
+	    msg.type = MSG_EVENT;
+	    msg.u.event.event = MSG_EVENT_CLICK_SHEET;
+	    msg.u.event.x = x - 14;
+	    msg.u.event.y = y - 77;
+	    struct message *msg2 = put_to_rec_queue(&msg);
+	    time_t start = time(NULL);
+	    while ((time(NULL) < start + 5) && (msg2->type != 0))
+		g_usleep(10000);
+    }
+
+    g_usleep(200000);
+
+    /* Take a snapshot. */
+    gchar buf[128];
+    snprintf(buf, sizeof(buf),
+	     "import -window '%s' /tmp/js.png",
+	     gtk_window_get_title(GTK_WINDOW(main_window)));
+    system(buf);
+
+    send_html_top(parser, "");
+    sendf(s,
+	  "<form action=\"judoshiai\">\r\n"
+	  "<input type=\"image\" id=\"jsImg\" src=\"js.png\" alt=\"Submit\" />\r\n"
+	  "</form>\r\n", t);
+    send_html_bottom(parser);
+}
+
+void get_js_png(http_parser_t *parser, gchar *txt)
+{
+    gchar *img;
+    gsize len;
+    SOCKET s = parser->sock;
+
+    if (g_file_get_contents("/tmp/js.png", &img, &len, NULL)) {
+	sendf(s, "HTTP/1.0 200 OK\r\n");
+	sendf(s, "Content-Type: image/png\r\n\r\n");
+	mysend(s, img, len);
+	g_free(img);
+    } else {
+	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
+    }
+}
+
+void get_next_match(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    avl_node *node;
+    http_var_t *var;
+    int t = 0;
+    struct message *msg;
+    struct msg_next_match *nm;
+
+    node = avl_get_first(parser->queryvars);
+    while (node) {
+        var = (http_var_t *)node->key;
+        if (var) {
+            //printf("Query variable: '%s'='%s'\n", var->name, var->value);
+            if (!strcmp(var->name, "t"))
+                t = atoi(var->value);
+        }
+        node = avl_get_next(node);
+    }
+
+    if (t <= 0 || t > NUM_TATAMIS) {
+	g_print("next match t=%d\n", t);
+	sendf(s, "HTTP/1.0 404 NOK\r\n\r\n");
+	return;
+    }
+
+    msg = get_next_match_msg(t);
+    nm = &msg->u.next_match;
+    gint rest_time = 0;
+    time_t now = time(NULL);
+    if (now < msg->u.next_match.rest_time)
+	rest_time = msg->u.next_match.rest_time - now;
+
+    sendf(s, "HTTP/1.0 200 OK\r\n");
+    sendf(s, "Content-Type: text/plain\r\n\r\n");
+    sendf(s, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+	  nm->tatami, nm->category, nm->match,  nm->minutes, nm->match_time,
+	  nm->gs_time, nm->rep_time, rest_time, nm->pin_time_ippon,
+	  nm->pin_time_wazaari, nm->pin_time_yuko, nm->pin_time_koka,
+	  nm->flags);
+    sendf(s, "%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n%s\r\n\r\n",
+	  nm->cat_1, nm->blue_1, nm->white_1,
+	  nm->cat_2, nm->blue_2, nm->white_2);
+}
+
+void sql_cmd(http_parser_t *parser, gchar *txt)
+{
+    SOCKET s = parser->sock;
+    gchar **tablecopy;
+    gint numrows, numcols, row, col;
+    char *sql;
+
+    if (!is_accepted(parser->address)) {
+	sendf(s, "HTTP/1.0 404 NOK\r\n");
+	sendf(s, "Content-Type: text/plain\r\n\r\n");
+	sendf(s, "%s!\r\n", "No access rights!");
+	sendf(s, "%s.\r\n\r\n", _("Login"));
+	return;
+    }
+
+    sql = httpp_get_query_param(parser, "sql");
+    tablecopy = db_get_table_copy(sql, &numrows, &numcols);
+
+    if (!tablecopy) {
+	sendf(s, "HTTP/1.0 404 NOK\r\n");
+	sendf(s, "Content-Type: text/plain\r\n\r\n");
+	sendf(s, "Error!\r\n\r\n");
+	return;
+    }
+
+    sendf(s, "HTTP/1.0 200 OK\r\n");
+    sendf(s, "Content-Type: text/plain\r\n\r\n");
+
+    for (row = 0; row < numrows; row++) {
+	for (col = 0; col < numcols; col++) {
+	    sendf(s, "%s", tablecopy[col + numcols*row]);
+	    if (col < numcols - 1)
+		sendf(s, "\t");
+	}
+	sendf(s, "\r\n");
+    }
+    sendf(s, "\r\n");
 
     db_close_table_copy(tablecopy);
 }
@@ -1126,7 +1542,7 @@ void get_file(http_parser_t *parser)
     gchar bufo[512];
     gint n, w;
 
-    char *mime = NULL;
+    char *mime = "application/octet-stream";
     char *p = parser->uri + 1;
     if (*p == 0)
         p = "index.html";
@@ -1146,6 +1562,8 @@ void get_file(http_parser_t *parser)
         else if (!strcmp(p2, "swf")) mime = "application/x-shockwave-flash";
         else if (!strcmp(p2, "ico")) mime = "image/vnd.microsoft.icon";
         else if (!strcmp(p2, "js")) mime = "text/javascript";
+        else if (!strcmp(p2, "ttf")) mime = "application/octet-stream";
+        else if (!strcmp(p2, "mp3")) mime = "audio/mpeg3";
     }
     gchar *docfile = g_build_filename(installation_dir, "etc", p, NULL);
     //g_print("GET %s\n", docfile);
@@ -1196,6 +1614,22 @@ gpointer analyze_http(gpointer param)
             check_password(parser);
         else if (!strcmp(parser->uri, "/logout"))
             logout(parser);
+        else if (!strcmp(parser->uri, "/matchinfo"))
+            get_match_info(parser, "");
+        else if (!strcmp(parser->uri, "/nameinfo"))
+            get_name_info(parser, "");
+        else if (!strcmp(parser->uri, "/nextmatch"))
+            get_next_match(parser, "");
+        else if (!strcmp(parser->uri, "/matchresult"))
+            set_result(parser, "");
+        else if (!strcmp(parser->uri, "/restcancel"))
+            cancel_rest(parser, "");
+        else if (!strcmp(parser->uri, "/sqlcmd"))
+            sql_cmd(parser, "");
+        else if (!strcmp(parser->uri, "/judoshiai"))
+            get_judoshiai(parser, "");
+        else if (!strcmp(parser->uri, "/js.png"))
+            get_js_png(parser, "");
         else if (!strcmp(parser->uri, "/index.html"))
             index_html(parser, "");
         else if (!strcmp(parser->uri, "/"))
@@ -1327,7 +1761,7 @@ gpointer httpd_thread(gpointer args)
             r = recv(connections[i].fd, buf, sizeof(buf)-1, 0);
             if (r > 0) {
                 http_parser_t *parser;
-			
+
                 buf[r] = 0;
                 //g_print("DATA='%s'\n", buf);
 

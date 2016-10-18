@@ -1,0 +1,139 @@
+# Size of the screen is 1.0*1.0, X and Y coordinates can have values 0.0 - 1.0.
+# Upper left corner has coordinates 0.0, 0.0.
+# Colors can have values 0.0 - 1.0 (black to full intensity).
+#
+# Meaning of the columns:
+#  1: Number of the label. Do not change.
+#  2: X coordinate of the label's upper left corner 0.0 - 1.0 (left to right).
+#  3: Y coordinate 0.0 - 1.0 (top to bottom).
+#  4: Width of the label 0.0 - 1.0. Width = 0 means label is not displayed.
+#  5: Height of the label 0.0 - 1.0.
+#  6: Size of the text. 0 means automatic adjustment,
+#     otherwise text size is this value * height of the label.
+#     For example size = 0.6 means text height is 60% of the label height.
+#  7: Horisontal alignment of the text: -1 = align left, 0 = center, 1 = align right.
+#  8: Foreground color, red component (0.0 - 1.0).
+#  9: Foreground color, green component (0.0 - 1.0).
+# 10: Foreground color, blue component (0.0 - 1.0).
+# 11: Background color, red component (0.0 - 1.0). Negative value means transparent background.
+# 12: Background color, green component (0.0 - 1.0).
+# 13: Background color, blue component (0.0 - 1.0).
+# 14: Wrap too long text: 0 = no wrap. 1 = wrap.
+
+#   2     3     4     5     6    7     8     9    10    11    12    13  14
+# Name of the first player
+0 0.0   0.137   1.0   0.094   0.0   -1   0.0   0.0   0.0   -1.0   1.0   1.0   0
+
+# Name of the second player
+1 0.0   0.677   1.0   0.094   0.0   -1   1.0   1.0   1.0   -1.0   0.0   1.0   0
+
+# Name of the preparing first player
+2 0.0   0.0   0.0   0.1   0.0   -1   1.0   1.0   1.0   0.0   0.0   0.0   0
+
+# Name of the preparing second player
+3 0.0   0.6   0.0   0.0   0.0   -1   1.0   1.0   1.0   0.0   0.0   0.0   0
+
+# Club name of the first player
+4 0.5   0.137   0.0  0.094   0     -1   0.0   0.0   0.0   0.0   0.0   1.0   0
+
+# Club name of the second player
+5 0.5   0.691   0.0  0.094   0     -1   1.0   1.0   1.0   0.0   0.0   1.0   0
+
+# Text "Match:"
+6 0.0   0.0   0.0   0.0   0.0   -1   1.0   1.0   1.0  -1.0   0.0   0.0   0
+
+# Text "Next:"
+7 0.0   0.0   0.0   0.0   0.0   -1   1.0   1.0   1.0  -1.0   0.0   0.0   0
+
+# Letter "I"
+8 0.0 0.5   0.0 0.1   1.0    0   0.0   0.0   0.0   1.0   1.0   0.5   0
+
+# Letter "W"
+9 0.0 0.5   0.0 0.1   1.0    0   0.0   0.0   0.0   1.0   1.0   0.5   0
+
+# Letter "Y"
+10 0.0 0.5   0.0 0.1   1.0   0   0.0   0.0   0.0   1.0   1.0   0.5   0
+
+# Letter "S"
+11 0.0 0.5   0.0 0.1   1.0   0   0.0   0.0   0.0   1.0   1.0   0.5   0
+
+# Padding for any use
+12 0.0 0.5   0.0   0.0   0.0   0   1.0   1.0   1.0   1.0   1.0   0.5   0
+
+# Text "Sonomama"
+13 0.69 0.81 0.056 0.14   0.1   0   0.686 0.0   -1.0   0.0   0.0   0.0   1
+
+# Scores for the first player: ippon, waza-ari, yuko, shido
+14  0.48 0.24  0.13 0.21   1     0   0.0   0.0   0.0   -1.0   1.0   1.0   0
+15  0.61 0.24  0.13 0.21   1     0   0.0   0.0   0.0   -1.0   1.0   1.0   0
+16  0.74 0.24  0.13 0.21   1     0   0.0   0.0   0.0   -1.0   1.0   1.0   0
+17  0.86 0.24  0.13 0.21   0.8   0   0.867 0.424 0.0   -1.0   1.0   0.0   0
+
+# Scores for the second player: ippon, waza-ari, yuko, shido
+18  0.48 0.46  0.13 0.21   1     0   1.0   1.0   1.0   -1.0   0.0   1.0   0
+19  0.61 0.46  0.13 0.21   1     0   1.0   1.0   1.0   -1.0   0.0   1.0   0
+20  0.74 0.46  0.13 0.21   1     0   1.0   1.0   1.0   -1.0   0.0   1.0   0
+21  0.86 0.46  0.13 0.21   0.8   0   0.867 0.847 0.604 -1.0   1.0   0.0   0
+
+# Contest clock: minutes, colon, tens, seconds
+22  0.333 0.77  0.12  0.21  1  0  0.0 0.0 0.0  -1.0 1.0 1.0  0
+23  0.433 0.77  0.07  0.21  1  0  0.0 0.0 0.0  -1.0 1.0 0.0  0
+24  0.483 0.77  0.12  0.21  1  0  0.0 0.0 0.0  -1.0 1.0 1.0  0
+25  0.583 0.77  0.1   0.21  1  0  0.0 0.0 0.0  -1.0 1.0 1.0  0
+
+# Osaekomi clock: tens, seconds
+26  0.74 0.77  0.15 0.21  1.0  0  0.0 1.0 0.0  -1.0 0.0 0.0  0
+27  0.86 0.77  0.14 0.21  1.0  0  0.0 1.0 0.0  -1.0 0.0 0.0  0
+
+# Osaekomi score, a letter
+28 0.32 0.34 0.08 0.2   0.6   0   0.251 0.251 0.251  0.0   0.0   0.0   0
+
+# Blue and white areas to click during osaekomi
+29 0.4 0.34 0.07  0.1  0.0    0   0.251 0.251 0.251  0.0   0.0   0.0   0
+30 0.4 0.46 0.07  0.1  0.0    0   0.251 0.251 0.251  0.0   0.0   0.0   0
+
+# Comment text (e.g. "Points going to blue")
+31 0.0 0.1 1.0 0.035   0.0   0   1.0   1.0   1.0   -1.0   0.0   0.0   0
+
+# Category name for the ongoing match
+32 0.02 0.77 0.31 0.21   0.6  0   1.0   1.0   1.0   -1.0   0.0   0.0   0
+
+# Category name for the following match
+33 0.0  0.0  0.0  0.0   0.0  -1   0.0  0.0   0.0   1.0   1.0   1.0   0
+
+# Golden score text
+34 0.2 0.35  0.0 0.21   0   0   1.0 1.0 1.0  0.0 0.0 0.0   0
+
+# Flag of the blue player's country
+35 0.0 0.24  0.314 0.22  0.0   0   1.0   1.0   1.0  -1.0   1.0   0.0   0
+
+# Flag of the white player's country
+36 0.0 0.46  0.314 0.22  0.0   0   0.0   0.0   0.0  -1.0   1.0   1.0   0
+
+# Screen background color: red, green, blue (0 - 1.0). Negative red = transparent.
+# This is useful if texts do not cover all the areas.
+100  -1  0.0  0.0
+
+# Clock foreground run and stop colors, and background color.
+#101  1.0 1.0 1.0  1.0 1.0 0.0  -1.0 1.0 1.0
+
+# Osaekomi clock foreground run and stop colors, and background color.
+#102  0.0 1.0 0.0  0.0 0.0 0.0  -1.0 0.0 0.0
+
+# List of miscellaneous settings:
+# 1. Hide clock if osakomi clock runs. This makes possible to use the same space
+#    for both clocks (0 = no hide, 1 = hide).
+# 2. Hide frames and menu (1 = hide). Press ctl-M to show frames and menu.
+# 3. Do not show shidos if there are not any
+#    (0 = show, 1 = don't show number, 2 = don't show background, 3 = show nothing).
+# 4. Put timer to slave mode (0 = normal, 1 = slave mode).
+103  0 0 0 0
+
+# Window layout (x, y, width, height). This usefull for TV logos.
+# Most window managers ignore requests for initial window positions so
+# x and y values may have no impact.
+#104 10 10 600 200
+#104 10 10 500 120
+
+# Background picture
+105 ../etc/timer-custom-2.png

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-28 10:35+0300\n"
+"POT-Creation-Date: 2015-12-30 07:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1802,3 +1802,9 @@ msgstr "Sovita sivulle"
 
 msgid "No SOREMADE/IPPON texts"
 msgstr "Ei SOREMADE/IPPON-tekstejä"
+
+msgid "Custom layout file..."
+msgstr "Asettelutiedosto..."
+
+msgid "Resolve 3-way ties by time:"
+msgstr "Otteluaika ratkaisee ristiin voitetut:"

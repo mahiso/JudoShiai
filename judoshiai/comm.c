@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -89,6 +89,11 @@ static struct {
 //static volatile struct message message_queue[MSG_QUEUE_LEN];
 //static volatile gint msg_put = 0, msg_get = 0;
 //static GStaticMutex msg_mutex = G_STATIC_MUTEX_INIT;
+
+struct message *get_next_match_msg(int tatami)
+{
+    return &next_match_messages[tatami-1];
+}
 
 void send_info_packet(struct message *msg)
 {
@@ -184,6 +189,7 @@ gboolean msg_accepted(struct message *m)
     case MSG_CANCEL_REST_TIME:
     case MSG_EDIT_COMPETITOR:
     case MSG_SCALE:
+    case MSG_EVENT:
         return TRUE;
     }
     return FALSE;
@@ -438,6 +444,33 @@ void msg_received(struct message *input_msg)
         if (weight_entry)
             gtk_button_set_label(GTK_BUTTON(weight_entry), buf);
         break;
+
+    case MSG_EVENT:
+	if (input_msg->u.event.event == MSG_EVENT_SELECT_TAB) {
+	    gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),
+					  input_msg->u.event.tab);
+	    if (input_msg->u.event.tab == 0)
+		gtk_tree_view_collapse_all(GTK_TREE_VIEW(current_view));
+	} else if (input_msg->u.event.event == MSG_EVENT_CLICK_COMP) {
+	    GtkTreePath *path;
+	    GtkTreeViewColumn *col;
+	    if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(current_view),
+					      input_msg->u.event.x,
+					      input_msg->u.event.y,
+					      &path, &col, NULL, NULL)) {
+		gtk_tree_view_collapse_all(GTK_TREE_VIEW(current_view));
+		gtk_tree_view_expand_row(GTK_TREE_VIEW(current_view),
+					 path, FALSE);
+	    }
+	} else if (input_msg->u.event.event == MSG_EVENT_CLICK_SHEET) {
+	    GdkEventButton event;
+	    event.type = GDK_BUTTON_PRESS;
+	    event.button = 1;
+	    event.x = input_msg->u.event.x;
+	    event.y = input_msg->u.event.y;
+	    change_current_page(NULL, &event, NULL);
+	}
+	break;
     }
 }
 
@@ -569,6 +602,7 @@ static gboolean send_message_to_application[NUM_MESSAGES][NUM_APPLICATION_TYPES]
     {FALSE, FALSE, FALSE, FALSE, TRUE , TRUE , FALSE}, // MSG_EDIT_COMPETITOR,
     {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_SCALE,
     {TRUE,  FALSE, FALSE, TRUE , FALSE, TRUE , FALSE}, // MSG_11_NAME_INFO,
+    {FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE}, // MSG_EVENT,
 };
 
 /*
@@ -794,7 +828,8 @@ gpointer node_thread(gpointer args)
                     }
                 }
             } else {
-                g_print("Node: connection %d fd=%d closed\n", i, connections[i].fd);
+                g_print("Node: connection %d fd=%d closed (r=%d, err=%s)\n",
+			i, connections[i].fd, r, strerror(errno));
                 closesocket(connections[i].fd);
                 FD_CLR(connections[i].fd, &read_fd);
                 connections[i].fd = 0;

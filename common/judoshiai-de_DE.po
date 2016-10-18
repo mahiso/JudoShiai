@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-28 10:35+0300\n"
+"POT-Creation-Date: 2015-12-30 07:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -756,7 +756,7 @@ msgid "Sex:"
 msgstr "Geschlecht:"
 
 msgid "Girl Text:"
-msgstr "Text für weiblich" 
+msgstr "Text für weiblich"
 
 msgid "Column Separator:"
 msgstr "Trennzeichen:"
@@ -1346,7 +1346,7 @@ msgid "Start time:"
 msgstr "Startzeit:"
 
 msgid "Resolution (min):"
-msgstr "Auflösung (Min):" 
+msgstr "Auflösung (Min):"
 
 msgid "Compressed timeline"
 msgstr "Komprimierte Zeitlinie"
@@ -1820,3 +1820,9 @@ msgstr "Seite anpassen"
 
 msgid "No SOREMADE/IPPON texts"
 msgstr "SOREMADE/IPPON-Text nicht anzeigen"
+
+msgid "Custom layout file..."
+msgstr ""
+
+msgid "Resolve 3-way ties by time:"
+msgstr ""

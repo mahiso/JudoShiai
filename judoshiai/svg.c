@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -328,7 +328,8 @@ gint paint_svg(struct paint_data *pd)
         fill_pool_struct(category, num_judokas, &pm, FALSE);
         m = pm.m;
         if (pm.finished)
-            get_pool_winner(num_judokas, pm.c, pm.yes, pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+            get_pool_winner(num_judokas, pm.c, pm.yes, pm.wins, pm.pts, pm.tim,
+			    pm.mw, pm.j, pm.all_matched, pm.tie);
         break;
 
     case SYSTEM_DPOOL:
@@ -348,14 +349,17 @@ gint paint_svg(struct paint_data *pd)
                 yes_b[i] = TRUE;
         }
         fill_pool_struct(category, num_judokas, &pm, FALSE);
-        get_pool_winner(num_pool_a, c_a, yes_a, pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
-        get_pool_winner(num_pool_b, c_b, yes_b, pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+        get_pool_winner(num_pool_a, c_a, yes_a, pm.wins, pm.pts, pm.tim,
+			pm.mw, pm.j, pm.all_matched, pm.tie);
+        get_pool_winner(num_pool_b, c_b, yes_b, pm.wins, pm.pts, pm.tim,
+			pm.mw, pm.j, pm.all_matched, pm.tie);
         m = pm.m;
 
         if (systm.system == SYSTEM_DPOOL2) {
             fill_pool_struct(category, num_judokas, &pm2, TRUE);
             if (pm2.finished)
-                get_pool_winner(4, pm2.c, pm2.yes, pm2.wins, pm2.pts, pm2.mw, pm2.j, pm2.all_matched, pm2.tie);
+                get_pool_winner(4, pm2.c, pm2.yes, pm2.wins, pm2.pts, pm2.tim,
+				pm2.mw, pm2.j, pm2.all_matched, pm2.tie);
         }
         break;
 
@@ -391,7 +395,8 @@ gint paint_svg(struct paint_data *pd)
                 }
             }
 
-            get_pool_winner(pool_size[i], c[i], yes[i], pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+            get_pool_winner(pool_size[i], c[i], yes[i], pm.wins, pm.pts, pm.tim,
+			    pm.mw, pm.j, pm.all_matched, pm.tie);
 
             pool_done[i] = pool_finished(num_judokas, num_matches(pd->systm.system, num_judokas),
                                             SYSTEM_QPOOL, yes[i], &pm);

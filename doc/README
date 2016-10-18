@@ -7,6 +7,29 @@ Windows: judoshiai-setup-n.n.exe
 Linux (Debian based): judoshiai_n.n-1_amd64.deb
 Raspberry Pi: judoshiai_n.n-1_armhf.deb
 
+==============================================
+RELEASE NOTE
+VERSION 2.4.1
+
+Common
+------
+
++ Web browser based timer and info. Connect to port 8088.
++ Bug fixes.
+
+JudoShiai
+----------
+
++ Match time editing.
++ Optionally resolve 3 way tie by match times.
++ Printing does not block other operations.
+
+JudoTimer
+----------
+
++ Problems with transparency related menu texts visibility fixed.
+
+==============================================
 RELEASE NOTE
 VERSION 2.4
 

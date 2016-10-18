@@ -1,14 +1,16 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef EMSCRIPTEN
 #include <gtk/gtk.h>
+#endif
 #include <assert.h>
 
 #include "avl.h"

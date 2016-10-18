@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -1918,6 +1918,7 @@ int main( int   argc,
 #endif
     main_window = window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(main_window), "JudoTimer");
+    gtk_widget_set_name(main_window, "JudoTimerMain");
     //gtk_widget_set_size_request(window, FRAME_WIDTH, FRAME_HEIGHT);
     gtk_window_resize(GTK_WINDOW(main_window), FRAME_WIDTH, FRAME_HEIGHT);  //w7 bug.
 
@@ -2988,6 +2989,20 @@ void select_display_layout(GtkWidget *menu_item, gpointer data)
 			p = fname;
 		    }
 		    background_image = cairo_image_surface_create_from_png(p);
+
+		    switch (cairo_surface_status(background_image)) {
+		    case CAIRO_STATUS_NO_MEMORY:
+		    case CAIRO_STATUS_FILE_NOT_FOUND:
+		    case CAIRO_STATUS_READ_ERROR:
+			g_print("background_image %s read error %d\n", p,
+				cairo_surface_status(background_image));
+			cairo_surface_destroy(background_image);
+			background_image = NULL;
+			break;
+		    default:
+			;
+		    }
+
 		    if (fname)
 			g_free(fname);
 		} else

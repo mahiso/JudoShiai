@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -883,6 +883,14 @@ void db_set_score(gint category, gint number, gint score, gboolean is_blue)
                 "WHERE \"category\"=%d AND \"number\"=%d",
                 is_blue ? "blue_score" : "white_score", score,
                 category, number);
+}
+
+void db_set_time(gint category, gint number, gint tim)
+{
+    db_exec_str(NULL, db_callback_matches,
+                "UPDATE matches SET \"time\"=%d "
+                "WHERE \"category\"=%d AND \"number\"=%d",
+                tim, category, number);
 }
 
 void db_reset_last_match_times(gint category, gint number, gboolean blue, gboolean white)

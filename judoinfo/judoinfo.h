@@ -1,12 +1,16 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
 #ifndef _JUDOINFO_H_
 #define _JUDOINFO_H_
+
+#ifdef EMSCRIPTEN
+#include "cairowrapper.h"
+#endif
 
 #include "comm.h"
 

@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */
 
@@ -117,6 +117,7 @@ gboolean       connections_updated = FALSE;
 GtkWidget     *notebook;
 gboolean       advertise_addr = FALSE;
 gboolean       show_video = FALSE;
+gchar          message[128];
 
 #define MY_FONT "Arial"
 
@@ -651,9 +652,15 @@ int main( int   argc,
     gpointer proxy_ssdp_thread(gpointer args);
     g_snprintf(ssdp_id, sizeof(ssdp_id), "JudoProxy");
 
-    gth = g_thread_new("Connection",
-                       (GThreadFunc)connection_thread,
-                       (gpointer)&run_flag);
+    static gint run[NUM_CONNECTIONS];
+    for (i = 0; i < NUM_CONNECTIONS; i++) {
+	char tname[16];
+	run[i] = i;
+	sprintf(tname, "Connection%d", i);
+	gth = g_thread_new(tname,
+			   (GThreadFunc)connection_thread,
+			   &run[i]);
+    }
 
     gth = g_thread_new("SSDP",
                        (GThreadFunc)proxy_ssdp_thread,
@@ -679,6 +686,8 @@ int main( int   argc,
      * mouse event). */
     gtk_main();
 
+    for (i = 0; i < NUM_CONNECTIONS; i++)
+	run[i] = -1;
     run_flag = FALSE;     /* flag threads to stop and exit */
     //g_thread_join(gth);   /* wait for thread to exit */
 
@@ -786,9 +795,24 @@ static void update_column(gint i)
     }
 }
 
+static void show_message(gchar *msg)
+{
+    GtkWidget *dialog;
+    dialog = gtk_message_dialog_new (NULL,
+                                     0 /*GTK_DIALOG_DESTROY_WITH_PARENT*/,
+                                     GTK_MESSAGE_INFO,
+                                     GTK_BUTTONS_OK,
+                                     "%s", msg);
+    g_signal_connect_swapped (dialog, "response",
+                              G_CALLBACK (gtk_widget_destroy),
+                              dialog);
+    gtk_widget_show(dialog);
+}
+
 static gint check_table(gpointer data)
 {
     gint i;
+
     for (i = 0; i < addrcnt; i++)
         update_column(i);
 
@@ -796,6 +820,12 @@ static gint check_table(gpointer data)
         update_connections_table();
         connections_updated = FALSE;
     }
+
+    if (message[0]) {
+	show_message(message);
+	message[0] = 0;
+    }
+
     return TRUE;
 }
 
@@ -1187,48 +1217,47 @@ void scan_interfaces(void)
 
 static gpointer connection_thread(gpointer args)
 {
-    gint i;
+    gint cn = *(gint *)args;
     struct sockaddr_in my_addr, node;
-    static guchar inbuf[2048];
+    guchar inbuf[2048];
     fd_set read_fd, fds;
     gint reuse = 1;
 
+    g_print("Starting tatami %d conn thread\n", cn+1);
     FD_ZERO(&read_fd);
 
-    for (i = 0; i < NUM_CONNECTIONS; i++) {
-        if ((connections[i].fd_listen = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-            perror("listen socket");
-            g_thread_exit(NULL);    /* not required just good pratice */
-            return NULL;
-        }
-
-        if (setsockopt(connections[i].fd_listen, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
-            perror("setsockopt (SO_REUSEADDR)");
-        }
-
-        memset(&my_addr, 0, sizeof(my_addr));
-        my_addr.sin_family = AF_INET;
-        my_addr.sin_port = htons(START_PORT + i);
-        my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-        if (bind(connections[i].fd_listen, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
-            perror("listen bind");
-            g_print("CANNOT BIND!\n");
-            g_thread_exit(NULL);    /* not required just good pratice */
-            return NULL;
-        }
-
-        listen(connections[i].fd_listen, 5);
-
-        FD_SET(connections[i].fd_listen, &read_fd);
-        connections[i].fd_conn = -1;
-        connections[i].fd_out = -1;
+    if ((connections[cn].fd_listen = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+	perror("listen socket");
+	g_thread_exit(NULL);    /* not required just good pratice */
+	return NULL;
     }
 
-    for ( ; *((gboolean *)args) ; )   /* exit loop when flag is cleared */
+    if (setsockopt(connections[cn].fd_listen, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse, sizeof(reuse)) < 0) {
+	perror("setsockopt (SO_REUSEADDR)");
+    }
+
+    memset(&my_addr, 0, sizeof(my_addr));
+    my_addr.sin_family = AF_INET;
+    my_addr.sin_port = htons(START_PORT + cn);
+    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(connections[cn].fd_listen, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) < 0) {
+	perror("listen bind");
+	g_print("CANNOT BIND!\n");
+	g_thread_exit(NULL);    /* not required just good pratice */
+	return NULL;
+    }
+
+    listen(connections[cn].fd_listen, 5);
+
+    FD_SET(connections[cn].fd_listen, &read_fd);
+    connections[cn].fd_conn = -1;
+    connections[cn].fd_out = -1;
+
+    for ( ; *((gint *)args) >= 0 ; )
     {
         struct timeval timeout;
-        gint r, i;
+        gint r;
 
         fds = read_fd;
         timeout.tv_sec = 0;
@@ -1236,96 +1265,96 @@ static gpointer connection_thread(gpointer args)
 
         r = select(64, &fds, NULL, NULL, &timeout);
 
-        for (i = 0; i < NUM_CONNECTIONS; i++) {
-            if (connections[i].fd_out > 0 && connections[i].changed) {
-                g_print("Closing out connection %d\n", i);
-                closesocket(connections[i].fd_out);
-                connections[i].fd_out = -1;
-                connections_updated = TRUE;
-            }
+	if (connections[cn].fd_out > 0 && connections[cn].changed) {
+	    g_print("Closing out connection %d\n", cn);
+	    closesocket(connections[cn].fd_out);
+	    connections[cn].fd_out = -1;
+	    connections_updated = TRUE;
+	}
 
-            if (connections[i].fd_out < 0 && connections[i].destination.sin_addr.s_addr) {
-                if ((connections[i].fd_out = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-                    perror("out socket");
-                    continue;
-                }
-                connections[i].changed = FALSE;
+	if (connections[cn].fd_out < 0 && connections[cn].destination.sin_addr.s_addr) {
+	    if ((connections[cn].fd_out = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+		perror("out socket");
+		continue;
+	    }
+	    connections[cn].changed = FALSE;
 
-                memset(&node, 0, sizeof(node));
-                node.sin_family      = AF_INET;
-                node.sin_port        = htons(SHIAI_PORT+2);
-                node.sin_addr.s_addr = connections[i].destination.sin_addr.s_addr;
+	    memset(&node, 0, sizeof(node));
+	    node.sin_family      = AF_INET;
+	    node.sin_port        = htons(SHIAI_PORT+2);
+	    node.sin_addr.s_addr = connections[cn].destination.sin_addr.s_addr;
 
-                if (connect(connections[i].fd_out, (struct sockaddr *)&node, sizeof(node))) {
-                    closesocket(connections[i].fd_out);
-                    connections[i].fd_out = -1;
-                    g_print("Connection out %d to %s failed!\n", i, inet_ntoa(node.sin_addr));
-                } else {
-                    FD_SET(connections[i].fd_out, &read_fd);
-                    g_print("Out connection %d (fd=%d) to %s\n", i,
-                            connections[i].fd_out, inet_ntoa(node.sin_addr));
-                    connections_updated = TRUE;
-                }
-            }
+	    if (connect(connections[cn].fd_out, (struct sockaddr *)&node, sizeof(node))) {
+		closesocket(connections[cn].fd_out);
+		connections[cn].fd_out = -1;
+		g_print("Connection out %d to %s failed!\n", cn, inet_ntoa(node.sin_addr));
+		sleep(2);
+	    } else {
+		FD_SET(connections[cn].fd_out, &read_fd);
+		g_print("Out connection %d (fd=%d) to %s\n", cn,
+			connections[cn].fd_out, inet_ntoa(node.sin_addr));
+		connections_updated = TRUE;
+	    }
+	}
 
-            if (r <= 0)
-                continue;
+	if (r <= 0)
+	    continue;
 
-            /* messages to receive */
-            if (FD_ISSET(connections[i].fd_listen, &fds)) {
-                guint alen = sizeof(connections[i].caller);
-                if (connections[i].fd_conn < 0) {
-                    if ((connections[i].fd_conn = accept(connections[i].fd_listen,
-                                                         (struct sockaddr *)&connections[i].caller,
-                                                         &alen)) < 0) {
-                        perror("conn accept");
-                        continue;
-                    } else {
-                        FD_SET(connections[i].fd_conn, &read_fd);
-                        connections_updated = TRUE;
-                        g_print("New connection in %d (fd=%d) from %s\n", i, connections[i].fd_conn,
-                                inet_ntoa(connections[i].caller.sin_addr));
-			//reload_web(NULL, gint_to_ptr(i));
-                    }
-                } else {
-                    g_print("Connection %d already in use.", i);
-                }
-            }
+	/* messages to receive */
+	if (FD_ISSET(connections[cn].fd_listen, &fds)) {
+	    guint alen = sizeof(connections[cn].caller);
+	    if (connections[cn].fd_conn < 0) {
+		if ((connections[cn].fd_conn = accept(connections[cn].fd_listen,
+						     (struct sockaddr *)&connections[cn].caller,
+						     &alen)) < 0) {
+		    perror("conn accept");
+		    continue;
+		} else {
+		    FD_SET(connections[cn].fd_conn, &read_fd);
+		    connections_updated = TRUE;
+		    g_print("New connection in %d (fd=%d) from %s\n", cn, connections[cn].fd_conn,
+			    inet_ntoa(connections[cn].caller.sin_addr));
+		    //reload_web(NULL, gint_to_ptr(i));
+		}
+	    } else {
+		g_print("Connection %d already in use.", cn);
+	    }
+	}
 
-            if (connections[i].fd_conn > 0 && FD_ISSET(connections[i].fd_conn, &fds)) {
-                r = recv(connections[i].fd_conn, inbuf, sizeof(inbuf), 0);
-                if (r <= 0) {
-                    g_print("Connection in %d fd=%d closed\n", i, connections[i].fd_conn);
-                    closesocket(connections[i].fd_conn);
-                    FD_CLR(connections[i].fd_conn, &read_fd);
-                    connections[i].fd_conn = -1;
-                    connections_updated = TRUE;
-                } else {
-                    if (connections[i].fd_out > 0) {
-                        send(connections[i].fd_out, inbuf, r, 0);
-                    }
-                }
-            }
+	if (connections[cn].fd_conn > 0 && FD_ISSET(connections[cn].fd_conn, &fds)) {
+	    r = recv(connections[cn].fd_conn, inbuf, sizeof(inbuf), 0);
+	    if (r <= 0) {
+		snprintf(message, sizeof(message),
+			 "Connection to camera %d (fd=%d) closed\n", cn+1, connections[cn].fd_conn);
+		g_print("%s", message);
+		closesocket(connections[cn].fd_conn);
+		FD_CLR(connections[cn].fd_conn, &read_fd);
+		connections[cn].fd_conn = -1;
+		connections_updated = TRUE;
+	    } else {
+		if (connections[cn].fd_out > 0) {
+		    send(connections[cn].fd_out, inbuf, r, 0);
+		}
+	    }
+	}
 
-            if (connections[i].fd_out > 0 && FD_ISSET(connections[i].fd_out, &fds)) {
-                r = recv(connections[i].fd_out, inbuf, sizeof(inbuf), 0);
-                if (r <= 0) {
-                    g_print("Connection out %d fd=%d closed\n", i, connections[i].fd_out);
-                    closesocket(connections[i].fd_out);
-                    FD_CLR(connections[i].fd_out, &read_fd);
-                    connections[i].fd_out = -1;
-                    connections_updated = TRUE;
-                } else {
-                    if (connections[i].fd_conn > 0) {
-                        send(connections[i].fd_conn, inbuf, r, 0);
-                    }
-                }
-            }
-
-        } // for connections
-
-
-    } // outer for
+	if (connections[cn].fd_out > 0 && FD_ISSET(connections[cn].fd_out, &fds)) {
+	    r = recv(connections[cn].fd_out, inbuf, sizeof(inbuf), 0);
+	    if (r <= 0) {
+		snprintf(message, sizeof(message),
+			 "Connection to timer %d (fd=%d) closed\n", cn+1, connections[cn].fd_out);
+		g_print("%s", message);
+		closesocket(connections[cn].fd_out);
+		FD_CLR(connections[cn].fd_out, &read_fd);
+		connections[cn].fd_out = -1;
+		connections_updated = TRUE;
+	    } else {
+		if (connections[cn].fd_conn > 0) {
+		    send(connections[cn].fd_conn, inbuf, r, 0);
+		}
+	    }
+	}
+    } // for connections
 
     g_print("CONNECT OUT!\n");
     g_thread_exit(NULL);    /* not required just good pratice */

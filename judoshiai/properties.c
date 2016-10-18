@@ -1,7 +1,7 @@
 /* -*- mode: C; c-basic-offset: 4;  -*- */
 
 /*
- * Copyright (C) 2006-2015 by Hannu Jokinen
+ * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
  */ 
 
@@ -157,6 +157,12 @@ struct property {
         .table = 1,
     },
     {
+        .name = "Resolve3WayTiesByTime",
+        .label = N_("Resolve 3-way ties by time:"),
+        .type = PROP_TYPE_CHECK,
+        .table = 1,
+    },
+    {
         .name = "Resolve3WayTiesByWeights",
         .label = N_("Resolve 3-way ties by weights:"),
         .type = PROP_TYPE_CHECK,
@@ -183,7 +189,7 @@ const gchar *prop_get_str_val(gint name)
 
 static void set_val(gint n, const gchar *dbval, gint intval)
 {
-    g_free(props[n].value); 
+    g_free(props[n].value);
     if (dbval == NULL) {
         gchar buf[16];
         snprintf(buf, sizeof(buf), "%d", intval);
@@ -416,6 +422,11 @@ void reset_props_1(GtkWidget *button, void *data, gboolean if_unset)
         SET_VAL(PROP_DPOOL2_WITH_CARRIED_FORWARD_POINTS, "1", 1);
     else
         SET_VAL(PROP_DPOOL2_WITH_CARRIED_FORWARD_POINTS, "0", 0);
+
+    if (draw_system == DRAW_SWEDISH || draw_system == DRAW_ESTONIAN)
+        SET_VAL(PROP_RESOLVE_3_WAY_TIES_BY_TIME, "1", 1);
+    else
+        SET_VAL(PROP_RESOLVE_3_WAY_TIES_BY_TIME, "0", 0);
 
     if (draw_system == DRAW_FINNISH || draw_system == DRAW_SWEDISH || draw_system == DRAW_ESTONIAN || draw_system == DRAW_NORWEGIAN)
         SET_VAL(PROP_RESOLVE_3_WAY_TIES_BY_WEIGHTS, "1", 1);
