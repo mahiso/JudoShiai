@@ -15,7 +15,7 @@
 #   As many as possible cards are fitted on one A4 page.
 #     cardsize 105 59.4
 #   Page geometry is a better way to tell how many cards you want on one page.
-#   Printer marginals are taken into the considiration. 
+#   Printer marginals are taken into the considiration.
 #   The following line is the default and can be left out (2 columns, 5 rows).
 #     pagegeom 2 5
 # - Background picture can be used. Only PNG files are supported.
@@ -64,11 +64,11 @@
 #     color 0 0 1.0
 #   Grey:
 #     color 0.5 0.5 0.5
-# 
-# Text uses the current attribute values. A text line contains also text's 
+#
+# Text uses the current attribute values. A text line contains also text's
 # position (mm) and angle (degrees). Position is expressed by two numbers telling the
 # text's distance from the note's left and top sides. The distance is measured to the left
-# bottom corner of the first letter. Example text starting 15 mm from the left and 
+# bottom corner of the first letter. Example text starting 15 mm from the left and
 # 30 mm from the top:
 #     text 15.0 30.0 0.0 This is sample text
 # Vertical text from bottom up:
@@ -80,8 +80,8 @@
 # A picture can be inserted anywhere inside the note sheet. The picture line contains
 # the position, size, angle, and path to a PNG file.
 #     picture 10 20 10 6 0 C:\Pictures\MyFlag.png
-# The position (10 20) is the place for the top left corner of the picture (mm). 
-# Picture will be resized to 10x6 mm. Angle is 0. In the end of the line is 
+# The position (10 20) is the place for the top left corner of the picture (mm).
+# Picture will be resized to 10x6 mm. Angle is 0. In the end of the line is
 # the file name of the picture.
 #
 # Both text and picture file name can contain special strings that are substituted
@@ -106,9 +106,9 @@
 # %GRADE%             Competitor's grade (belt).
 # %ID%                Competitor's ID.
 # %ID-BARCODE%        Competitor's ID printed as barcode 39. Supported characters are
-#                     numbers, uppercase characters A-Z, and special characters 
-#                     '-', '.', '$', '/', '+', '%', and space. 
-# %ID-BARCODE-EXT%    Competitor's ID printed as extended barcode 39. All 
+#                     numbers, uppercase characters A-Z, and special characters
+#                     '-', '.', '$', '/', '+', '%', and space.
+# %ID-BARCODE-EXT%    Competitor's ID printed as extended barcode 39. All
 #                     the 7-bit ASCII characters are supported. Barcode reader must be set
 #                     for the extended mode. UTF-8 is not supported.
 # %WEIGHTTEXT%        Text "Weight" in selected language.
@@ -119,26 +119,57 @@
 # the flag of the competitor's country rotated 45 degrees:
 #     picture 10 30 10 6 45 C:\Pictures\Flags\%COUNTRY%.png
 # (The flags are not included in the JudoShiai software)
-# 
+#
 
-pagegeom 1 37 
+pagegeom 1 4
+border 0
 fontslant normal
 fontweight bold
 font Arial
 color 0.0 0.0 0.0
-border 0
+
+fontsize 10
+fontweight normal
+text 15.0 10.0 0.0 Geschlecht:
 
 fontsize 24
-page_text 40.0 10.0 0 Teilnehmer - U9/U12 - weiblich
-fontsize 12 
-page_text 20.0 20.0 0 Bitte Unstimmigkeiten umgehend im Wettkampfbüro melden.
-fontsize 14
-page_text 20.0 30.0 0 Name
-page_text 95.0 30.0 0 Geburtsjahr
-page_text 125.0 30.0 0 Verein
+fontweight bold
+text 35.0 10.0 0.0 m / w
+text 150.0 10.0 0.0 0000
+fontsize 8
+fontweight normal
+text 149 11 90.0 Index
 
-card_offset 0.0 37.0
-fontsize 12
-text 20.0 0.0 0 %LAST%, %FIRST%
-text 105.0 0.0 0 %YOB%
-text 125.0. 0.0 0 %CLUB%
+picture 185 5 14 29 0 /home/maik/git/JudoShiai/custom-examples/RTSV/judo.png
+fontsize 14
+fontweight bold
+text 185 39 0 RTSV
+
+fontsize 10
+fontweight normal
+text 15.0 20.0 0.0 Vorname:
+text 15.0 29.0 0.0 Name:
+text 15.0 38.0 0.0 Geburtsjahr:
+text 15.0 48.0 0.0 Verein:
+
+fontsize 18
+fontweight normal
+text 35.0 20.0 0.0 ____________________
+
+text 35.0 29.0 0.0 ____________________
+
+text 35.0 38.0 0.0 ____________________
+
+text 35.0 48.0 0.0 ____________________
+fontsize 20
+fontweight bold
+text 110.0 55.0 0.0 Gewicht:
+
+fontsize 10
+fontweight bold
+fontslant italic
+text 60 70 0 Bitte deutlich schreiben!
+fontweight normal
+fontslant normal
+fontsize 6
+text 5.0 68.0 90.0 Erstellt mit JudoShiai - https://mahiso.de/judoshiai
