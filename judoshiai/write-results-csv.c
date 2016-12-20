@@ -21,41 +21,41 @@
 static FILE *open_file()
 {
 	FILE *f = NULL;
-	
+
 	GtkWidget *dialog;
 	GtkFileChooser *chooser;
-	
+
 	dialog = gtk_file_chooser_dialog_new (_("CSV Results File"),
                                           NULL,
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
                                           NULL);
-    
+
     chooser = GTK_FILE_CHOOSER(dialog);
 
-	// Set current dir to database dir	
+	// Set current dir to database dir
 	gchar *dirname = g_path_get_dirname(database_name);
         gtk_file_chooser_set_current_folder(chooser, dirname);
         g_free(dirname);
-        
+
     gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER(dialog), TRUE);
-    
+
     gtk_file_chooser_set_current_name (chooser, _("results.csv"));
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
         	gchar *name;
             gchar csv_file_name[200];
-            
+
         	name = gtk_file_chooser_get_filename(chooser);
         	if (strstr(name, ".csv") == NULL) {
             		sprintf(csv_file_name, "%s.csv", name);
         	} else {
             		sprintf(csv_file_name, "%s", name);
         	}
-        	
+
 			g_free(name);
-			
+
 			f = fopen(csv_file_name,"wb");
 	}
 
@@ -73,7 +73,7 @@ static void write_result_row(FILE *f, gint category, gint num, const gchar *firs
 {
     struct judoka *ctg = NULL;
     ctg = get_data(category);
-    
+
     fprintf(f,"\"%s\",\"%s\",\"%s\",\"%s\",%d\n",last,first,club,ctg->last,num);
 }
 
@@ -88,7 +88,7 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
         num_judokas = 4;
 
     if (pm.finished)
-        get_pool_winner(num_judokas, pm.c, pm.yes, pm.wins, pm.pts, pm.mw, pm.j, pm.all_matched, pm.tie);
+        get_pool_winner(num_judokas, pm.c, pm.yes, pm.wins, pm.pts, pm.tim, pm.mw, pm.j, pm.all_matched, pm.tie);
 
     for (i = 1; i <= num_judokas; i++) {
         if (pm.finished == FALSE || pm.j[pm.c[i]] == NULL)
@@ -97,13 +97,13 @@ static void pool_results(FILE *f, gint category, struct judoka *ctg, gint num_ju
         // Two bronzes in pool system
         if (i <= 4 && prop_get_int_val(PROP_TWO_POOL_BRONZES) &&
             (pm.j[pm.c[i]]->deleted & HANSOKUMAKE) == 0) {
-            write_result_row(f, category, i == 4 ? 3 : i, pm.j[pm.c[i]]->first, 
+            write_result_row(f, category, i == 4 ? 3 : i, pm.j[pm.c[i]]->first,
                          pm.j[pm.c[i]]->last, pm.j[pm.c[i]]->club);
             avl_set_competitor_position(pm.j[pm.c[i]]->index, i == 4 ? 3 : i);
             db_set_category_positions(category, pm.j[pm.c[i]]->index, i);
 		} else if (
             (pm.j[pm.c[i]]->deleted & HANSOKUMAKE) == 0) {
-            write_result_row(f, category, i, pm.j[pm.c[i]]->first, 
+            write_result_row(f, category, i, pm.j[pm.c[i]]->first,
                          pm.j[pm.c[i]]->last, pm.j[pm.c[i]]->club);
             avl_set_competitor_position(pm.j[pm.c[i]]->index, i);
             db_set_category_positions(category, pm.j[pm.c[i]]->index, i);
@@ -123,7 +123,7 @@ static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_
 
     fill_pool_struct(category, num_judokas, &pm, FALSE);
 
-    i = num_matches(sys.system, num_judokas) + 
+    i = num_matches(sys.system, num_judokas) +
         ((sys.system == SYSTEM_DPOOL || sys.system == SYSTEM_DPOOL3) ? 1 : 5);
 
     if (sys.system == SYSTEM_DPOOL3) {
@@ -147,7 +147,7 @@ static void dqpool_results(FILE *f, gint category, struct judoka *ctg, gint num_
             bronze2 = pm.m[i].white;
         else
             bronze2 = pm.m[i].blue;
-        
+
         i++;
     }
 
@@ -220,7 +220,7 @@ static void french_results(FILE *f, gint category, struct judoka *ctg,
 {
     struct match m[NUM_MATCHES];
     struct judoka *j1;
-    gint gold = 0, silver = 0, bronze1 = 0, bronze2 = 0, fourth = 0, 
+    gint gold = 0, silver = 0, bronze1 = 0, bronze2 = 0, fourth = 0,
         fifth1 = 0, fifth2 = 0, seventh1 = 0, seventh2 = 0;
     gint winner= 0, loser = 0;
     gint sys = systm.system - SYSTEM_FRENCH_8;
@@ -398,15 +398,14 @@ void write_results_csv_file(FILE *f)
 void write_results_csv(GtkWidget *w, gpointer data)
 {
 	FILE *f;
-	
+
 	f = open_file();
 	if (!f)
 		return;
-	
+
 	write_header_csv_file(f);
-	write_results_csv_file(f);	
-		
+	write_results_csv_file(f);
+
 	fclose(f);
 
 }
-
