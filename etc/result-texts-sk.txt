@@ -97,3 +97,5 @@ Obraz.
 Zápas po
 ### 48: matches (Match after n "matches")
 zápase/och
+### 49: Tatami (Tatami: n)
+Tatami

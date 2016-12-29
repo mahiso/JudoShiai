@@ -94,6 +94,8 @@ Status
 Display.
 ### 47: "Match after n matches" divided in two parts
 ###     Match after ("Match after" n matches)
-Zápas po 
+Zápas po
 ### 48: matches (Match after n "matches")
 zápasy/zápasech
+### 49: Tatami (Tatami: n)
+Tatami

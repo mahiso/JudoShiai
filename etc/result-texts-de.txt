@@ -97,3 +97,5 @@ Anzeige
 Kampf nach
 ### 48: matches (Match after n "matches")
 Kämpfen
+### 49: Tatami (Tatami: n)
+Matte

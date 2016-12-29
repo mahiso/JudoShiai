@@ -1,6 +1,6 @@
 ﻿Результати Українською
 ### 1: Competitors
-Учасники 
+Учасники
 ### 2: Competitors A (for double and quadruple pools)
 Учасники A
 ### 3: Competitors B
@@ -96,3 +96,5 @@ kategoriy.pdf
 Наступна сутичка
 ### 48: matches (Match after n "matches")
 Наступні сутички
+### 49: Tatami (Tatami: n)
+Tatami

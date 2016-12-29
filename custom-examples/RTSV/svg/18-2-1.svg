@@ -11,7 +11,7 @@
    height="891px"
    id="judoshiai"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="18-2-1.svg">
   <metadata
      id="metadata3688">
@@ -36,27 +36,20 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="335.65377"
-     inkscape:cy="710.83513"
+     inkscape:zoom="0.99999999"
+     inkscape:cx="336.36088"
+     inkscape:cy="470.83513"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="1920"
-     inkscape:window-height="979"
-     inkscape:window-x="0"
-     inkscape:window-y="28"
+     inkscape:window-width="959"
+     inkscape:window-height="1101"
+     inkscape:window-x="960"
+     inkscape:window-y="27"
      showgrid="false"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="0" />
   <g
      id="layer1"
      style="opacity:1">
-    <rect
-       x="0.00"
-       y="0.00"
-       width="630.00"
-       height="891.00"
-       style="fill:white;stroke:none"
-       id="rect3356" />
     <text
        style="font-size:21.38px;font-style:normal;font-weight:bold;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
        x="315.00"
@@ -74,643 +67,702 @@
          id="tspan3364">%t0: %n</tspan>
     </text>
     <path
-       d="M 31.50,89.10 l 466.20,0.00 l 0.00,53.46 l -466.20,0.00 z"
-       style="fill:none; stroke:black; stroke-width:2"
-       id="path3366" />
+       d="m 31.5,141.1 466.2,0 0,53.46 -466.2,0 z"
+       style="fill:none;stroke:#000000;stroke-width:2"
+       id="path3366"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 31.50,106.92 l 466.20,0.00"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3368" />
+       d="m 31.5,158.92 466.2,0"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3368"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 31.50,124.74 l 466.20,0.00"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3370" />
+       d="m 31.5,176.74 466.2,0"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3370"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 50.40,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3372" />
+       d="m 50.4,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3372"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 258.30,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3374" />
+       d="m 258.3,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3374"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 384.30,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3376" />
+       d="m 384.3,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3376"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 403.20,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3378" />
+       d="m 403.2,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3378"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 422.10,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3380" />
+       d="m 422.1,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3380"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 441.00,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3382" />
+       d="m 441,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3382"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 459.90,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3384" />
+       d="m 459.9,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3384"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 478.80,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3386" />
+       d="m 478.8,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3386"
+       inkscape:connector-curvature="0" />
     <text
-       x="236.62"
-       y="80.07"
-       style="font-size:12.83px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="256.62"
+       y="132.07001"
+       style="font-style:normal;font-weight:bold;font-size:12.82999992px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3388">
       <tspan
          id="tspan3390">%t0</tspan>
     </text>
     <text
        x="44.950001"
-       y="101.89"
-       style="font-size:10.68999958px;font-style:normal;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="153.89"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3392">
       <tspan
          id="tspan3394">%t5</tspan>
     </text>
     <text
-       x="129.15"
-       y="101.95"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="129.14999"
+       y="153.95"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3396">
       <tspan
          id="tspan3398">%t6</tspan>
     </text>
     <text
-       x="321.30"
-       y="101.95"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="321.29999"
+       y="153.95"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3400">
       <tspan
          id="tspan3402">%t8</tspan>
     </text>
     <text
        x="393.75"
-       y="101.96"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       y="153.95999"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3404">
       <tspan
          id="tspan3406">1</tspan>
     </text>
     <text
-       x="431.55"
-       y="101.96"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="431.54999"
+       y="153.95999"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3408">
       <tspan
          id="tspan3410">1</tspan>
     </text>
     <text
-       x="469.35"
-       y="101.96"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="469.35001"
+       y="153.95999"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3412">
       <tspan
          id="tspan3414">1</tspan>
     </text>
     <text
-       x="412.65"
-       y="101.96"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="412.64999"
+       y="153.95999"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3416">
       <tspan
          id="tspan3418">2</tspan>
     </text>
     <text
-       x="450.45"
-       y="101.96"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="450.45001"
+       y="153.95999"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3420">
       <tspan
          id="tspan3422">2</tspan>
     </text>
     <text
        x="488.25"
-       y="101.96"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       y="153.95999"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3424">
       <tspan
          id="tspan3426">2</tspan>
     </text>
     <text
-       x="40.95"
-       y="119.78"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="40.950001"
+       y="171.78"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3428">
       <tspan
          id="tspan3430">1</tspan>
     </text>
     <text
-       x="56.70"
-       y="119.69"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="56.700001"
+       y="171.69"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3432">
       <tspan
          id="tspan3434">%c1first-s-last</tspan>
     </text>
     <text
-       x="264.60"
-       y="119.69"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="264.60001"
+       y="171.69"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3436">
       <tspan
          id="tspan3438">%c1club</tspan>
     </text>
     <text
-       x="40.95"
-       y="137.60"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="40.950001"
+       y="189.60001"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3440">
       <tspan
          id="tspan3442">2</tspan>
     </text>
     <text
-       x="56.70"
-       y="137.51"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="56.700001"
+       y="189.50999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3444">
       <tspan
          id="tspan3446">%c2first-s-last</tspan>
     </text>
     <text
-       x="264.60"
-       y="137.51"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="264.60001"
+       y="189.50999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3448">
       <tspan
          id="tspan3450">%c2club</tspan>
     </text>
     <path
-       d="m 31.51079,178.21079 540.84568,0 0,71.25842 -540.84568,0 z"
+       d="m 31.51079,230.21079 540.84568,0 0,71.25842 -540.84568,0 z"
        style="fill:none;stroke:#000000;stroke-width:2.02158046"
        id="path3452"
        inkscape:connector-curvature="0" />
     <path
-       d="m 31.51167,196.02 541.55103,0"
+       d="m 31.51167,248.02 541.55103,0"
        style="fill:none;stroke:#000000;stroke-width:1.01160228"
        id="path3454"
        inkscape:connector-curvature="0" />
     <path
-       d="m 31.511003,213.84 540.845257,0"
+       d="m 31.511003,265.84 540.845257,0"
        style="fill:none;stroke:#000000;stroke-width:1.01094282"
        id="path3456"
        inkscape:connector-curvature="0" />
     <path
-       d="m 31.510669,231.66 540.492371,0"
+       d="m 31.510669,283.66 540.492371,0"
        style="fill:none;stroke:#000000;stroke-width:1.01061296"
        id="path3458"
        inkscape:connector-curvature="0" />
     <path
-       d="M 56.70,196.02 l 0.00,53.46"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3460" />
+       d="m 56.7,248.02 0,53.46"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3460"
+       inkscape:connector-curvature="0" />
     <path
-       d="m 257.7,196.02 0,53.46"
+       d="m 257.7,248.02 0,53.46"
        style="fill:none;stroke:#000000;stroke-width:1"
        id="path3462"
        inkscape:connector-curvature="0" />
     <path
-       d="m 276.6,196.02 0,53.46"
+       d="m 276.6,248.02 0,53.46"
        style="fill:none;stroke:#000000;stroke-width:1"
        id="path3464"
        inkscape:connector-curvature="0" />
     <path
-       d="m 295.5,196.02 0,53.46"
+       d="m 295.5,248.02 0,53.46"
        style="fill:none;stroke:#000000;stroke-width:1"
        id="path3466"
        inkscape:connector-curvature="0" />
     <path
-       d="m 496.5,196.02 0,53.46"
+       d="m 496.5,248.02 0,53.46"
        style="fill:none;stroke:#000000;stroke-width:1"
        id="path3468"
        inkscape:connector-curvature="0" />
     <text
-       x="275.77"
-       y="171.74"
-       style="font-size:12.83px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="275.76999"
+       y="223.74001"
+       style="font-style:normal;font-weight:bold;font-size:12.82999992px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3472">
       <tspan
          id="tspan3474">%t9</tspan>
     </text>
     <text
        x="50.099998"
-       y="191.05"
-       style="font-size:10.68999958px;font-style:normal;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="243.05"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3476">
       <tspan
          id="tspan3478">%t14</tspan>
     </text>
     <text
-       x="151.20"
-       y="190.99"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="151.2"
+       y="242.99001"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3480">
       <tspan
          id="tspan3482">%t16</tspan>
     </text>
     <text
-       x="378.00"
-       y="191.05"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="378"
+       y="243.05"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3484">
       <tspan
          id="tspan3486">%t15</tspan>
     </text>
     <text
        x="532.54999"
-       y="190.99001"
-       style="font-size:10.68999958px;font-style:normal;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="242.99001"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3488">
       <tspan
          id="tspan3490">%t17</tspan>
     </text>
     <text
        x="267.14999"
-       y="208.88"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="260.88"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3496">
       <tspan
          id="tspan3498">1</tspan>
     </text>
     <text
        x="286.04999"
-       y="208.88"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="260.88"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3500">
       <tspan
          id="tspan3502">2</tspan>
     </text>
     <text
-       x="44.10"
-       y="208.88"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="44.099998"
+       y="260.88"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3504">
       <tspan
          id="tspan3506">1</tspan>
     </text>
     <text
-       x="63.00"
-       y="208.79"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="63"
+       y="260.78998"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3508">
       <tspan
          id="tspan3510">%c1first-s-last</tspan>
     </text>
     <text
        x="301.79999"
-       y="208.78999"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="260.78998"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3512">
       <tspan
          id="tspan3514">%c2first-s-last</tspan>
     </text>
     <text
        x="532.54999"
-       y="207.84"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="259.84"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3516">
       <tspan
          id="tspan3518">%m1p1 - %m1p2</tspan>
     </text>
     <text
-       x="412.65"
-       y="118.74"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="412.64999"
+       y="170.73999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3524">
       <tspan
          id="tspan3526">%m1p1</tspan>
     </text>
     <text
        x="393.75"
-       y="136.56"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       y="188.56"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3528">
       <tspan
          id="tspan3530">%m1p2</tspan>
     </text>
     <text
        x="267.14999"
-       y="226.7"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="278.70001"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3532">
       <tspan
          id="tspan3534">1</tspan>
     </text>
     <text
        x="286.04999"
-       y="226.7"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="278.70001"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3536">
       <tspan
          id="tspan3538">2</tspan>
     </text>
     <text
-       x="44.10"
-       y="226.70"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="44.099998"
+       y="278.70001"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3540">
       <tspan
          id="tspan3542">2</tspan>
     </text>
     <text
-       x="63.00"
-       y="226.61"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="63"
+       y="278.60999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3544">
       <tspan
          id="tspan3546">%c1first-s-last</tspan>
     </text>
     <text
        x="301.79999"
-       y="226.61"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="278.60999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3548">
       <tspan
          id="tspan3550">%c2first-s-last</tspan>
     </text>
     <text
        x="532.54999"
-       y="225.66"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="277.66"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3552">
       <tspan
          id="tspan3554">%m2p1 - %m2p2</tspan>
     </text>
     <text
-       x="450.45"
-       y="118.74"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="450.45001"
+       y="170.73999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3560">
       <tspan
          id="tspan3562">%m2p1</tspan>
     </text>
     <text
-       x="431.55"
-       y="136.56"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="431.54999"
+       y="188.56"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3564">
       <tspan
          id="tspan3566">%m2p2</tspan>
     </text>
     <text
        x="267.14999"
-       y="244.52"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="296.52002"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3568">
       <tspan
          id="tspan3570">1</tspan>
     </text>
     <text
        x="286.04999"
-       y="244.52"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="296.52002"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3572">
       <tspan
          id="tspan3574">2</tspan>
     </text>
     <text
-       x="44.10"
-       y="244.45"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="44.099998"
+       y="296.45001"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3576">
       <tspan
          id="tspan3578">3</tspan>
     </text>
     <text
-       x="63.00"
-       y="244.43"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="63"
+       y="296.42999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3580">
       <tspan
          id="tspan3582">%c1first-s-last</tspan>
     </text>
     <text
        x="301.79999"
-       y="244.42999"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="296.42999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3584">
       <tspan
          id="tspan3586">%c2first-s-last</tspan>
     </text>
     <text
        x="532.54999"
-       y="243.48"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="295.47998"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3588">
       <tspan
          id="tspan3590">%m3p1 - %m3p2</tspan>
     </text>
     <text
        x="488.25"
-       y="118.74"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       y="170.73999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3596">
       <tspan
          id="tspan3598">%m3p1</tspan>
     </text>
     <text
-       x="469.35"
-       y="136.56"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="469.35001"
+       y="188.56"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3600">
       <tspan
          id="tspan3602">%m3p2</tspan>
     </text>
     <path
-       d="M 497.70,89.10 l 75.60,0.00 l 0.00,53.46 l -75.60,0.00 z"
-       style="fill:none; stroke:black; stroke-width:2"
-       id="path3604" />
+       d="m 497.7,141.1 75.6,0 0,53.46 -75.6,0 z"
+       style="fill:none;stroke:#000000;stroke-width:2"
+       id="path3604"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 497.70,106.92 l 75.60,0.00"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3606" />
+       d="m 497.7,158.92 75.6,0"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3606"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 497.70,124.74 l 75.60,0.00"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3608" />
+       d="m 497.7,176.74 75.6,0"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3608"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 522.90,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3610" />
+       d="m 522.9,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3610"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 548.10,106.92 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3612" />
+       d="m 548.1,158.92 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3612"
+       inkscape:connector-curvature="0" />
     <text
-       x="510.30"
-       y="101.89"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="510.29999"
+       y="153.89"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3614">
       <tspan
          id="tspan3616">%t20</tspan>
     </text>
     <text
-       x="535.50"
-       y="101.89"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="535.5"
+       y="153.89"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3618">
       <tspan
          id="tspan3620">%t21</tspan>
     </text>
     <text
-       x="560.70"
-       y="100.86"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="560.70001"
+       y="152.86"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3622">
       <tspan
          id="tspan3624">%t22</tspan>
     </text>
     <text
        x="510.29999"
-       y="119.69"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="171.69"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3626">
       <tspan
          id="tspan3628">%c1w</tspan>
     </text>
     <text
        x="535.5"
-       y="119.09355"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="171.09355"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3630">
       <tspan
          id="tspan3632">%c1p</tspan>
     </text>
     <text
        x="560.70001"
-       y="119.69"
-       style="font-size:10.68999958px;font-style:normal;font-weight:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="171.69"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3634">
       <tspan
          id="tspan3636">%c1r</tspan>
     </text>
     <text
-       x="510.30"
-       y="137.51"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="510.29999"
+       y="189.50999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3638">
       <tspan
          id="tspan3640">%c2w</tspan>
     </text>
     <text
-       x="535.50"
-       y="136.56"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="535.5"
+       y="188.56"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3642">
       <tspan
          id="tspan3644">%c2p</tspan>
     </text>
     <text
-       x="560.70"
-       y="137.51"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="560.70001"
+       y="189.50999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3646">
       <tspan
          id="tspan3648">%c2r</tspan>
     </text>
     <path
-       d="M 31.50,285.12 l 283.50,0.00 l 0.00,53.46 l -283.50,0.00 z"
-       style="fill:none; stroke:black; stroke-width:2"
-       id="path3650" />
+       d="m 31.5,337.12 283.5,0 0,53.46 -283.5,0 z"
+       style="fill:none;stroke:#000000;stroke-width:2"
+       id="path3650"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 31.50,302.94 l 283.50,0.00"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3652" />
+       d="m 31.5,354.94 283.5,0"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3652"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 31.50,320.76 l 283.50,0.00"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3654" />
+       d="m 31.5,372.76 283.5,0"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3654"
+       inkscape:connector-curvature="0" />
     <path
-       d="M 63.00,302.94 l 0.00,35.64"
-       style="fill:none; stroke:black; stroke-width:1"
-       id="path3656" />
+       d="m 63,354.94 0,35.64"
+       style="fill:none;stroke:#000000;stroke-width:1"
+       id="path3656"
+       inkscape:connector-curvature="0" />
     <text
-       x="147.07"
-       y="278.66"
-       style="font-size:12.83px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="147.07001"
+       y="330.66"
+       style="font-style:normal;font-weight:bold;font-size:12.82999992px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3658">
       <tspan
          id="tspan3660">%t18</tspan>
     </text>
     <text
        x="51.25"
-       y="296.88"
-       style="font-size:10.68999958px;font-style:normal;font-weight:bold;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       y="348.88"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3662">
       <tspan
          id="tspan3664">%t22</tspan>
     </text>
     <text
-       x="189.00"
-       y="297.97"
-       style="font-size:10.69px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       x="189"
+       y="349.97"
+       style="font-style:normal;font-weight:bold;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3666">
       <tspan
          id="tspan3668">%t6</tspan>
     </text>
     <text
        x="47.25"
-       y="315.80"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       y="367.79999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3670">
       <tspan
          id="tspan3672">1</tspan>
     </text>
     <text
-       x="69.30"
-       y="315.71"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="69.300003"
+       y="367.70999"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3674">
       <tspan
          id="tspan3676">%r1hm2-first-s-last-s-club</tspan>
     </text>
     <text
        x="47.25"
-       y="333.62"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;text-anchor:middle;text-align:center"
+       y="385.62"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
        id="text3678">
       <tspan
          id="tspan3680">2</tspan>
     </text>
     <text
-       x="69.30"
-       y="333.53"
-       style="font-size:10.69px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       x="69.300003"
+       y="385.53"
+       style="font-style:normal;font-weight:normal;font-size:10.68999958px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
        id="text3682">
       <tspan
          id="tspan3684">%r2hm2-first-s-last-s-club</tspan>
     </text>
     <text
        xml:space="preserve"
-       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Serif;-inkscape-font-specification:Liberation Serif"
-       x="-882.71289"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="-880.71289"
        y="14.423828"
        id="text3134"
        sodipodi:linespacing="125%"
        transform="matrix(0,-1,1,0,0,0)"><tspan
          sodipodi:role="line"
          id="tspan3136"
-         x="-882.71289"
+         x="-880.71289"
          y="14.423828">Erstellt mit JudoShiai - https://mahiso.de/judoshiai</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 383.95898,106.81858 37.47666,34.64823"
+       d="m 383.95898,158.81858 37.47666,34.64823"
        id="path3159"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 421.7892,107.17213 37.47665,33.94113"
+       d="m 421.7892,159.17213 37.47665,33.94113"
        id="path3161"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 459.26585,107.87924 39.24443,33.58757"
+       d="m 459.26585,159.87924 39.24443,33.58757"
        id="path3163"
        inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:125%;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';letter-spacing:0px;word-spacing:0px;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="31.324219"
+       y="95.592033"
+       id="text3455"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3457"
+         x="31.324219"
+         y="95.592033"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold'">%t48: %i-tatami</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;line-height:125%;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold Oblique';letter-spacing:0px;word-spacing:0px;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="38.93457"
+       y="854.81079"
+       id="text3459"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3461"
+         x="38.93457"
+         y="854.81079">Die Matte für den Kampf kann sich ändern.</tspan><tspan
+         sodipodi:role="line"
+         x="38.93457"
+         y="873.56079"
+         id="tspan3463">Bitte auf die Durchsagen achten!</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;line-height:125%;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans';letter-spacing:0px;word-spacing:0px;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="568.93457"
+       y="871.81079"
+       id="text3465"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3467"
+         x="568.93457"
+         y="871.81079">T|W</tspan></text>
   </g>
 </svg>
