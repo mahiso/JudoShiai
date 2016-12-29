@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@ static gboolean for_each_row_selected(GtkTreeModel *model,
                                       GtkTreeIter *iter,
                                       gpointer data)
 {
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(current_view));
 
     if (gtk_tree_selection_iter_is_selected(selection, iter)) {
@@ -69,7 +69,7 @@ static void view_popup_menu_move_judoka(GtkWidget *menuitem, gpointer userdata)
 
     GtkTreeView *treeview = GTK_TREE_VIEW(current_view);
     GtkTreeModel *model = current_model;
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 
     if (!dest_category)
@@ -91,7 +91,7 @@ static void view_popup_menu_move_judoka(GtkWidget *menuitem, gpointer userdata)
             continue;
 
         if (db_competitor_match_status(j->index) & MATCH_EXISTS) {
-            SHOW_MESSAGE("%s %s: %s.", 
+            SHOW_MESSAGE("%s %s: %s.",
                          j->first, j->last, _("Remove drawing first"));
         } else {
             if (j->category)
@@ -110,7 +110,7 @@ static void view_popup_menu_copy_judoka(GtkWidget *menuitem, gpointer userdata)
 
     GtkTreeView *treeview = GTK_TREE_VIEW(current_view);
     GtkTreeModel *model = current_model;
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 
     num_selected_judokas = 0;
@@ -138,7 +138,7 @@ void view_popup_menu_print_cards(GtkWidget *menuitem, gpointer userdata)
 {
     GtkTreeView *treeview = GTK_TREE_VIEW(current_view);
     GtkTreeModel *model = current_model;
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 
     num_selected_judokas = 0;
@@ -154,7 +154,7 @@ void view_popup_menu_print_cards_to_default(GtkWidget *menuitem, gpointer userda
 {
     GtkTreeView *treeview = GTK_TREE_VIEW(current_view);
     GtkTreeModel *model = current_model;
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 
     num_selected_judokas = 0;
@@ -225,7 +225,7 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
 
     GtkTreeView *treeview = GTK_TREE_VIEW(current_view);
     GtkTreeModel *model = current_model;
-    GtkTreeSelection *selection = 
+    GtkTreeSelection *selection =
         gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 
     num_selected_judokas = 0;
@@ -277,10 +277,10 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
         if (age > 19 && female)
             k += sprintf(cbuf+k, "N");
         if (age >= 0 && age <= 19) {
-            k += sprintf(cbuf+k, "%c", 
+            k += sprintf(cbuf+k, "%c",
                          "JIIHHGGFFEEDDCCBBAAA"[age]);
             if (male)
-                k += sprintf(cbuf+k, "P"); 
+                k += sprintf(cbuf+k, "P");
             if (female)
                 k += sprintf(cbuf+k, "T");
         }
@@ -292,8 +292,8 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
             k += sprintf(cbuf+k, "U%d", age+1);
     }
 
-    k += sprintf(cbuf+k, "-%d,%d", 
-                 weight/1000, 
+    k += sprintf(cbuf+k, "-%d,%d",
+                 weight/1000,
                  (weight%1000)/100);
 
 
@@ -302,16 +302,16 @@ static void create_new_category(GtkWidget *menuitem, gpointer userdata)
         SHOW_MESSAGE("%s %s!", cbuf, _("already exists"));
         return;
     }
-	
+
 
     for (i = 0; i < num_selected_judokas; i++) {
         struct judoka *j = get_data(selected_judokas[i]);
-        
+
         if (!j)
             continue;
 
         if (db_competitor_match_status(j->index) & MATCH_EXISTS) {
-            SHOW_MESSAGE("%s %s: %s.", 
+            SHOW_MESSAGE("%s %s: %s.",
                          j->first, j->last, _("Remove drawing first"));
         } else {
             if (j->category)
@@ -346,8 +346,8 @@ static void show_category_window(GtkWidget *menuitem, gpointer userdata)
     category_window(ptr_to_gint(userdata));
 }
 
-void view_popup_menu(GtkWidget *treeview, 
-                     GdkEventButton *event, 
+void view_popup_menu(GtkWidget *treeview,
+                     GdkEventButton *event,
                      gpointer userdata,
                      gchar *regcategory,
                      gboolean visible)
@@ -373,14 +373,14 @@ void view_popup_menu(GtkWidget *treeview,
     g_signal_connect(menuitem, "activate",
                      (GCallback) change_display, (gpointer)0);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-	
+
     menuitem = gtk_menu_item_new_with_label(_("Collapse All"));
     g_signal_connect(menuitem, "activate",
                      (GCallback) change_display, (gpointer)1);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
-	
+
     GtkWidget *submenu;
     GtkTreeIter iter;
     gboolean ok;
@@ -401,11 +401,11 @@ void view_popup_menu(GtkWidget *treeview,
                            -1);
         menuitem = gtk_menu_item_new_with_label(cat);
         g_signal_connect(menuitem, "activate",
-                         (GCallback) view_popup_menu_change_category, 
+                         (GCallback) view_popup_menu_change_category,
                          gint_to_ptr(index));
         gtk_menu_shell_append(GTK_MENU_SHELL(submenu), menuitem);
         g_free(cat);
-        
+
         ok = gtk_tree_model_iter_next(current_model, &iter);
     }
 
@@ -451,7 +451,7 @@ void view_popup_menu(GtkWidget *treeview,
 
             menuitem = gtk_menu_item_new_with_label(_("Edit Drawing"));
             g_signal_connect(menuitem, "activate",
-                             (GCallback) view_popup_menu_draw_category_manually, 
+                             (GCallback) view_popup_menu_draw_category_manually,
                              gint_to_ptr(ptr_to_gint(userdata) | 0x01000000));
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
@@ -481,12 +481,12 @@ void view_popup_menu(GtkWidget *treeview,
 
         menuitem = gtk_menu_item_new_with_label(_("Print Selected Sheets (Printer)"));
         g_signal_connect(menuitem, "activate",
-                         (GCallback) print_doc, gint_to_ptr(ptr_to_gint(userdata) | PRINT_SHEET | PRINT_TO_PRINTER));
+                         (GCallback) print_doc, gint_to_ptr(ptr_to_gint(userdata) | PRINT_ALL_CATEGORIES | PRINT_TO_PRINTER));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 
         menuitem = gtk_menu_item_new_with_label(_("Print Selected Sheets (PDF)"));
         g_signal_connect(menuitem, "activate",
-                         (GCallback) print_doc, gint_to_ptr(ptr_to_gint(userdata) | PRINT_SHEET | PRINT_TO_PDF));
+                         (GCallback) print_doc, gint_to_ptr(ptr_to_gint(userdata) | PRINT_ALL_CATEGORIES | PRINT_TO_PDF));
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
     }
 
@@ -508,4 +508,3 @@ void view_popup_menu(GtkWidget *treeview,
                    (event != NULL) ? event->button : 0,
                    gdk_event_get_time((GdkEvent*)event));
 }
-

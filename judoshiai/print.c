@@ -1830,7 +1830,7 @@ void print_schedule_cb(GtkWidget *menuitem, gpointer userdata)
     print_schedule();
 }
 
-static gint fill_in_pages(gint category, gint all)
+static gint fill_in_pages(gint category, gint what)
 {
     GtkTreeIter iter;
     gboolean ok;
@@ -1841,7 +1841,7 @@ static gint fill_in_pages(gint category, gint all)
     numpages = 0;
 
     ok = gtk_tree_model_get_iter_first(current_model, &iter);
-    while (ok) {
+    while (ok && what == PRINT_ALL_CATEGORIES) {
         gint index;
         struct compsys sys;
 
@@ -1849,8 +1849,7 @@ static gint fill_in_pages(gint category, gint all)
                            COL_INDEX, &index,
                            -1);
 
-        if (all ||
-            gtk_tree_selection_iter_is_selected(selection, &iter)) {
+        if (gtk_tree_selection_iter_is_selected(selection, &iter)) {
             sys = db_get_system(index);
 
             for (i = 0; i < num_pages(sys) && numpages < NUM_PAGES; i++) {
@@ -1864,7 +1863,7 @@ static gint fill_in_pages(gint category, gint all)
                 cat = index;
 
             struct category_data *d = avl_get_category(index);
-            if (d && all == FALSE)
+            if (d && what == PRINT_ALL_CATEGORIES)
                 d->match_status |= CAT_PRINTED;
         }
         ok = gtk_tree_model_iter_next(current_model, &iter);
@@ -1897,8 +1896,7 @@ static void begin_print(GtkPrintOperation *operation,
     numpages = 1;
 
     if (what == PRINT_ALL_CATEGORIES || what == PRINT_SHEET) {
-        fill_in_pages(ptr_to_gint(user_data) & PRINT_DATA_MASK,
-                      what == PRINT_ALL_CATEGORIES);
+        fill_in_pages(ptr_to_gint(user_data) & PRINT_DATA_MASK, what);
         gtk_print_operation_set_n_pages(operation, numpages);
     } else if (what == PRINT_WEIGHING_NOTES) {
         GtkPageSetup *setup = gtk_print_context_get_page_setup(context);
