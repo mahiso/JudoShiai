@@ -151,8 +151,8 @@ text 185 39 0 RTSV
 
 fontsize 10
 fontweight normal
-text 15.0 20.0 0.0 Vorname:
-text 15.0 29.0 0.0 Name:
+text 15.0 20.0 0.0 Nachname:
+text 15.0 29.0 0.0 Vorame:
 text 15.0 38.0 0.0 Geburtsjahr:
 text 15.0 48.0 0.0 Verein:
 
