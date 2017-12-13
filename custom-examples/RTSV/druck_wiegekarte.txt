@@ -103,6 +103,7 @@
 # %BARCODE%           This is not text but a barcode presentation of the INDEX.
 # %WEIGHT%            Competitor's weight.
 # %YOB%               Competitor's year of birth.
+# %GENDER%            Gender text
 # %GRADE%             Competitor's grade (belt).
 # %ID%                Competitor's ID.
 # %ID-BARCODE%        Competitor's ID printed as barcode 39. Supported characters are
@@ -132,6 +133,8 @@ fontsize 10
 fontweight normal
 text 15.0 10.0 0.0 Klasse
 
+text 60.0 10.0 0.0 %GENDER%
+
 fontsize 24
 fontweight bold
 text 35.0 10.0 0.0 %REGCATEGORY%
@@ -147,16 +150,16 @@ text 185 39 0 RTSV
 
 fontsize 10
 fontweight normal
-text 15.0 20.0 0.0 Vorname
-text 15.0 29.0 0.0 Name
+text 15.0 20.0 0.0 Name
+text 15.0 29.0 0.0 Vorname
 text 15.0 38.0 0.0 Geburtsjahr
 text 15.0 48.0 0.0 Verein
 
-fontsize 18
-fontweight bold
-text 35.0 20.0 0.0 %FIRST%
 fontsize 24
-text 35.0 29.0 0.0 %LAST%
+fontweight bold
+text 35.0 20.0 0.0 %LAST%
+fontsize 18
+text 35.0 29.0 0.0 %FIRST%
 fontsize 16
 text 35.0 38.0 0.0 %YOB%
 fontsize 20

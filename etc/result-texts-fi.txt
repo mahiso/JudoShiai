@@ -97,3 +97,5 @@ näyttö
 Ottelu
 ### 48: matches (Match after n "matches")
 ottelun jälkeen
+### 49: Tatami (Tatami: n)
+Tatami

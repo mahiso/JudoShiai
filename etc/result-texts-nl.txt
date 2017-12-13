@@ -97,3 +97,5 @@ Display
 Wedstrijd na
 ### 48: matches (Match after n "matches")
 wedstrijden
+### 49: Tatami (Tatami: n)
+Tatami

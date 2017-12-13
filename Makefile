@@ -54,8 +54,12 @@ endif
 	mkdir -p $(RELDIR)/licenses
 	mkdir -p $(RELDIR)/etc
 	cp $(JUDOSHIAIFILE) $(RELDIR)/bin/
+ifeq ($(JUDOTIMER),YES)
 	cp $(JUDOTIMERFILE) $(RELDIR)/bin/
+endif
+ifeq ($(JUDOINFO),YES)
 	cp $(JUDOINFOFILE) $(RELDIR)/bin/
+endif
 	cp $(JUDOWEIGHTFILE) $(RELDIR)/bin/
 	cp $(JUDOJUDOGIFILE) $(RELDIR)/bin/
 ifeq ($(JUDOPROXY),YES)

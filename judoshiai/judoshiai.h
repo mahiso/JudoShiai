@@ -371,6 +371,7 @@ enum {
     displaytext,
     matchafter1text,
     matchafter2text,
+    tatamitext,
 
     numprinttexts
 };

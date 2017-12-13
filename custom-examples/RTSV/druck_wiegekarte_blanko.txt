@@ -132,9 +132,13 @@ fontsize 10
 fontweight normal
 text 15.0 10.0 0.0 Geschlecht:
 
-fontsize 24
+picture 35 6 5 5 0 /home/maik/git/JudoShiai/custom-examples/RTSV/kasten.png
+picture 72 6 5 5 0 /home/maik/git/JudoShiai/custom-examples/RTSV/kasten.png
+
+fontsize 18
 fontweight bold
-text 35.0 10.0 0.0 m / w
+text 42.0 10.0 0.0 männlich
+text 79.0 10.0 0.0 weiblich *
 text 150.0 10.0 0.0 0000
 fontsize 8
 fontweight normal
@@ -147,8 +151,8 @@ text 185 39 0 RTSV
 
 fontsize 10
 fontweight normal
-text 15.0 20.0 0.0 Vorname:
-text 15.0 29.0 0.0 Name:
+text 15.0 20.0 0.0 Nachname:
+text 15.0 29.0 0.0 Vorname:
 text 15.0 38.0 0.0 Geburtsjahr:
 text 15.0 48.0 0.0 Verein:
 
@@ -168,7 +172,7 @@ text 110.0 55.0 0.0 Gewicht:
 fontsize 10
 fontweight bold
 fontslant italic
-text 60 70 0 Bitte deutlich schreiben!
+text 60 70 0 Bitte deutlich schreiben! * Zutreffendes ankreuzen.
 fontweight normal
 fontslant normal
 fontsize 6
