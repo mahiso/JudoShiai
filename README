@@ -4,7 +4,7 @@ Linux and Windows are the supported operating systems.
 
 Development work is done in Linux environment. For Windows users it is recommended
 to install VirtualBox + Ubuntu (32 bit) for compilation. Learn how to use
-Linux terminal and line commands. Everything below after the $ sign 
+Linux terminal and line commands. Everything below after the $ sign
 is typed in a terminal.
 
 LibreOffice is needed for PDF creation. You should already have it,
@@ -12,7 +12,7 @@ but if not, get it with the following command:
 
 $ sudo apt-get install libreoffice
 
-"sudo" makes you have temporary root priviledges that are required for 
+"sudo" makes you have temporary root priviledges that are required for
 software installation. "apt-get install" fetches and installs software packages.
 
 Install the basic development tools:
@@ -20,7 +20,7 @@ Install the basic development tools:
 $ sudo apt-get install build-essential gnome-devel bison flex checkinstall
 
 You probably already have "build-essential" (compiler, linker). "gnome-devel"
-contains everything needed for GTK+ graphical user interface development. 
+contains everything needed for GTK+ graphical user interface development.
 "bison flex" are used for parsing text. "checkinstall" is required for Debian packages.
 
 Next some libraries:
@@ -41,7 +41,6 @@ Create some missing links on CentOS:
 $ cd /usr/lib64
 $ sudo ln -s libmp3lame.so.0.0.0 libmp3lame.so
 $ sudo ln -s libx264.so.142 libx264.so
-$ sudo ln -s libfaac.so.0.0.0 libfaac.so
 
 For judoproxy:
 
@@ -81,7 +80,7 @@ Some programs need Windows emulator to run:
 $ sudo apt-get install wine
 
 There exist still lots of required libraries and run time DLL's that are not in
-any package. Many DLL's have incompatible versions around and finding the correct one 
+any package. Many DLL's have incompatible versions around and finding the correct one
 may take time. To make life easier you can fetch a ready made set of Windows software.
 Get it using command line or your favorite browser:
 
