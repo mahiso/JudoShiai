@@ -122,14 +122,55 @@
 # (The flags are not included in the JudoShiai software)
 #
 
-pagegeom 1 1
+pagegeom 1 4
 border 0
 fontslant normal
 fontweight bold
-font Japonesa
+font Arial
 color 0.0 0.0 0.0
-fontsize 24
-align center
 
-text 105.0 200.0 0.0 %FIRST% %LAST%
-text 105.0 220.0 0.0 %WINPOSR%. Platz
+fontsize 10
+fontweight normal
+text 15.0 10.0 0.0 Klasse
+
+text 60.0 10.0 0.0 %GENDER%
+
+fontsize 24
+fontweight bold
+text 35.0 10.0 0.0 %REGCATEGORY%
+text 150.0 10.0 0.0 %INDEX%
+fontsize 8
+fontweight normal
+text 149 11 90.0 Index
+
+picture 185 5 14 29 0 /home/judo/JudoShiai/custom-examples/RTSV/judo.png
+fontsize 14
+fontweight bold
+text 185 39 0 RTSV
+
+fontsize 10
+fontweight normal
+text 15.0 20.0 0.0 Name
+text 15.0 29.0 0.0 Vorname
+text 15.0 38.0 0.0 Geburtsjahr
+text 15.0 48.0 0.0 Verein
+
+fontsize 24
+fontweight bold
+text 35.0 20.0 0.0 %LAST%
+fontsize 18
+text 35.0 29.0 0.0 %FIRST%
+fontsize 16
+text 35.0 38.0 0.0 %YOB%
+fontsize 20
+text 35.0 48.0 0.0 %CLUB%
+text 110.0 55.0 0.0 Gewicht:
+
+fontsize 10
+fontweight bold
+fontslant italic
+text 60 70 0 Bitte alle Angaben vor dem Wiegen prüfen!
+fontweight normal
+fontslant normal
+fontsize 6
+text 5.0 68.0 90.0 Erstellt mit JudoShiai - https://mahiso.de/judoshiai
