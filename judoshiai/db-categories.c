@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,10 +97,10 @@ void db_add_category(int num, struct judoka *j)
         g_print("%s: ERROR, num = %d\n", __FUNCTION__, num);
         return;
     }
-    db_exec_str(NULL, db_callback_categories, 
+    db_exec_str(NULL, db_callback_categories,
             "INSERT INTO categories VALUES ("
             "%d, \"%s\", %d, %d, %d, 0, 0, 0, 0, "
-            "0, 0, 0, 0, 0, 0, 0, 0)", 
+            "0, 0, 0, 0, 0, 0, 0, 0)",
                 num, j->last, j->belt, j->deleted, j->birthyear);
 
     avl_set_category(num, j->last, j->belt, j->birthyear, cs, j->deleted);
@@ -124,12 +124,12 @@ void db_update_category(int num, struct judoka *j)
     if (old) {
         db_exec_str(NULL, NULL,
                     "UPDATE competitors SET \"category\"=\"%s\" "
-                    "WHERE \"category\"=\"%s\"", 
+                    "WHERE \"category\"=\"%s\"",
                     j->last, old->last);
 
         // tatami changed. remove comments to avoid conflicts.
         if (old->belt != j->belt) {
-            db_exec_str(NULL, NULL, 
+            db_exec_str(NULL, NULL,
                         "UPDATE matches SET \"comment\"=0 "
                         "WHERE \"category\"&%d=%d AND "
                         "(\"comment\"=%d OR \"comment\"=%d) ",
@@ -139,7 +139,7 @@ void db_update_category(int num, struct judoka *j)
         free_judoka(old);
     }
 
-    db_exec_str(NULL, db_callback_categories, 
+    db_exec_str(NULL, db_callback_categories,
 		"UPDATE categories SET "
 		"\"category\"=\"%s\", \"tatami\"=%d, \"deleted\"=%d, \"group\"=%d "
 		"WHERE \"index\"=%d",
@@ -207,8 +207,8 @@ void db_read_categories(void)
 
 void db_set_category_positions(gint category, gint competitor, gint position)
 {
-    if (automatic_web_page_update || create_statistics == FALSE)
-        return;
+//    if (automatic_web_page_update || create_statistics == FALSE)
+//        return;
 
     db_exec_str(NULL, NULL,
                 "UPDATE categories SET "
@@ -225,7 +225,7 @@ gint db_get_competitors_position(gint competitor, gint *catindex)
     db_exec_str((gpointer)DB_GET_SYSTEM, db_callback_categories,
                 "SELECT * FROM categories WHERE \"pos1\"=%d OR \"pos2\"=%d OR \"pos3\"=%d OR \"pos4\"=%d OR "
                 "\"pos5\"=%d OR \"pos6\"=%d OR \"pos7\"=%d OR \"pos8\"=%d",
-                competitor, competitor, competitor, competitor, 
+                competitor, competitor, competitor, competitor,
                 competitor, competitor, competitor, competitor);
 
     for (i = 0; i < NUM_POSITIONS; i++)
@@ -236,6 +236,16 @@ gint db_get_competitors_position(gint competitor, gint *catindex)
         }
 
     return 0;
+}
+
+void db_rm_competitors_position(gint category, gint competitor)
+{
+  gint i;
+  for (i = 1; i <= NUM_POSITIONS; i++) {
+    db_exec_str(NULL, NULL,
+                "UPDATE categories SET \"pos%d\"=0 WHERE \"index\"=%d AND \"pos%d\"=%d",
+                i, category, i, competitor);
+  }
 }
 
 #define NUM_TEAM_MEMBERS 32
@@ -344,4 +354,3 @@ void db_create_default_teams(gint index)
     }
 
 }
-

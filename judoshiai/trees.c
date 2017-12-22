@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2006-2016 by Hannu Jokinen
  * Full copyright text is included in the software package.
- */ 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -168,7 +168,7 @@ void set_category_to_queue(struct category_data *data)
             data->prev = queue;
             data->next = NULL;
             return;
-        } 
+        }
 
         if (compare_categories_order(data, queue->next) < 0) {
             data->prev = queue;
@@ -182,7 +182,7 @@ void set_category_to_queue(struct category_data *data)
     }
 }
 
-void avl_set_category(gint index, const gchar *category, gint tatami, 
+void avl_set_category(gint index, const gchar *category, gint tatami,
                       gint group, struct compsys system, gint deleted)
 {
     struct category_data *data;
@@ -193,7 +193,7 @@ void avl_set_category(gint index, const gchar *category, gint tatami,
 
     data = g_malloc(sizeof(*data));
     memset(data, 0, sizeof(*data));
-        
+
     data->index = index;
     strncpy(data->category, category, sizeof(data->category)-1);
     data->tatami = tatami;
@@ -330,16 +330,16 @@ void avl_set_competitor(gint index, struct judoka *j)
 
     data = g_malloc(sizeof(*data));
     memset(data, 0, sizeof(*data));
-	
+
     datah = g_malloc(sizeof(*datah));
     memset(datah, 0, sizeof(*datah));
-	
+
     data->index = index;
     data->status = j->deleted;
     gint crc1 = pwcrc32((guchar *)last, strlen(last));
     gint crc2 = pwcrc32((guchar *)first, strlen(first));
     data->hash = crc1 ^ crc2;
-	
+
     datah->hash = data->hash;
     datah->last_match_time = 0;
 
@@ -597,7 +597,7 @@ static void init_html_tree(void)
 
     if (!html_tree)
         return;
-	
+
     for (i = 0; utf2html[i].utf8; i++) {
         struct html_data *data = g_malloc(sizeof(*data));
         if (!data) return;
@@ -736,7 +736,7 @@ void club_stat_add(const gchar *club, const gchar *country, gint num)
     }
 }
 
-void club_name_set(const gchar *club, 
+void club_name_set(const gchar *club,
 		   const gchar *abbr,
 		   const gchar *address)
 {
@@ -867,8 +867,8 @@ void club_stat_print(FILE *f)
 
         fprintf(f, "<tr><td>%d.</td><td>%s</td><td class=\"medalcnt\">%d</td>"
                 "<td class=\"medalcnt\">%d</td><td class=\"medalcnt\">%d</td>"
-                "<td class=\"medalcnt\">%d</td></tr>\n", 
-                prpos, utf8_to_html(get_club_text(&j, CLUB_TEXT_ADDRESS)), 
+                "<td class=\"medalcnt\">%d</td></tr>\n",
+                prpos, utf8_to_html(get_club_text(&j, CLUB_TEXT_ADDRESS)),
                 p->gold, p->silver, p->bronze, p->competitors);
     }
 

@@ -132,8 +132,8 @@ fontsize 10
 fontweight normal
 text 15.0 10.0 0.0 Geschlecht:
 
-picture 35 6 5 5 0 /home/maik/git/JudoShiai/custom-examples/RTSV/kasten.png
-picture 72 6 5 5 0 /home/maik/git/JudoShiai/custom-examples/RTSV/kasten.png
+picture 35 6 5 5 0 /home/judo/JudoShiai/custom-examples/RTSV/kasten.png
+picture 72 6 5 5 0 /home/judo/JudoShiai/custom-examples/RTSV/kasten.png
 
 fontsize 18
 fontweight bold
@@ -144,7 +144,7 @@ fontsize 8
 fontweight normal
 text 149 11 90.0 Index
 
-picture 185 5 14 29 0 /home/maik/git/JudoShiai/custom-examples/RTSV/judo.png
+picture 185 5 14 29 0 /home/judo/JudoShiai/custom-examples/RTSV/judo.png
 fontsize 14
 fontweight bold
 text 185 39 0 RTSV

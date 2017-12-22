@@ -913,6 +913,7 @@ extern struct compsys db_get_system(gint num);
 extern gint db_get_tatami(gint num);
 extern void db_set_category_positions(gint category, gint competitor, gint position);
 extern gint db_get_competitors_position(gint competitor, gint *catindex);
+extern void db_rm_competitors_position(gint category, gint competitor);
 extern void db_create_default_teams(gint index);
 
 extern void db_read_competitor_statistics(gint *numcomp, gint *numweighted);

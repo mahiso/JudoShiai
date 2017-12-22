@@ -498,7 +498,9 @@ gint paint_svg(struct paint_data *pd)
                     m = pm2.m;
 
                 set_competitor_position(m[fight].blue, COMP_POS_DRAWN);
+                db_rm_competitors_position(category, m[fight].blue);
                 set_competitor_position(m[fight].white, COMP_POS_DRAWN);
+                db_rm_competitors_position(category, m[fight].white);
 
                 if (attr[1].code[0] == 0) { // name
                     reset_last_country();
@@ -669,6 +671,7 @@ gint paint_svg(struct paint_data *pd)
                 }
 
                 set_competitor_position(j->index, COMP_POS_DRAWN);
+                db_rm_competitors_position(category, j->index);
 
                 if (attr2_code[0] && attr2_code[1] == 0) { // one letter codes
                     if (attr2_code[0] == 'w') { // number of wins
@@ -781,12 +784,14 @@ gint paint_svg(struct paint_data *pd)
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
                    		set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
+                      db_set_category_positions(category, j->index, res);
                     }
                 } else if (systm.system == SYSTEM_DPOOL2) {
                     struct judoka *j = pm2.j[pm2.c[res]];
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
                         set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
+                        db_set_category_positions(category, j->index, res);
                     }
                 } else if (systm.system == SYSTEM_DPOOL3) {
                     gint ix = 0;
@@ -801,6 +806,7 @@ gint paint_svg(struct paint_data *pd)
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
                         set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
+                        db_set_category_positions(category, j->index, res);
                         free_judoka(j);
                     }
                 } else if (systm.system == SYSTEM_DPOOL ||
@@ -818,6 +824,7 @@ gint paint_svg(struct paint_data *pd)
                     if (j) {
                         write_judoka(handle, 1, j, dfile);
                         set_competitor_position(j->index, COMP_POS_DRAWN | prop_get_int_val(PROP_TWO_POOL_BRONZES) && res == 4 ? 3 : res);
+                        db_set_category_positions(category, j->index, res);
                         free_judoka(j);
                     }
                 } else if (systm.system == SYSTEM_CUSTOM) {
@@ -828,6 +835,7 @@ gint paint_svg(struct paint_data *pd)
                         if (j) {
                             write_judoka(handle, 1, j, dfile);
                             set_competitor_position(j->index, COMP_POS_DRAWN | real_res);
+                            db_set_category_positions(category, j->index, real_res);
                             free_judoka(j);
                             //g_print("pos=%d real=%d\n", res, real_res);
                         }
@@ -899,6 +907,7 @@ gint paint_svg(struct paint_data *pd)
                         write_judoka(handle, 1, j, dfile);
                         set_competitor_position(j->index, COMP_POS_DRAWN |
                                                 (res == 4 ? 3 : (res == 6 ? 5 : (res == 8 ? 7 : res))));
+                        db_set_category_positions(category, j->index, res);
                         free_judoka(j);
                     }
                 }

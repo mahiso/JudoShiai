@@ -123,13 +123,13 @@
 #
 
 pagegeom 1 1
-border 0
-fontslant normal
-fontweight bold
+#border 0
+#fontslant normal
+#fontweight bold
 font Japonesa
 color 0.0 0.0 0.0
+
 fontsize 24
 align center
-
-text 105.0 200.0 0.0 %FIRST% %LAST%
-text 105.0 220.0 0.0 %WINPOSR%. Platz
+text 110.0 200.0 0.0 %FIRST% %LAST%
+text 110.0 220.0 0.0 %WINPOS%. Platz
