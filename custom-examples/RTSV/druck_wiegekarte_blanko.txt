@@ -176,4 +176,4 @@ text 60 70 0 Bitte deutlich schreiben! * Zutreffendes ankreuzen.
 fontweight normal
 fontslant normal
 fontsize 6
-text 5.0 68.0 90.0 Erstellt mit JudoShiai - https://mahiso.de/judoshiai
+text 5.0 68.0 90.0 Erstellt mit JudoShiai

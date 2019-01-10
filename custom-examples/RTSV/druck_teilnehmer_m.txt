@@ -139,7 +139,7 @@ page_text 125.0 30.0 0 Verein
 
 fontsize 8
 fontweight normal
-page_text 5 270 90 Erstellt mit JudoShiai - https://mahiso.de/judoshiai
+page_text 5 270 90 Erstellt mit JudoShiai
 
 card_offset 0.0 37.0
 fontsize 12
