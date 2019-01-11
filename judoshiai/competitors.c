@@ -435,7 +435,7 @@ out:
     gtk_widget_destroy(widget);
 
     if (bcdialog) {
-        gtk_window_present(bcdialog);
+      barcode_search(GTK_WIDGET(main_window), NULL);
     }
 }
 
@@ -2312,8 +2312,6 @@ static void on_enter(GtkEntry *entry, gpointer user_data)  {
         display_competitor(indx);
     else
         display_competitor(atoi(the_text));
-    gtk_entry_set_text(GTK_ENTRY(entry), "");
-    //gtk_widget_grab_focus(GTK_WIDGET(entry));
 }
 
 #if 0
@@ -2335,6 +2333,10 @@ static void barcode_delete_callback(GtkWidget *widget,
 void barcode_search(GtkWidget *w, gpointer data)
 {
     GtkWidget *dialog, *label, *hbox, *bcentry;
+
+    if (bcdialog) {
+      gtk_widget_destroy(bcdialog);
+    }
 
     /* Create a non-modal dialog with one OK button. */
     dialog = gtk_dialog_new_with_buttons (_("Bar code search"), GTK_WINDOW(main_window),
