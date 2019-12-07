@@ -132,4 +132,4 @@ color 0.0 0.0 0.0
 fontsize 26
 align center
 text 102.0 207.0 0.0 %FIRST% %LAST%
-text 102.0 245.0 0.0 %WINPOS%. Platz
+text 102.0 245.0 0.0 1. Platz
